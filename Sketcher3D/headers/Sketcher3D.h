@@ -1,7 +1,10 @@
 #pragma once
+#include <QtWidgets/QMainWindow>
+#include <QStatusBar>
+#include <QLabel>
 #include <QGridLayout>
 #include <QToolBar>
-#include <memory>
+#include <QToolButton>
 #include "Shape.h"
 
 #include <QtWidgets/QMainWindow>
@@ -20,15 +23,19 @@ private:
     void setupUI() ;
 
 private:
-    //QWidget* mCentralWidget;
     std::unique_ptr<QWidget> mCentralWidget;
-    //QGridLayout* mCentralgridWidget;
     std::unique_ptr<QGridLayout> mCentralgridWidget;
 
-    /*QToolBar* mToolBar;
-    QMenuBar* mMenuBar;
-    QStatusBar* mStatusBar;*/
-  
+    std::unique_ptr<QToolBar> mToolBar;
+    std::unique_ptr<QMenuBar> mMenuBar;
+    std::unique_ptr<QStatusBar> mStatusBar;
 
+    std::unique_ptr<QToolButton> mCuboidTool;
+    std::unique_ptr<QToolButton> mCubeTool;
+    std::unique_ptr<QToolButton> mConeTool;
+    std::unique_ptr<QToolButton> mPyramidTool;
+    std::unique_ptr<QToolButton> mCylinderTool;
+    std::unique_ptr<QToolButton> mSphereTool;
+    
 };
 
