@@ -26,19 +26,19 @@ private:
     void menuBarElements();
 
 private:
-    std::unique_ptr<QWidget> mCentralWidget;
-    std::unique_ptr<QGridLayout> mCentralgridWidget;
+    QWidget* mCentralWidget;
+    QGridLayout* mCentralgridWidget;
 
-    std::unique_ptr<QToolBar> mToolBar;
-    std::unique_ptr<QMenuBar> mMenuBar;
-    std::unique_ptr<QStatusBar> mStatusBar;
+    QToolBar* mToolBar;
+    QMenuBar* mMenuBar;
+    QStatusBar* mStatusBar;
 
-    std::unique_ptr<QToolButton> mCuboidTool;
-    std::unique_ptr<QToolButton> mCubeTool;
-    std::unique_ptr<QToolButton> mConeTool;
-    std::unique_ptr<QToolButton> mCylinderTool;
-    std::unique_ptr<QToolButton> mPyramidTool;
-    std::unique_ptr<QToolButton> mSphereTool;
+    QToolButton* mCuboidTool;
+    QToolButton* mCubeTool;
+    QToolButton* mConeTool;
+    QToolButton* mCylinderTool;
+    QToolButton* mPyramidTool;
+    QToolButton* mSphereTool;
     
 private slots:
     void onCuboidToolClicked();
