@@ -5,7 +5,12 @@
 #include <QGridLayout>
 #include <QToolBar>
 #include <QToolButton>
+//#include <QMenu>
+//#include <QAction>
 #include "Shape.h"
+#include "ShapeCreator.h"
+#include "ShapeManager.h"
+#include "FileHandle.h"
 
 #include <QtWidgets/QMainWindow>
 //#include "ui_Sketcher3D.h"
@@ -39,6 +44,13 @@ private:
     QToolButton* mCylinderTool;
     QToolButton* mPyramidTool;
     QToolButton* mSphereTool;
+
+    QMenu* mFileMenu;
+    QAction* mNewAction;
+    QAction* mOpenAction;
+    QAction* mSaveAction;
+
+    ShapeManager mgr;
     
 private slots:
     void onCuboidToolClicked();
@@ -47,6 +59,10 @@ private slots:
     void onCylinderToolClicked();
     void onPyramidClicked();
     void onSphereToolClicked();
+
+    //void onNewActionTriggered();
+    //void onOpenActionTriggered();
+    void onSaveActionTriggered(); 
     
 };
 

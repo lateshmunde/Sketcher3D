@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <iostream>
+#include <vector>
 #include <fstream>
 #include "Sketcher3D.h"
 #include "Cube.h"
@@ -17,6 +18,7 @@ Sketcher3D::Sketcher3D(QWidget *parent)
     setupUI();
     resize(800, 600);
 
+
 }
 
 Sketcher3D::~Sketcher3D()
@@ -24,6 +26,7 @@ Sketcher3D::~Sketcher3D()
 
 void Sketcher3D::setupUI()
 {
+    // for add shapes
     // Central widget and layout
     mCentralWidget = new QWidget(this);
     mCentralgridWidget = new QGridLayout(mCentralWidget);
@@ -44,6 +47,7 @@ void Sketcher3D::setupUI()
     connect(mCylinderTool, &QToolButton::clicked, this, &Sketcher3D::onCylinderToolClicked);
     connect(mPyramidTool, &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool, &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
+    connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
    
 }
 
@@ -53,13 +57,13 @@ void Sketcher3D::menuBarElements()
     setMenuBar(mMenuBar);
 
     // File Menu
-    QMenu* fileMenu = mMenuBar->addMenu("File");
-    QAction* newAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
-    newAction->setShortcut(QKeySequence::New);   // Ctrl+N
-    QAction* openAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
-    openAction->setShortcut(QKeySequence::Open);   // Ctrl+O
-    QAction* saveAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
-    saveAction->setShortcut(QKeySequence::Save);   // Ctrl+S
+    mFileMenu = mMenuBar->addMenu("File");
+    mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
+    mNewAction->setShortcut(QKeySequence::New);   // Ctrl+N
+    mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
+    mOpenAction->setShortcut(QKeySequence::Open);   // Ctrl+O
+    mSaveAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
+    mSaveAction->setShortcut(QKeySequence::Save);   // Ctrl+S
 
 }
 
@@ -167,13 +171,28 @@ void Sketcher3D::onSphereToolClicked()
 
     if (!ok) return;
 
-    std::shared_ptr<Shape> S = std::make_shared<Sphere>(name, radius);
+     
+    std::shared_ptr<Shape> s = std::make_shared<Sphere>(name, radius);
+    mgr.addShape(s);
+    //Create shapes using ShapeCreator
+    /*std::shared_ptr<Shape> S
+        = std::make_shared<Shape>(ShapeCreator::createSphere(name, radius));*/
+    
+}
 
-    std::string filePath = "sphere.dat";
+void Sketcher3D::onSaveActionTriggered()
+{
+    /*QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", ".dat");*/
+  
+    //Save shapes to file (GNU Plot)
+    std::string fileName = "../ShapesGNU.dat";
 
-    std::ofstream fout(filePath);
-    S->saveForGnu(fout);        // write the coordinates
-    fout.close();
+    std::vector<std::shared_ptr<Shape>> shapesVec = mgr.getShapesVec();
+    if (FileHandle::saveToFileGNUPlot(fileName, shapesVec)) {
+        QMessageBox::information(this, "Saved", "Shapes saved successfully!");
+    }
+    else
+        QMessageBox::information(this, "Not Saved", "Shapes not saved!");
 
-    QMessageBox::information(this, "Done", "sphere.dat created!");
 }

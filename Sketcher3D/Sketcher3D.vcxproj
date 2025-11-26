@@ -115,7 +115,10 @@
     <QtUic Include="Sketcher3D.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FileHandle.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ShapeCreator.cpp" />
+    <ClCompile Include="src\ShapeManager.cpp" />
     <ClCompile Include="src\Sketcher3D.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -126,6 +129,9 @@
     <QtMoc Include="headers\Sketcher3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\FileHandle.h" />
+    <ClInclude Include="headers\ShapeCreator.h" />
+    <ClInclude Include="headers\ShapeManager.h" />
     <ClInclude Include="headers\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
