@@ -1,7 +1,10 @@
 #pragma once
+#include <QGridLayout>
+#include <QToolBar>
+#include "Shape.h"
 
 #include <QtWidgets/QMainWindow>
-#include "ui_Sketcher3D.h"
+//#include "ui_Sketcher3D.h"
 
 class Sketcher3D : public QMainWindow
 {
@@ -12,6 +15,16 @@ public:
     ~Sketcher3D();
 
 private:
-    Ui::Sketcher3DClass ui;
+    //Ui::Sketcher3DClass ui;
+    void setupUI() ;
+
+private:
+    QWidget* mCentralWidget;
+    QGridLayout* mCentralgridWidget;
+    QToolBar* mToolBar;
+    QMenuBar* mMenuBar;
+    QStatusBar* mStatusBar;
+  
+
 };
 
