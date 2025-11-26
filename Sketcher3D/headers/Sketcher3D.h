@@ -47,6 +47,11 @@ private:
     std::unique_ptr<QToolButton> mSphereTool;
     std::unique_ptr<QToolButton> mPyramidTool;
 
+    QMenu* mFileMenu;
+    QAction* mSaveAction;
+    QAction* mNewAction;
+    QAction* mOpenAction;
+
     ShapeManager mgr; // handles conatiner(vector) of shapes
     
 private slots:

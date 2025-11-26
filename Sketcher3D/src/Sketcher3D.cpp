@@ -36,10 +36,6 @@ void Sketcher3D::setupUI()
     setStatusBar(mStatusBar.get());
     mStatusBar->showMessage("Application Started");
 
-    QMenu *fileMenu = mMenuBar.get()->addMenu("File");
-    QAction *saveAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
-    saveAction->setShortcut(QKeySequence::Save); // Ctrl+S
-
     // Connections
     connect(mCuboidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCuboidToolClicked);
     connect(mCubeTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCubeToolClicked);
@@ -47,7 +43,7 @@ void Sketcher3D::setupUI()
     connect(mCylinderTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCylinderToolClicked);
     connect(mPyramidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
-    connect(saveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
 }
 
 void Sketcher3D::menuBarElements()
@@ -56,14 +52,15 @@ void Sketcher3D::menuBarElements()
     mMenuBar = std::make_unique<QMenuBar>(this);
     setMenuBar(mMenuBar.get());
 
+    
     // File Menu
-    QMenu *fileMenu = mMenuBar.get()->addMenu("File");
-    QAction *newAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
-    newAction->setShortcut(QKeySequence::New); // Ctrl+N
-    QAction *openAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
-    openAction->setShortcut(QKeySequence::Open); // Ctrl+O
-    // QAction* saveAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
-    // saveAction->setShortcut(QKeySequence::Save);   // Ctrl+S
+    mFileMenu = mMenuBar.get()->addMenu("File");
+    mSaveAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
+    mSaveAction->setShortcut(QKeySequence::Save); // Ctrl+S
+    mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
+    mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
+    mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
+    mOpenAction->setShortcut(QKeySequence::Open); // Ctrl+O
 
     // Edit Menu
     QMenu *editMenu = mMenuBar.get()->addMenu("Edit"); // Local pointer editMenu, no need to delete
