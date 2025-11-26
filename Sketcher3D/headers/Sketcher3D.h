@@ -18,9 +18,12 @@ public:
     Sketcher3D(QWidget *parent = nullptr);
     ~Sketcher3D();
 
+
 private:
     //Ui::Sketcher3DClass ui;
     void setupUI() ;
+    void toolBarElements();
+    void menuBarElements();
 
 private:
     std::unique_ptr<QWidget> mCentralWidget;
@@ -33,9 +36,17 @@ private:
     std::unique_ptr<QToolButton> mCuboidTool;
     std::unique_ptr<QToolButton> mCubeTool;
     std::unique_ptr<QToolButton> mConeTool;
-    std::unique_ptr<QToolButton> mPyramidTool;
     std::unique_ptr<QToolButton> mCylinderTool;
+    std::unique_ptr<QToolButton> mPyramidTool;
     std::unique_ptr<QToolButton> mSphereTool;
     
+private slots:
+    void onCuboidToolClicked();
+    void onCubeToolClicked();
+    void onConeToolClicked();
+    void onCylinderToolClicked();
+    void onPyramidClicked();
+    void onSphereToolClicked();
+
 };
 
