@@ -17,13 +17,13 @@ class Sketcher3D : public QMainWindow
 public:
     Sketcher3D(QWidget *parent = nullptr);
     ~Sketcher3D();
-
+    void toolBarElements();
+    void menuBarElements();
 
 private:
     //Ui::Sketcher3DClass ui;
     void setupUI() ;
-    void toolBarElements();
-    void menuBarElements();
+    
 
 private:
     QWidget* mCentralWidget;
@@ -47,6 +47,6 @@ private slots:
     void onCylinderToolClicked();
     void onPyramidClicked();
     void onSphereToolClicked();
-
+    
 };
 

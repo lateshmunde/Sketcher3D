@@ -1,5 +1,13 @@
 #include "stdafx.h"
+#include <iostream>
+#include <fstream>
 #include "Sketcher3D.h"
+#include "Cube.h"
+#include "Cuboid.h"
+#include "Sphere.h"
+#include "Cylinder.h"
+#include "Cone.h"
+#include "Pyramid.h"
 
 Sketcher3D::Sketcher3D(QWidget *parent)
     : QMainWindow(parent)
@@ -19,7 +27,8 @@ void Sketcher3D::setupUI()
     // Central widget and layout
     mCentralWidget = new QWidget(this);
     mCentralgridWidget = new QGridLayout(mCentralWidget);
-    
+    setCentralWidget(mCentralWidget);
+
     menuBarElements();
     toolBarElements();
 
@@ -36,17 +45,22 @@ void Sketcher3D::setupUI()
     connect(mPyramidTool, &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool, &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
    
-
-
 }
 
 void Sketcher3D::menuBarElements()
 {
+    mMenuBar = new QMenuBar(this);
+    setMenuBar(mMenuBar);
+
     // File Menu
     QMenu* fileMenu = mMenuBar->addMenu("File");
-    QAction* newAction = fileMenu->addAction("New");
-    QAction* openAction = fileMenu->addAction("Open");
-    QAction* saveAction = fileMenu->addAction("Save");
+    QAction* newAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
+    newAction->setShortcut(QKeySequence::New);   // Ctrl+N
+    QAction* openAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
+    openAction->setShortcut(QKeySequence::Open);   // Ctrl+O
+    QAction* saveAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
+    saveAction->setShortcut(QKeySequence::Save);   // Ctrl+S
+
 }
 
 void Sketcher3D::toolBarElements()
@@ -57,6 +71,8 @@ void Sketcher3D::toolBarElements()
     //Cuboid Tool
     mCuboidTool = new QToolButton(mToolBar);
     mCuboidTool->setIcon(QIcon("Cuboid"));
+    mCuboidTool->setText("Cuboid");
+    mCuboidTool->setIconSize(QSize(32, 32));
     mCuboidTool->setIconSize(QSize(32, 32));
     mCuboidTool->setToolTip("Cuboid");
     mToolBar->addWidget(mCuboidTool);
@@ -99,30 +115,65 @@ void Sketcher3D::toolBarElements()
 
 void Sketcher3D::onCuboidToolClicked()
 {
-
+    QMessageBox::information(this, "Done", "sphere.dat created!");
 }
 
 void Sketcher3D::onCubeToolClicked()
 {
-
+    QMessageBox::information(this, "Done", "sphere.dat created!");
 }
 
 void Sketcher3D::onConeToolClicked()
 {
-
+    QMessageBox::information(this, "Done", "sphere.dat created!");
 }
 
 void Sketcher3D::onCylinderToolClicked()
 {
-
+    QMessageBox::information(this, "Done", "sphere.dat created!");
 }
 
 void Sketcher3D::onPyramidClicked()
 {
-
+    QMessageBox::information(this, "Done", "sphere.dat created!");
 }
 
 void Sketcher3D::onSphereToolClicked()
 {
+    bool okName = false;
+    QString qname = QInputDialog::getText(
+        this,
+        "Sphere Name",
+        "Enter sphere name:",
+        QLineEdit::Normal,
+        "Sphere1",
+        &okName);
 
+    if (!okName || qname.isEmpty())
+        return;
+
+    std::string name = qname.toStdString();
+
+    bool ok = false;
+    double radius = QInputDialog::getDouble(
+        this,
+        "Sphere Radius",
+        "Enter radius:",
+        5.0,      // default value
+        1.0,      // min
+        100.0,  // max
+        2,
+        &ok);
+
+    if (!ok) return;
+
+    std::shared_ptr<Shape> S = std::make_shared<Sphere>(name, radius);
+
+    std::string filePath = "sphere.dat";
+
+    std::ofstream fout(filePath);
+    S->saveForGnu(fout);        // write the coordinates
+    fout.close();
+
+    QMessageBox::information(this, "Done", "sphere.dat created!");
 }
