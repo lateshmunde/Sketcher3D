@@ -25,95 +25,103 @@ Sketcher3D::~Sketcher3D()
 
 void Sketcher3D::setupUI()
 {
-    // for add shapes
     // Central widget and layout
-    mCentralWidget = new QWidget(this);
-    mCentralgridWidget = new QGridLayout(mCentralWidget);
-    setCentralWidget(mCentralWidget);
+    mCentralWidget = std::make_unique<QWidget>(this);
+    mCentralgridWidget = std::make_unique<QGridLayout>(mCentralWidget.get());
+    setCentralWidget(mCentralWidget.get());
 
     menuBarElements();
     toolBarElements();
 
-    mStatusBar = new QStatusBar(this);
-    setStatusBar(mStatusBar);
+    mStatusBar = std::make_unique<QStatusBar>(this);
+    setStatusBar(mStatusBar.get());
     mStatusBar->showMessage("Application Started");
 
 
     // Connections
-    connect(mCuboidTool, &QToolButton::clicked, this, &Sketcher3D::onCuboidToolClicked);
-    connect(mCubeTool, &QToolButton::clicked, this, &Sketcher3D::onCubeToolClicked);
-    connect(mConeTool, &QToolButton::clicked, this, &Sketcher3D::onConeToolClicked);
-    connect(mCylinderTool, &QToolButton::clicked, this, &Sketcher3D::onCylinderToolClicked);
-    connect(mPyramidTool, &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
-    connect(mSphereTool, &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
-    connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    connect(mCuboidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCuboidToolClicked);
+    connect(mCubeTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCubeToolClicked);
+    connect(mConeTool.get(), &QToolButton::clicked, this, &Sketcher3D::onConeToolClicked);
+    connect(mCylinderTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCylinderToolClicked);
+    connect(mPyramidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
+    connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
+    connect(saveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
    
 }
 
 void Sketcher3D::menuBarElements()
 {
-    mMenuBar = new QMenuBar(this);
-    setMenuBar(mMenuBar);
+    // ============================ MENU BAR =================================
+    mMenuBar = std::make_unique<QMenuBar>(this);
+    setMenuBar(mMenuBar.get());
 
     // File Menu
-    mFileMenu = mMenuBar->addMenu("File");
-    mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
-    mNewAction->setShortcut(QKeySequence::New);   // Ctrl+N
-    mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
-    mOpenAction->setShortcut(QKeySequence::Open);   // Ctrl+O
-    mSaveAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
-    mSaveAction->setShortcut(QKeySequence::Save);   // Ctrl+S
+    QMenu* fileMenu = mMenuBar.get()->addMenu("File");
+    QAction* newAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
+    newAction->setShortcut(QKeySequence::New);   // Ctrl+N
+    QAction* openAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
+    openAction->setShortcut(QKeySequence::Open);   // Ctrl+O
+    QAction* saveAction = fileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
+    saveAction->setShortcut(QKeySequence::Save);   // Ctrl+S
 
+    // Edit Menu
+    QMenu* editMenu = mMenuBar.get()->addMenu("Edit"); // Local pointer editMenu, no need to delete
+    QAction* cleanAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_TrashIcon), "Clean");
+    cleanAction->setShortcut(Qt::CTRL | Qt::Key_X); // Ctrl+X
+    QAction* undoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowBack), "Undo");
+    undoAction->setShortcut(QKeySequence::Undo);   // Ctrl+Z
+    QAction* redoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowForward), "Redo");
+    redoAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Z);   // Ctrl+Shift+Z/
 }
 
 void Sketcher3D::toolBarElements()
 {
-    mToolBar = new QToolBar(this);
-    addToolBar(mToolBar);
+    // ============================ TOOL BAR =================================
+    mToolBar = std::make_unique<QToolBar>(this);
+    addToolBar(mToolBar.get());
+    mToolBar->setIconSize(QSize(48, 48));
 
     //Cuboid Tool
-    mCuboidTool = new QToolButton(mToolBar);
-    mCuboidTool->setIcon(QIcon("Cuboid"));
-    mCuboidTool->setText("Cuboid");
-    mCuboidTool->setIconSize(QSize(32, 32));
-    mCuboidTool->setIconSize(QSize(32, 32));
-    mCuboidTool->setToolTip("Cuboid");
-    mToolBar->addWidget(mCuboidTool);
+    mCuboidTool = std::make_unique<QToolButton>(mToolBar.get());
+    mCuboidTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cuboid.png"));
+    mCuboidTool.get()->setIconSize(QSize(48, 48));
+    mCuboidTool.get()->setToolTip("Cuboid");
+    mToolBar.get()->addWidget(mCuboidTool.get());
 
     //Cube Tool
-    mCubeTool = new QToolButton(mToolBar);
-    mCubeTool->setIcon(QIcon("Cube"));
-    mCubeTool->setIconSize(QSize(32, 32));
-    mCubeTool->setToolTip("Cube");
-    mToolBar->addWidget(mCubeTool);
+    mCubeTool = std::make_unique<QToolButton>(mToolBar.get());
+    mCubeTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cube.png"));
+    mCubeTool.get()->setIconSize(QSize(48, 48));
+    mCubeTool.get()->setToolTip("Cube");
+    mToolBar.get()->addWidget(mCubeTool.get());
 
     //Sphere Tool
-    mSphereTool = new QToolButton(mToolBar);
-    mSphereTool->setIcon(QIcon("Sphere"));
-    mSphereTool->setIconSize(QSize(32, 32));
-    mSphereTool->setToolTip("Sphere");
-    mToolBar->addWidget(mSphereTool);
+    mSphereTool = std::make_unique<QToolButton>(mToolBar.get());
+    mSphereTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/sphere.png"));
+    mSphereTool.get()->setIconSize(QSize(48, 48));
+    mSphereTool.get()->setToolTip("Sphere");
+    mToolBar.get()->addWidget(mSphereTool.get());
 
     //Cylinder Tool
-    mCylinderTool = new QToolButton(mToolBar);
-    mCylinderTool->setIcon(QIcon("Cylinder"));
-    mCylinderTool->setIconSize(QSize(32, 32));
-    mCylinderTool->setToolTip("Cylinder");
-    mToolBar->addWidget(mCylinderTool);
+    mCylinderTool = std::make_unique<QToolButton>(mToolBar.get());
+    mCylinderTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cylinder.png"));
+    mCylinderTool.get()->setIconSize(QSize(48, 48));
+    mCylinderTool.get()->setToolTip("Cylinder");
+    mToolBar.get()->addWidget(mCylinderTool.get());
 
     //Cone Tool
-    mConeTool = new QToolButton(mToolBar);
-    mConeTool->setIcon(QIcon("Cone"));
-    mConeTool->setIconSize(QSize(32, 32));
-    mConeTool->setToolTip("Cone");
-    mToolBar->addWidget(mConeTool);
+    mConeTool = std::make_unique<QToolButton>(mToolBar.get());
+    mConeTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cone.png"));
+    mConeTool.get()->setIconSize(QSize(48, 48));
+    mConeTool.get()->setToolTip("Cone");
+    mToolBar.get()->addWidget(mConeTool.get());
 
     //Pyramid Tool
-    mPyramidTool = new QToolButton(mToolBar);
-    mPyramidTool->setIcon(QIcon("Pyramid"));
-    mPyramidTool->setIconSize(QSize(32, 32));
-    mPyramidTool->setToolTip("Pyramid");
-    mToolBar->addWidget(mPyramidTool);
+    mPyramidTool = std::make_unique<QToolButton>(mToolBar.get());
+    mPyramidTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/pyramid.png"));
+    mPyramidTool.get()->setIconSize(QSize(48, 48));
+    mPyramidTool.get()->setToolTip("Pyramid");
+    mToolBar.get()->addWidget(mPyramidTool.get());
 }
 
 void Sketcher3D::onCuboidToolClicked()
