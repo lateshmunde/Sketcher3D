@@ -7,6 +7,8 @@
 #include <memory> // For unique_ptr
 #include <QToolButton>
 #include <fstream>
+#include <QMessageBox>
+#include <QFileDialog>
 #include "Shape.h"
 #include "ShapeCreator.h"
 #include "ShapeManager.h"
