@@ -1,8 +1,7 @@
 #include "stdafx.h"
+#include "Sketcher3D.h"
 #include <iostream>
 #include <vector>
-#include <fstream>
-#include "Sketcher3D.h"
 #include "Cube.h"
 #include "Cuboid.h"
 #include "Sphere.h"
