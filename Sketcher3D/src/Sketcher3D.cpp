@@ -17,8 +17,10 @@ Sketcher3D::~Sketcher3D()
 void Sketcher3D::setupUI()
 {
     // Central widget and layout
-    mCentralWidget = new QWidget(this);
-    mCentralgridWidget = new QGridLayout(mCentralWidget);
+    //mCentralWidget = new QWidget(this);
+    mCentralWidget = std::make_unique<QWidget>(this);
+    mCentralgridWidget = std::make_unique<QGridLayout>(mCentralWidget.get());
+    //mCentralgridWidget = new QGridLayout(mCentralWidget);
 
     
 }
