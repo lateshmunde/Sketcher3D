@@ -44,6 +44,8 @@ void Sketcher3D::setupUI()
     connect(mPyramidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
 
+
+    connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     //connect(mNewAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     //connect(mOpenAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
@@ -61,8 +63,10 @@ void Sketcher3D::menuBarElements()
     
     // File Menu
     mFileMenu = mMenuBar.get()->addMenu("File");
-    mSaveAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
+    mSaveMenu = mFileMenu->addMenu("Save");
+    mSaveAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
     mSaveAction->setShortcut(QKeySequence::Save); // Ctrl+S
+    mSaveGNUAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveGNU");
     mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
     mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
     mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
@@ -550,7 +554,7 @@ void Sketcher3D::onSphereToolClicked()
 
 }
 
-void Sketcher3D::onSaveActionTriggered()
+void Sketcher3D::onSaveGNUActionTriggered()
 {
     /*QString qFileName = QFileDialog::getSaveFileName(
         this, "Save Shapes", "", ".dat");*/
@@ -560,6 +564,23 @@ void Sketcher3D::onSaveActionTriggered()
 
     std::vector<std::shared_ptr<Shape>> shapesVec = mgr.getShapesVec();
     if (FileHandle::saveToFileGNUPlot(fileName, shapesVec))
+    {
+        QMessageBox::information(this, "Saved", "Shapes saved successfully!");
+    }
+    else
+        QMessageBox::information(this, "Not Saved", "Shapes not saved!");
+}
+
+void Sketcher3D::onSaveActionTriggered()
+{
+    /*QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", ".dat");*/
+
+        // Save shapes to file
+    std::string fileName = "../Shapes.skt";
+
+    std::vector<std::shared_ptr<Shape>> shapesVec = mgr.getShapesVec();
+    if (FileHandle::saveToFile(fileName, shapesVec))
     {
         QMessageBox::information(this, "Saved", "Shapes saved successfully!");
     }
