@@ -339,18 +339,23 @@ void Sketcher3D::onPyramidClicked()
     double height = heightSpin->value();
 
     // Create Pyramid
-    Pyramid py(name.toStdString(), baseLength, baseWidth, height);
+    /*Pyramid py(name.toStdString(), baseLength, baseWidth, height);*/
 
-    // Save .dat file
-    std::ofstream out(name.toStdString() + ".dat");
-    if (!out.is_open())
-    {
-        QMessageBox::critical(this, "Error", "Cannot write dat file.");
-        return;
-    }
 
-    py.saveForGnu(out);
-    out.close();
+    // Create Pyramid object
+    std::shared_ptr<Shape> py = std::make_shared<Pyramid>(name.toStdString(), baseLength, baseWidth, height);
+    mgr.addShape(py);
+
+    //// Save .dat file
+    //std::ofstream out(name.toStdString() + ".dat");
+    //if (!out.is_open())
+    //{
+    //    QMessageBox::critical(this, "Error", "Cannot write dat file.");
+    //    return;
+    //}
+
+    //py.saveForGnu(out);
+    //out.close();
 
     // Inform user
     QMessageBox::information(this, "Success", "Pyramid created.");
