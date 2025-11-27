@@ -48,11 +48,13 @@ private:
     std::unique_ptr<QToolButton> mPyramidTool;
 
     QMenu* mFileMenu;
+    QMenu* mSaveMenu;
     QAction* mSaveAction;
+    QAction* mSaveGNUAction;
     QAction* mNewAction;
     QAction* mOpenAction;
 
-    ShapeManager mgr; // handles conatiner(vector) of shapes
+    ShapeManager shapeManager; // handles container(vector) of shapes
     
 private slots:
     void onCuboidToolClicked();
@@ -65,6 +67,6 @@ private slots:
     //void onNewActionTriggered();
     //void onOpenActionTriggered();
     void onSaveActionTriggered(); 
-    
+    void onSaveGNUActionTriggered(); // For GNU plot
 };
 
