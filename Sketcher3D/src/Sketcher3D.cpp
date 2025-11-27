@@ -376,7 +376,7 @@ void Sketcher3D::onCylinderToolClicked()
     std::unique_ptr<QDoubleSpinBox> radiusSpin = std::make_unique<QDoubleSpinBox>(&dlg);
     // QDoubleSpinBox* radiusSpin = new QDoubleSpinBox(&dlg);
     radiusSpin->setRange(0.1, 10000);
-    radiusSpin->setValue(5.0);
+    radiusSpin->setValue(10.0);
     layout->addRow("Radius:", radiusSpin.get());
     // layout->addRow("Radius:", radiusSpin);
 
@@ -438,7 +438,7 @@ void Sketcher3D::onConeToolClicked()
     // QFormLayout* layout = new QFormLayout(&dlg);
 
     // Name
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Pyramid1", &dlg);
+    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Cone1", &dlg);
     layout->addRow("Cone Name:", nameEdit.get());
     // QLineEdit* nameEdit = new QLineEdit("Cone1", &dlg);
     // layout->addRow("Cone Name:", nameEdit);
@@ -446,18 +446,16 @@ void Sketcher3D::onConeToolClicked()
     // Radius
     std::unique_ptr<QDoubleSpinBox> radiusSpin = std::make_unique<QDoubleSpinBox>(&dlg);
     // QDoubleSpinBox* radiusSpin = new QDoubleSpinBox(&dlg);
-    radiusSpin->setRange(0.0001, 1000000.0);
-    radiusSpin->setDecimals(4);
-    radiusSpin->setValue(0.0);
+    radiusSpin->setRange(0.1, 10000.0);
+    radiusSpin->setValue(10.0);
     layout->addRow("Radius:", radiusSpin.get());
     // layout->addRow("Radius:", radiusSpin);
 
     // Height
     std::unique_ptr<QDoubleSpinBox> heightSpin = std::make_unique<QDoubleSpinBox>(&dlg);
     // QDoubleSpinBox* heightSpin = new QDoubleSpinBox(&dlg);
-    heightSpin->setRange(0.0001, 1000000.0);
-    heightSpin->setDecimals(4);
-    heightSpin->setValue(0.0);
+    heightSpin->setRange(0.1, 10000.0);
+    heightSpin->setValue(10.0);
     layout->addRow("Height:", heightSpin.get());
     // layout->addRow("Height:", heightSpin);
 
@@ -520,7 +518,7 @@ void Sketcher3D::onSphereToolClicked()
     std::unique_ptr<QDoubleSpinBox> radiusSpin = std::make_unique<QDoubleSpinBox>(&dlg);
     // QDoubleSpinBox* radiusSpin = new QDoubleSpinBox(&dlg);
     radiusSpin->setRange(0.1, 10000);
-    radiusSpin->setValue(5.0);
+    radiusSpin->setValue(10.0);
     layout->addRow("Radius:", radiusSpin.get());
     // layout->addRow("Radius:", radiusSpin);
 
