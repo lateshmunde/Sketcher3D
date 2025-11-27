@@ -54,7 +54,7 @@ private:
     QAction* mNewAction;
     QAction* mOpenAction;
 
-    ShapeManager mgr; // handles container(vector) of shapes
+    ShapeManager shapeManager; // handles container(vector) of shapes
     
 private slots:
     void onCuboidToolClicked();
