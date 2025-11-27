@@ -43,7 +43,13 @@ void Sketcher3D::setupUI()
     connect(mCylinderTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCylinderToolClicked);
     connect(mPyramidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
+
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    //connect(mNewAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    //connect(mOpenAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    //connect(cleanAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    //connect(undoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    //connect(redoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
 }
 
 void Sketcher3D::menuBarElements()
@@ -77,47 +83,53 @@ void Sketcher3D::toolBarElements()
     // ============================ TOOL BAR =================================
     mToolBar = std::make_unique<QToolBar>(this);
     addToolBar(mToolBar.get());
-    mToolBar->setIconSize(QSize(48, 48));
+    mToolBar->setIconSize(QSize(32, 32));
 
     // Cuboid Tool
     mCuboidTool = std::make_unique<QToolButton>(mToolBar.get());
-    mCuboidTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cuboid.png"));
-    mCuboidTool.get()->setIconSize(QSize(48, 48));
+    //mCuboidTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cuboid.png"));
+    mCuboidTool.get()->setIcon(QIcon(":/Sketcher3D/Resources/cuboid.png"));
+    mCuboidTool.get()->setIconSize(QSize(32, 32));
     mCuboidTool.get()->setToolTip("Cuboid");
     mToolBar.get()->addWidget(mCuboidTool.get());
 
     // Cube Tool
     mCubeTool = std::make_unique<QToolButton>(mToolBar.get());
-    mCubeTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cube.png"));
-    mCubeTool.get()->setIconSize(QSize(48, 48));
+    //mCubeTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cube.png"));
+    mCubeTool.get()->setIcon(QIcon(":/Sketcher3D/Resources/cube.png"));
+    mCubeTool.get()->setIconSize(QSize(32, 32));
     mCubeTool.get()->setToolTip("Cube");
     mToolBar.get()->addWidget(mCubeTool.get());
 
     // Sphere Tool
     mSphereTool = std::make_unique<QToolButton>(mToolBar.get());
-    mSphereTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/sphere.png"));
-    mSphereTool.get()->setIconSize(QSize(48, 48));
+    //mSphereTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/sphere.png"));
+    mSphereTool.get()->setIcon(QIcon(":/Sketcher3D/Resources/sphere.png"));
+    mSphereTool.get()->setIconSize(QSize(32, 32));
     mSphereTool.get()->setToolTip("Sphere");
     mToolBar.get()->addWidget(mSphereTool.get());
 
     // Cylinder Tool
     mCylinderTool = std::make_unique<QToolButton>(mToolBar.get());
-    mCylinderTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cylinder.png"));
-    mCylinderTool.get()->setIconSize(QSize(48, 48));
+    //mCylinderTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cylinder.png"));
+    mCylinderTool.get()->setIcon(QIcon(":/Sketcher3D/Resources/cylinder.png"));
+    mCylinderTool.get()->setIconSize(QSize(32, 32));
     mCylinderTool.get()->setToolTip("Cylinder");
     mToolBar.get()->addWidget(mCylinderTool.get());
 
     // Cone Tool
     mConeTool = std::make_unique<QToolButton>(mToolBar.get());
-    mConeTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cone.png"));
-    mConeTool.get()->setIconSize(QSize(48, 48));
+    //mConeTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/cone.png"));
+    mConeTool.get()->setIcon(QIcon(":/Sketcher3D/Resources/cone.png"));
+    mConeTool.get()->setIconSize(QSize(32, 32));
     mConeTool.get()->setToolTip("Cone");
     mToolBar.get()->addWidget(mConeTool.get());
 
     // Pyramid Tool
     mPyramidTool = std::make_unique<QToolButton>(mToolBar.get());
-    mPyramidTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/pyramid.png"));
-    mPyramidTool.get()->setIconSize(QSize(48, 48));
+    //mPyramidTool.get()->setIcon(QIcon(":/Sketcher3D/Rec/pyramid.png"));
+    mPyramidTool.get()->setIcon(QIcon(":/Sketcher3D/Resources/pyramid.png"));
+    mPyramidTool.get()->setIconSize(QSize(32, 32));
     mPyramidTool.get()->setToolTip("Pyramid");
     mToolBar.get()->addWidget(mPyramidTool.get());
 }
@@ -134,7 +146,7 @@ void Sketcher3D::onCuboidToolClicked()
 
     // Name field
     std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Cuboid1", &dlg);
-    layout.get()->addRow("Cuboid Name:", nameEdit.get());
+    layout->addRow("Cuboid Name:", nameEdit.get());
     //QLineEdit* nameEdit = new QLineEdit("Cuboid1", &dlg);
     //layout->addRow("Cuboid Name:", nameEdit);
 
@@ -143,7 +155,7 @@ void Sketcher3D::onCuboidToolClicked()
     // QDoubleSpinBox* lengthSpin = new QDoubleSpinBox(&dlg);
     lengthSpin->setRange(0.1, 10000);
     lengthSpin->setValue(10.0);
-    layout.get()->addRow("Length: ", lengthSpin.get());
+    layout->addRow("Length: ", lengthSpin.get());
     // layout->addRow( Length:", lengthSpin);
 
     //  Width
@@ -159,7 +171,7 @@ void Sketcher3D::onCuboidToolClicked()
     // QDoubleSpinBox* heightSpin = new QDoubleSpinBox(&dlg);
     heightSpin->setRange(0.1, 10000);
     heightSpin->setValue(10.0);
-    layout.get()->addRow(" Height:", heightSpin.get());
+    layout->addRow(" Height:", heightSpin.get());
     // layout->addRow("Height:", heightSpin);
 
     // OK / Cancel buttons
@@ -224,7 +236,7 @@ void Sketcher3D::onCubeToolClicked()
     // QDoubleSpinBox* lengthSpin = new QDoubleSpinBox(&dlg);
     lengthSpin->setRange(0.1, 10000);
     lengthSpin->setValue(10.0);
-    layout.get()->addRow("Length: ", lengthSpin.get());
+    layout->addRow("Length: ", lengthSpin.get());
     // layout->addRow( Length:", lengthSpin);
   
 
