@@ -13,6 +13,7 @@
 #include "ShapeCreator.h"
 #include "ShapeManager.h"
 #include "FileHandle.h"
+#include "OpenGLWidget.h"
 
 #include <QtWidgets/QMainWindow>
 //#include "ui_Sketcher3D.h"
@@ -55,6 +56,8 @@ private:
     QAction* mOpenAction;
 
     ShapeManager shapeManager; // handles container(vector) of shapes
+
+    std::unique_ptr<OpenGLWidget> mGLWidget;
     
 private slots:
     void onCuboidToolClicked();
