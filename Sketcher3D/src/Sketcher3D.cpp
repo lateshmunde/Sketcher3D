@@ -932,8 +932,8 @@ void Sketcher3D::onSaveActionTriggered()
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
     if (FileHandle::saveToFile(fileName, shapesVec))
     {
-        // For regular save, we might also want to save a .dat file for OpenGL
-        // Let's also save to a temporary .dat file for visualization
+        // For regular save, save a .dat file for OpenGL
+        // saving to a temporary .dat file for visualization
         std::string datFileName = "../ShapesView.dat";
         if (FileHandle::saveToFileGNUPlot(datFileName, shapesVec))
         {

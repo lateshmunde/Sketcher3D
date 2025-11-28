@@ -5,13 +5,13 @@
 #include <QtMath>
 
 // OpenGL headers - order matters!
-#ifdef _WIN32
-#include <windows.h>
-#pragma comment(lib, "opengl32.lib")
-#pragma comment(lib, "glu32.lib")
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#ifdef _WIN32
+//#include <windows.h>
+//#pragma comment(lib, "opengl32.lib")
+//#pragma comment(lib, "glu32.lib")
+//#endif
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 
 GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
