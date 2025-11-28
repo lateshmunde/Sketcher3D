@@ -78,7 +78,8 @@ void GLWidget::initializeGL()
     initializeOpenGLFunctions();
 
     // Set background color (dark gray)
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    //glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Enable depth testing for 3D
     glEnable(GL_DEPTH_TEST);

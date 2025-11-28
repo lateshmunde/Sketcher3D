@@ -475,7 +475,7 @@
 
 #include "stdafx.h"
 #include "Sketcher3D.h"
-#include "ui_Sketcher3D.h"
+//#include "ui_Sketcher3D.h"
 #include <iostream>
 #include <vector>
 #include "Cube.h"

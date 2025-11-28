@@ -96,6 +96,26 @@ void Sphere::saveForGnu(std::ostream& out) const
 		pts.clear();
 	}
 
+	for (int i = 0; i <= number; i++)
+	{
+		theta = i * dTheta;
+		for (int j = 0; j <= number; j++)
+		{
+			phi = j * dPhi;
+
+			double x_ = mRadius * sin(theta) * sin(phi);
+			double y_ =  mRadius* cos(theta);
+			double z_ = mRadius * sin(theta) * cos(phi);
+			pts.emplace_back(x + x_, y + y_, z + z_);
+		}
+		double x_ = mRadius * sin(theta) * sin(0);
+		double y_ = mRadius * cos(theta);
+		double z_ = mRadius * sin(theta) * cos(0);
+		pts.emplace_back(x + x_, y + y_, z + z_);
+		vec.push_back(pts);
+		pts.clear();
+	}
+
 	for (const auto& ptsVec : vec)
 	{
 		for (const auto& pt : ptsVec)
