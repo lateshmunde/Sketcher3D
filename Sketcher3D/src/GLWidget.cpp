@@ -17,13 +17,11 @@ GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
     , rotationX(30.0f)
     , rotationY(45.0f)
+    //, rotationZ(45.0f)
     , zoom(5.0f)
-{
-}
+{}
 
-GLWidget::~GLWidget()
-{
-}
+GLWidget::~GLWidget() {}
 
 void GLWidget::loadDATFile(const QString& filename)
 {
@@ -86,6 +84,7 @@ void GLWidget::initializeGL()
 
     // Set point size
     glPointSize(5.0f);
+
 
     // Enable line smoothing
     glEnable(GL_LINE_SMOOTH);

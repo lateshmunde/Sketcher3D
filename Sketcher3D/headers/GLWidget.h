@@ -33,6 +33,7 @@ private:
 
     float rotationX;
     float rotationY;
+    float rotationZ;
     float zoom;
     QPoint lastMousePos;
 };
