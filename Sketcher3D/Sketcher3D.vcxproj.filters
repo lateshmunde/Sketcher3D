@@ -49,9 +49,15 @@
     <ClCompile Include="src\ShapeManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GLWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="headers\Sketcher3D.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="headers\GLWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

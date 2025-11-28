@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.9.2</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;widgets;opengl;openglwidgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -68,8 +68,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir)headers;$(SolutionDir)\GeometryEngine3D\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GeometryEngine3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug;$(QTDIR)include;$(QTDIR)include\QtCore;$(QTDIR)include\QtWidgets;$(QTDIR)include\QtGui;$(QTDIR)include\QtOpenGL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GeometryEngine3D.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FileHandle.cpp" />
+    <ClCompile Include="src\GLWidget.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
     <ClCompile Include="src\ShapeManager.cpp" />
@@ -130,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\FileHandle.h" />
+    <QtMoc Include="headers\GLWidget.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
     <ClInclude Include="headers\ShapeManager.h" />
     <ClInclude Include="headers\stdafx.h" />
