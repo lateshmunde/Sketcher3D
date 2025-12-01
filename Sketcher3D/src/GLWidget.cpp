@@ -4,27 +4,13 @@
 #include <QDebug>
 #include <QtMath>
 
-// OpenGL headers - order matters!
-//#ifdef _WIN32
-//#include <windows.h>
-//#pragma comment(lib, "opengl32.lib")
-//#pragma comment(lib, "glu32.lib")
-//#endif
-//#include <GL/gl.h>
-//#include <GL/glu.h>
 
-GLWidget::GLWidget(QWidget* parent)
-    : QOpenGLWidget(parent)
-    , rotationX(30.0f)
-    , rotationY(45.0f)
-    , rotationZ(45.0f)
-    , zoom(5.0f)
-{
-}
+GLWidget::GLWidget(QWidget* parent): QOpenGLWidget(parent)
+    , rotationX(30.0f), rotationY(45.0f), rotationZ(30.0f), zoom(50.0f){}
+//Initialize rotation around X, Y, Z axis(30, 45, 30 deg resp.)
+//Initial zoom value = 5 (camera is 5 units away along - Z)
 
-GLWidget::~GLWidget()
-{
-}
+GLWidget::~GLWidget(){}
 
 void GLWidget::drawShape(std::shared_ptr<Shape> shape) // from pts
 {
@@ -57,6 +43,7 @@ void GLWidget::initializeGL()
 
     // Set background color (dark gray)
     //glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    // Set background color (white)
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Enable depth testing for 3D
