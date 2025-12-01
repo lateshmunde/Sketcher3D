@@ -7,7 +7,7 @@ void ShapeManager::addShape(std::shared_ptr<Shape> shapes)
 	mShapes.push_back(shapes);
 }
 
-const std::vector<std::shared_ptr<Shape>>& ShapeManager::getShapesVec()
+const std::vector<std::shared_ptr<Shape>>& ShapeManager::getShapesVec() const
 {
 	return mShapes;
 }

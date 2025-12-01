@@ -35,6 +35,7 @@ Cuboid ShapeCreator::createCuboid(const std::string& name, double length, double
 	return Cuboid(name, length, width, height);
 }
 
+
 Cube ShapeCreator::createCube(const std::string& name, double side )
 {
 	if (side <= 0)

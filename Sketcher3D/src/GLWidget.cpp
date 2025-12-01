@@ -17,6 +17,7 @@ GLWidget::GLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
     , rotationX(30.0f)
     , rotationY(45.0f)
+    , rotationZ(45.0f)
     , zoom(5.0f)
 {
 }
@@ -25,44 +26,21 @@ GLWidget::~GLWidget()
 {
 }
 
-void GLWidget::loadDATFile(const QString& filename)
+void GLWidget::drawShape(std::shared_ptr<Shape> shape) // from pts
 {
     vertices.clear();
 
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Cannot open file:" << filename;
-        return;
+    std::vector <Point> pts = shape->getCoordinates();
+
+    for (const Point& pt : pts)
+    {
+        float x = pt.getX();
+        float y = pt.getY();
+        float z = pt.getZ();
+        vertices.push_back(x);
+        vertices.push_back(y);
+        vertices.push_back(z);
     }
-
-    QTextStream in(&file);
-
-    while (!in.atEnd()) {
-        QString line = in.readLine().trimmed();
-
-        if (line.isEmpty())
-            continue;
-
-        // Split by whitespace
-        QStringList coords = line.split(" ", Qt::SkipEmptyParts);
-
-        if (coords.size() >= 3) {
-            bool okX, okY, okZ;
-            float x = coords[0].toFloat(&okX);
-            float y = coords[1].toFloat(&okY);
-            float z = coords[2].toFloat(&okZ);
-
-            if (okX && okY && okZ) {
-                vertices.push_back(x);
-                vertices.push_back(y);
-                vertices.push_back(z);
-            }
-        }
-    }
-
-    file.close();
-
-    qDebug() << "Loaded" << vertices.size() / 3 << "points from" << filename;
 
     update();
 }
@@ -122,6 +100,7 @@ void GLWidget::paintGL()
     glTranslatef(0.0f, 0.0f, -zoom);
     glRotatef(rotationX, 1.0f, 0.0f, 0.0f);
     glRotatef(rotationY, 0.0f, 1.0f, 0.0f);
+    glRotatef(rotationZ, 0.0f, 0.0f, 1.0f);
 
     // Draw coordinate axes
     glLineWidth(2.0f);

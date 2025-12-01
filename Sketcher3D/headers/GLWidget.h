@@ -7,6 +7,8 @@
 #include <QWheelEvent>
 #include <vector>
 #include <QString>
+#include "Point.h"
+#include "Shape.h"
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -16,7 +18,7 @@ public:
     GLWidget(QWidget* parent = nullptr);
     ~GLWidget();
 
-    void loadDATFile(const QString& filename);
+    void drawShape(std::shared_ptr<Shape> shape);
     void clearShape();
 
 protected:
@@ -33,6 +35,7 @@ private:
 
     float rotationX;
     float rotationY;
+    float rotationZ;
     float zoom;
     QPoint lastMousePos;
 };

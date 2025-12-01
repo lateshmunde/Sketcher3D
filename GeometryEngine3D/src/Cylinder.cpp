@@ -100,9 +100,9 @@ void Cylinder::saveForGnu(std::ostream& out) const
 		pts.clear();
 	}
 
-	for (const auto& ptsVec : vec)
+	for (const std::vector <Point>& ptsVec : vec)
 	{
-		for (const auto& pt : ptsVec)
+		for (const Point& pt : ptsVec)
 		{
 			pt.writeXYZ(out);
 		}
