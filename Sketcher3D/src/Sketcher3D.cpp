@@ -2,12 +2,7 @@
 #include "Sketcher3D.h"
 #include <iostream>
 #include <vector>
-#include "Cube.h"
-#include "Cuboid.h"
-#include "Sphere.h"
-#include "Cylinder.h"
-#include "Cone.h"
-#include "Pyramid.h"
+#include "ShapeSlots.h"
 
 Sketcher3D::Sketcher3D(QWidget* parent)
     : QMainWindow(parent)
@@ -144,31 +139,8 @@ void Sketcher3D::toolBarElements()
 
 void Sketcher3D::onCuboidToolClicked()
 {
-    // Create dialog
-    QDialog dlg(this);
-    dlg.setWindowTitle("Create Cuboid");
-
-    // Layout
-    std::unique_ptr<QFormLayout> layout = std::make_unique<QFormLayout>(&dlg);
-
-    // Name field
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Cuboid1", &dlg);
-    layout->addRow("Cuboid Name:", nameEdit.get());
-
-    std::unique_ptr<QDoubleSpinBox> lengthSpin = dimensionField(dlg, "Length", layout);
-    std::unique_ptr<QDoubleSpinBox> widthSpin = dimensionField(dlg, "Width", layout);
-    std::unique_ptr<QDoubleSpinBox> heightSpin = dimensionField(dlg, "Height", layout);
-
-    dialogButtonBoxFn(dlg, layout); // OK / Cancel buttons
-    // Extract name
-    QString name = nameEdit->text(); 
-    // Extract value
-    double length = lengthSpin->value(); 
-    double width = widthSpin.get()->value(); 
-    double height = heightSpin.get()->value(); 
-
     // Create cuboid 
-    std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(name.toStdString(), length, width, height);
+    std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
     shapeManager.addShape(cb);
     glWidget->drawShape(cb);
     mStatusBar->showMessage("Cuboid created");
@@ -176,28 +148,8 @@ void Sketcher3D::onCuboidToolClicked()
 
 void Sketcher3D::onCubeToolClicked()
 {
-    // Create dialog
-    QDialog dlg(this);
-    dlg.setWindowTitle("Create Cube");
-
-    // Layout
-    std::unique_ptr<QFormLayout> layout = std::make_unique<QFormLayout>(&dlg);
-
-    // Name 
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Cube1", &dlg);
-    layout.get()->addRow("Cube Name:", nameEdit.get());
-
-    // side
-    std::unique_ptr<QDoubleSpinBox> lengthSpin = dimensionField(dlg, "Side", layout);
-
-    dialogButtonBoxFn(dlg, layout); // OK / Cancel buttons
-
-    // Get values
-    QString name = nameEdit->text();
-    double side = lengthSpin->value();
-
     // Create Cube object
-    std::shared_ptr<Shape> c = std::make_shared<Cube>(name.toStdString(), side);
+    std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
     shapeManager.addShape(c);
     glWidget->drawShape(c);
     mStatusBar->showMessage("Cube created");
@@ -205,31 +157,8 @@ void Sketcher3D::onCubeToolClicked()
 
 void Sketcher3D::onPyramidClicked()
 {
-    // Create dialog
-    QDialog dlg(this);
-    dlg.setWindowTitle("Create Pyramid");
-
-    // Layout
-    std::unique_ptr<QFormLayout> layout = std::make_unique<QFormLayout>(&dlg);
-
-    // Name
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Pyramid1", &dlg);
-    layout.get()->addRow("Pyramid Name:", nameEdit.get());
-
-    std::unique_ptr<QDoubleSpinBox> lengthSpin = dimensionField(dlg, "Length", layout);
-    std::unique_ptr<QDoubleSpinBox> widthSpin = dimensionField(dlg, "Width", layout);
-    std::unique_ptr<QDoubleSpinBox> heightSpin = dimensionField(dlg, "Height", layout);
-
-    dialogButtonBoxFn(dlg, layout); // OK / Cancel buttons
-
-    // Get values
-    QString name = nameEdit->text();
-    double baseLength = lengthSpin->value();
-    double baseWidth = widthSpin->value();
-    double height = heightSpin->value();
-
     // Create Pyramid
-    std::shared_ptr<Shape> py = std::make_shared<Pyramid>(name.toStdString(), baseLength, baseWidth, height);
+    std::shared_ptr<Shape> py= std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
     shapeManager.addShape(py);
     glWidget->drawShape(py);
     mStatusBar->showMessage("Pyramid created");
@@ -237,29 +166,8 @@ void Sketcher3D::onPyramidClicked()
 
 void Sketcher3D::onCylinderToolClicked()
 {
-    // Create dialog
-    QDialog dlg(this);
-    dlg.setWindowTitle("Create Cylinder");
-
-    // Layout
-    std::unique_ptr<QFormLayout> layout = std::make_unique<QFormLayout>(&dlg);
-
-    // Cylinder Name
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Cylinder1", &dlg);
-    layout->addRow("Cylinder Name:", nameEdit.get());
-
-    std::unique_ptr<QDoubleSpinBox> radiusSpin = dimensionField(dlg, "Radius", layout);
-    std::unique_ptr<QDoubleSpinBox> heightSpin = dimensionField(dlg, "Height", layout);
-
-    dialogButtonBoxFn(dlg, layout); // OK / Cancel buttons
-
-    // Get values
-    const QString name = nameEdit->text();
-    const double radius = radiusSpin->value();
-    const double height = heightSpin->value();
-
     // Create Cylinder object
-    std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(name.toStdString(), radius, height);
+    std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
     shapeManager.addShape(cyl);
     glWidget->drawShape(cyl);
     mStatusBar->showMessage("Cylinder created");
@@ -267,29 +175,8 @@ void Sketcher3D::onCylinderToolClicked()
 
 void Sketcher3D::onConeToolClicked()
 {
-    // Create dialog
-    QDialog dlg(this);
-    dlg.setWindowTitle("Create Cone");
-
-    // Layout
-    std::unique_ptr<QFormLayout> layout = std::make_unique<QFormLayout>(&dlg);
-
-    // Name
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Cone1", &dlg);
-    layout->addRow("Cone Name:", nameEdit.get());
-
-    std::unique_ptr<QDoubleSpinBox> radiusSpin = dimensionField(dlg, "Radius", layout);
-    std::unique_ptr<QDoubleSpinBox> heightSpin = dimensionField(dlg, "Height", layout);
-
-    dialogButtonBoxFn(dlg, layout); // OK / Cancel buttons
-
-    // Get values
-    const QString name = nameEdit->text();
-    const double radius = radiusSpin->value();
-    const double height = heightSpin->value();
-
     // Create Cone object
-    std::shared_ptr<Shape> cone = std::make_shared<Cone>(name.toStdString(), radius, height);
+    std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
     shapeManager.addShape(cone);
     glWidget->drawShape(cone);
     mStatusBar->showMessage("Cone created");
@@ -297,26 +184,8 @@ void Sketcher3D::onConeToolClicked()
 
 void Sketcher3D::onSphereToolClicked()
 {
-    QDialog dlg(this);
-    dlg.setWindowTitle("Create Sphere");
-
-    // Layout
-    std::unique_ptr<QFormLayout> layout = std::make_unique<QFormLayout>(&dlg);
-
-    // Sphere Name
-    std::unique_ptr<QLineEdit> nameEdit = std::make_unique<QLineEdit>("Sphere1", &dlg);
-    layout->addRow("Sphere Name:", nameEdit.get());
-
-    std::unique_ptr<QDoubleSpinBox> radiusSpin = dimensionField(dlg, "Radius", layout);
-  
-    dialogButtonBoxFn(dlg, layout); // OK / Cancel buttons
-
-    // Get values
-    const QString name = nameEdit->text();
-    const double radius = radiusSpin->value();
-
     // Create Sphere object
-    std::shared_ptr<Shape> sp = std::make_shared<Sphere>(name.toStdString(), radius);
+    std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
     shapeManager.addShape(sp);
     glWidget->drawShape(sp);
     mStatusBar->showMessage("Sphere created");

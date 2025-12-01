@@ -120,6 +120,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
     <ClCompile Include="src\ShapeManager.cpp" />
+    <ClCompile Include="src\ShapeSlots.cpp" />
     <ClCompile Include="src\Sketcher3D.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -134,6 +135,7 @@
     <QtMoc Include="headers\GLWidget.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
     <ClInclude Include="headers\ShapeManager.h" />
+    <ClInclude Include="headers\ShapeSlots.h" />
     <ClInclude Include="headers\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
