@@ -15,20 +15,19 @@ void OpenGLWidget::initializeGL()
 
     // Simple vertex + fragment shaders (hardcoded)
     shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
-        R"(
-            layout(location = 0) in vec3 position;
-            void main()
-            {
-                gl_Position = vec4(position, 1.0);
-            }
+        "(\
+            attribute vec3 position;\
+            void main()\
+            {\
+                gl_Position = vec4(position, 1.0);\
+            }\
         )");
 
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
         R"(
-            out vec4 color;
             void main()
             {
-                color = vec4(0.0, 0.7, 1.0, 1.0);
+                gl_FragColor = vec4(0.0, 0.7, 1.0, 1.0);
             }
         )");
 
