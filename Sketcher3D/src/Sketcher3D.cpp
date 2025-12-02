@@ -84,6 +84,11 @@ void Sketcher3D::menuBarElements()
     undoAction->setShortcut(QKeySequence::Undo); // Ctrl+Z
     QAction *redoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowForward), "Redo");
     redoAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Z); // Ctrl+Shift+Z/
+
+    // Transformation Menu
+    mTransformationMenu = mMenuBar.get()->addMenu("Transformations");
+
+
 }
 
 void Sketcher3D::toolBarElements()
