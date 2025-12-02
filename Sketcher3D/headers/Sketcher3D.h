@@ -55,6 +55,14 @@ private:
     QAction* mNewAction;
     QAction* mOpenAction;
 
+    QMenu* mTransformationMenu;
+    QAction* mTranslate;
+    QAction* mScale;
+    QMenu* mRotate;
+    QAction* mRotateX;
+    QAction* mRotateY;
+    QAction* mRotateZ;
+
     ShapeManager shapeManager; // handles container(vector) of shapes
 
     std::unique_ptr<OpenGLWidget> mGLWidget;
