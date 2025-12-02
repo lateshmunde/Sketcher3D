@@ -31,8 +31,6 @@ void OpenGLWidget::initializeGL()
                 color = vec4(0.0, 0.7, 1.0, 1.0);
             }
         )");
-   /* shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vertex_src);
-    shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fragment_src);*/
 
     shader.link();
 
