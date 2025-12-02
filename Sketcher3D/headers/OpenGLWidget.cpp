@@ -10,12 +10,12 @@ OpenGLWidget::~OpenGLWidget() {}
 void OpenGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
     // Simple vertex + fragment shaders (hardcoded)
     shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
         R"(
-            #version 330 core
             layout(location = 0) in vec3 position;
             void main()
             {
@@ -25,13 +25,14 @@ void OpenGLWidget::initializeGL()
 
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
         R"(
-            #version 330 core
             out vec4 color;
             void main()
             {
-                color = vec4(0.0, 1.0, 0.0, 1.0); // green triangle
+                color = vec4(0.0, 0.7, 1.0, 1.0);
             }
         )");
+   /* shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vertex_src);
+    shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fragment_src);*/
 
     shader.link();
 
