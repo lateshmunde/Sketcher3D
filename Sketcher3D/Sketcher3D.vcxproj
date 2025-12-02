@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.9.2</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;widgets;opengl;openglwidgets;shadertools</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
@@ -115,6 +115,7 @@
     <QtUic Include="Sketcher3D.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="headers\OpenGLWidget.cpp" />
     <ClCompile Include="src\FileHandle.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
@@ -130,6 +131,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\FileHandle.h" />
+    <QtMoc Include="headers\OpenGLWidget.h" />
+    <ClInclude Include="headers\Renderer.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
     <ClInclude Include="headers\ShapeManager.h" />
     <ClInclude Include="headers\stdafx.h" />

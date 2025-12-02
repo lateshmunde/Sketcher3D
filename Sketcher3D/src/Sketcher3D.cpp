@@ -52,6 +52,10 @@ void Sketcher3D::setupUI()
     //connect(cleanAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     //connect(undoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     //connect(redoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+
+    mGLWidget = std::make_unique<OpenGLWidget>(this);
+    mCentralgridWidget->addWidget(mGLWidget.get(), 0, 0);
+
 }
 
 void Sketcher3D::menuBarElements()
