@@ -27,11 +27,9 @@ public:
         QToolBar* toolbar,const QString& iconPath,
         const QString& toolTip,const QSize& iconSize);
 
-    std::unique_ptr<QDoubleSpinBox> dimensionField(QDialog& dlg,
-        const QString& name, std::unique_ptr<QFormLayout>& layout);
+   
 
-    void dialogButtonBoxFn(QDialog& dlg, 
-        std::unique_ptr<QFormLayout>& layout);
+  
 
 private:
     void setupUI();

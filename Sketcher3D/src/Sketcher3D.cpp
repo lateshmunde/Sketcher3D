@@ -66,34 +66,6 @@ std::unique_ptr<QToolButton> Sketcher3D::createToolButton(
     return btn;        // return unique_ptr
 }
 
-
-
-std::unique_ptr<QDoubleSpinBox> Sketcher3D::dimensionField(QDialog& dlg,
-    const QString& name, std::unique_ptr<QFormLayout>& layout)
-{
-    // Dimension
-    std::unique_ptr<QDoubleSpinBox> dimensionSpin = std::make_unique<QDoubleSpinBox>(&dlg);
-    dimensionSpin->setRange(0.1, 10000);
-    dimensionSpin->setValue(10.0);
-    layout->addRow(name + " :", dimensionSpin.get());
-    return dimensionSpin;
-}
-
-void Sketcher3D::dialogButtonBoxFn(QDialog& dlg, std::unique_ptr<QFormLayout>& layout)
-{
-    // OK / Cancel buttons
-    std::unique_ptr<QDialogButtonBox> buttons = std::make_unique<QDialogButtonBox>(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dlg);
-    layout->addRow(buttons.get());
-
-    QObject::connect(buttons.get(), &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
-    QObject::connect(buttons.get(), &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
-
-    // Show dialog
-    if (dlg.exec() != QDialog::Accepted)
-        return;
-   }
-
-
 void Sketcher3D::menuBarElements()
 {
     // ============================ MENU BAR =================================
@@ -140,46 +112,76 @@ void Sketcher3D::toolBarElements()
 void Sketcher3D::onCuboidToolClicked()
 {
     // Create cuboid 
-    std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
-    shapeManager.addShape(cb);
-    glWidget->drawShape(cb);
-    mStatusBar->showMessage("Cuboid created");
+    try {
+        std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
+        shapeManager.addShape(cb);
+        glWidget->drawShape(cb);
+        mStatusBar->showMessage("Cuboid created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
 }
 
 void Sketcher3D::onCubeToolClicked()
 {
     // Create Cube object
-    std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
-    shapeManager.addShape(c);
-    glWidget->drawShape(c);
-    mStatusBar->showMessage("Cube created");
+    try {
+        std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
+        shapeManager.addShape(c);
+        glWidget->drawShape(c);
+        mStatusBar->showMessage("Cube created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
 }
 
 void Sketcher3D::onPyramidClicked()
 {
     // Create Pyramid
-    std::shared_ptr<Shape> py= std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
-    shapeManager.addShape(py);
-    glWidget->drawShape(py);
-    mStatusBar->showMessage("Pyramid created");
+    try {
+        std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
+        shapeManager.addShape(py);
+        glWidget->drawShape(py);
+        mStatusBar->showMessage("Pyramid created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
 }
 
 void Sketcher3D::onCylinderToolClicked()
 {
     // Create Cylinder object
-    std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
-    shapeManager.addShape(cyl);
-    glWidget->drawShape(cyl);
-    mStatusBar->showMessage("Cylinder created");
+    try {
+        std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
+        shapeManager.addShape(cyl);
+        glWidget->drawShape(cyl);
+        mStatusBar->showMessage("Cylinder created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
 }
 
 void Sketcher3D::onConeToolClicked()
 {
     // Create Cone object
-    std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
-    shapeManager.addShape(cone);
-    glWidget->drawShape(cone);
-    mStatusBar->showMessage("Cone created");
+    try {
+        std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
+        shapeManager.addShape(cone);
+        glWidget->drawShape(cone);
+        mStatusBar->showMessage("Cone created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
 }
 
 void Sketcher3D::onSphereToolClicked()
@@ -191,11 +193,12 @@ void Sketcher3D::onSphereToolClicked()
         glWidget->drawShape(sp);
         mStatusBar->showMessage("Sphere created");
     }
-    catch (...) {
-        // Do nothing — user cancelled
+    catch (const std::runtime_error& e)
+    { 
+        QMessageBox::information(nullptr, "Info", e.what());
     }
-    
 }
+
 
 void Sketcher3D::onSaveGNUActionTriggered()
 {
