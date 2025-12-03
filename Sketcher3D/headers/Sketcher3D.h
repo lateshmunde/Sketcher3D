@@ -27,10 +27,7 @@ public:
         QToolBar* toolbar,const QString& iconPath,
         const QString& toolTip,const QSize& iconSize);
 
-   
-
   
-
 private:
     void setupUI();
     void toolBarElements();
@@ -55,6 +52,8 @@ private:
     std::unique_ptr<QToolButton> mSphereTool;
     std::unique_ptr<QToolButton> mPyramidTool;
 
+    std::unique_ptr<QToolButton> mTransformationTool;
+
     // Menu Items
     QMenu* mFileMenu;
     QMenu* mSaveMenu;
@@ -75,6 +74,8 @@ private slots:
     void onSphereToolClicked();
     void onSaveActionTriggered();
     void onSaveGNUActionTriggered();
+
+    void onTransformToolClicked();
 };
 
 

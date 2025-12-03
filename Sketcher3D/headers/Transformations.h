@@ -1,6 +1,7 @@
 #pragma once
 #include "Matrix.h"
-#include "Point.h"
+//#include "Point.h"
+#include "Shape.h"
 
 class Transformations
 {
@@ -13,6 +14,6 @@ public:
 	static Matrix rotationX(double degreeX = 0);
 	static Matrix rotationY(double degreeY = 0);
 	static Matrix rotationZ(double degreeZ = 0);
-	static Point getPtMatrix(const Point& p);
+	static std::vector<Point> getPtMatrix(const std::vector<Point>& vec);
 	static Matrix getMatrix();
 };

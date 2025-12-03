@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "ShapeSlots.h"
+#include "Transformations.h"
 
 Sketcher3D::Sketcher3D(QWidget* parent)
     : QMainWindow(parent)
@@ -46,6 +47,8 @@ void Sketcher3D::setupUI()
     connect(mCylinderTool.get(), &QToolButton::clicked, this, &Sketcher3D::onCylinderToolClicked);
     connect(mPyramidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
+
+    connect(mTransformationTool.get(), &QToolButton::clicked, this, &Sketcher3D::onTransformToolClicked);
 
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
@@ -107,6 +110,7 @@ void Sketcher3D::toolBarElements()
     mCylinderTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cylinder.png", "Cylinder");
     mConeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cone.png", "Cone");
     mPyramidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/pyramid.png", "Pyramid");
+    mTransformationTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cube.png", "Transform");
 }
 
 void Sketcher3D::onCuboidToolClicked()
@@ -115,7 +119,8 @@ void Sketcher3D::onCuboidToolClicked()
     try {
         std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
         shapeManager.addShape(cb);
-        glWidget->drawShape(cb);
+        std::vector<Point> vec = cb->getCoordinates();
+        glWidget->drawShape(vec);
         mStatusBar->showMessage("Cuboid created");
     }
     catch (const std::runtime_error& e)
@@ -130,7 +135,8 @@ void Sketcher3D::onCubeToolClicked()
     try {
         std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
         shapeManager.addShape(c);
-        glWidget->drawShape(c);
+        std::vector<Point> vec = c->getCoordinates();
+        glWidget->drawShape(vec);
         mStatusBar->showMessage("Cube created");
     }
     catch (const std::runtime_error& e)
@@ -145,7 +151,8 @@ void Sketcher3D::onPyramidClicked()
     try {
         std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
         shapeManager.addShape(py);
-        glWidget->drawShape(py);
+        std::vector<Point> vec = py->getCoordinates();
+        glWidget->drawShape(vec);
         mStatusBar->showMessage("Pyramid created");
     }
     catch (const std::runtime_error& e)
@@ -160,7 +167,8 @@ void Sketcher3D::onCylinderToolClicked()
     try {
         std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
         shapeManager.addShape(cyl);
-        glWidget->drawShape(cyl);
+        std::vector<Point> vec = cyl->getCoordinates();
+        glWidget->drawShape(vec);
         mStatusBar->showMessage("Cylinder created");
     }
     catch (const std::runtime_error& e)
@@ -175,7 +183,8 @@ void Sketcher3D::onConeToolClicked()
     try {
         std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
         shapeManager.addShape(cone);
-        glWidget->drawShape(cone);
+        std::vector<Point> vec = cone->getCoordinates();
+        glWidget->drawShape(vec);
         mStatusBar->showMessage("Cone created");
     }
     catch (const std::runtime_error& e)
@@ -190,7 +199,8 @@ void Sketcher3D::onSphereToolClicked()
     try {
         std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
         shapeManager.addShape(sp);
-        glWidget->drawShape(sp);
+        std::vector<Point> vec = sp->getCoordinates();
+        glWidget->drawShape(vec);
         mStatusBar->showMessage("Sphere created");
     }
     catch (const std::runtime_error& e)
@@ -198,6 +208,16 @@ void Sketcher3D::onSphereToolClicked()
         QMessageBox::information(nullptr, "Info", e.what());
     }
 }
+
+void Sketcher3D::onTransformToolClicked()
+{
+    std::shared_ptr<Shape> py = std::make_shared<Pyramid>("py1", 2, 3, 6);
+    std::vector<Point> vec = py->getCoordinates();
+    vec = Transformations::getPtMatrix(vec);
+    glWidget->drawShape(vec);
+    mStatusBar->showMessage("Transform Done");
+}
+
 
 
 void Sketcher3D::onSaveGNUActionTriggered()

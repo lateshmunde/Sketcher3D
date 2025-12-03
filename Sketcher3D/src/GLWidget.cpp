@@ -12,11 +12,11 @@ GLWidget::GLWidget(QWidget* parent): QOpenGLWidget(parent)
 
 GLWidget::~GLWidget(){}
 
-void GLWidget::drawShape(std::shared_ptr<Shape> shape) // from pts
+void GLWidget::drawShape(std::vector<Point>& vec) // from pts
 {
     vertices.clear();
 
-    std::vector <Point> pts = shape->getCoordinates();
+    std::vector <Point> pts = vec;
 
     for (const Point& pt : pts)
     {

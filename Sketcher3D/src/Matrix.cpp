@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "Matrix.h"
 
-Matrix::Matrix(int row, int col): rows(row), cols(col){}
+Matrix::Matrix(int row, int col): rows(row), cols(col), data(row, std::vector<double>(col, 0.0))
+{
+	
+}
 
 Matrix::~Matrix(){} 
 
@@ -10,8 +13,16 @@ double& Matrix::operator()(int row, int col) { return data[row][col]; }
 Matrix Matrix::getIdentity()
 {
 	Matrix identity(4, 4);
-	for (int i = 0; i < 4; i++)
-		identity(i, i) = 1.0;
+	for (int i = 0; i < 4; i++) 
+	{
+		for (int j = 0; j < 4; j++) 
+		{
+			if (i == j)
+				identity(i, j) = 1.0;
+			else
+				identity(i, j) = 0.0;
+		}
+	}
 	return identity;
 }
 

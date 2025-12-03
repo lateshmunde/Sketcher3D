@@ -18,7 +18,7 @@ public:
     GLWidget(QWidget* parent = nullptr);
     ~GLWidget();
 
-    void drawShape(std::shared_ptr<Shape> shape);
+    void drawShape(std::vector<Point>& vec);
     void clearShape();
 
 protected:

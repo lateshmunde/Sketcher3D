@@ -9,7 +9,7 @@ Transformations::Transformations(){}
 
 Transformations::~Transformations(){}
 
-Matrix Transformations::translate(double transX = 0, double transY = 0, double transZ = 0)
+Matrix Transformations::translate(double transX, double transY, double transZ)
 {
     Matrix transMat = Matrix::getIdentity();
     transMat(0, 3) = transX;
@@ -20,7 +20,7 @@ Matrix Transformations::translate(double transX = 0, double transY = 0, double t
 
 
 
-Matrix Transformations::scale(double scaleFac = 0)
+Matrix Transformations::scale(double scaleFac)
 {
     Matrix transToOrigin = translate(0,0,0);
 
@@ -32,7 +32,7 @@ Matrix Transformations::scale(double scaleFac = 0)
     return scaleMat* transToOrigin;
 }
 
-Matrix Transformations::rotationX(double degreeX = 0)  {
+Matrix Transformations::rotationX(double degreeX)  {
     Matrix transToOrigin = translate(0, 0, 0);
 
     Matrix rotXMat(4, 4);
@@ -46,7 +46,7 @@ Matrix Transformations::rotationX(double degreeX = 0)  {
     return rotXMat* transToOrigin;
 }
 
-Matrix Transformations::rotationY(double degreeY = 0) {
+Matrix Transformations::rotationY(double degreeY) {
     Matrix transToOrigin = translate(0, 0, 0);
 
     Matrix rotYMat(4, 4);
@@ -61,7 +61,7 @@ Matrix Transformations::rotationY(double degreeY = 0) {
 }
 
 
-Matrix Transformations::rotationZ(double degreeZ = 0) {
+Matrix Transformations::rotationZ(double degreeZ) {
     Matrix transToOrigin = translate(0, 0, 0);
 
     Matrix rotZMat(4, 4);
@@ -79,7 +79,7 @@ Matrix Transformations::getMatrix()
 {
     Matrix result = Matrix::getIdentity();
 
-    Matrix trans = translate();
+    Matrix trans = translate(7,7,7);
     Matrix scaleM = scale();
     Matrix rotX = rotationX();
     Matrix rotY = rotationY();
@@ -89,26 +89,35 @@ Matrix Transformations::getMatrix()
 }
 
 
-Point Transformations::getPtMatrix(const Point& p)
+std::vector<Point> Transformations::getPtMatrix(const std::vector<Point>& vec)
 {
-    Matrix pt(4, 1);
-    pt(0, 1) = p.getX();
-    pt(1, 1) = p.getY();
-    pt(2, 1) = p.getZ();
-    pt(3, 1) = 1.0;
+    std::vector<Point> transformedPts;
 
     Matrix result = getMatrix();
-    result = result * pt;
-
-    double fac = result(3, 0);
-    double X;
-    double Y;
-    double Z;
-    if (fac != 0) 
+    Matrix pt(4, 1);
+    for (const Point& p : vec)
     {
-        X = result(0, 0) / fac;
-        Y = result(1, 0) / fac;
-        Z = result(2, 0) / fac;
+        pt(0, 0) = p.getX();
+        pt(1, 0) = p.getY();
+        pt(2, 0) = p.getZ();
+        pt(3, 0) = 1.0;
+
+        result = result * pt;
+
+        double fac = result(3, 0);
+        double X;
+        double Y;
+        double Z;
+
+        if (fac != 0)
+        {
+            X = result(0, 0) / fac;
+            Y = result(1, 0) / fac;
+            Z = result(2, 0) / fac;
+        }
+        transformedPts.emplace_back(X, Y, Z);
     }
-    return Point(X, Y, Z);
+    return transformedPts;
 }
+
+
