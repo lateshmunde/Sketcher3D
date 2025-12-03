@@ -53,8 +53,22 @@ void Sketcher3D::setupUI()
     //connect(undoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     //connect(redoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
 
+    /*connect(mTranslate, &QAction::triggered, this, &Sketcher3D::onTranslateActionTriggered);
+    connect(mScale, &QAction::triggered, this, &Sketcher3D::onScaleActionTriggered);
+    connect(mRotateX, &QAction::triggered, this, &Sketcher3D::onRotateXActionTriggered);
+    connect(mRotateY, &QAction::triggered, this, &Sketcher3D::onRotateYActionTriggered);
+    connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);*/
+
+
     mGLWidget = std::make_unique<OpenGLWidget>(this);
     mCentralgridWidget->addWidget(mGLWidget.get(), 0, 0);
+
+    std::vector<Point> triangle = {
+    Point(0.0, 0.0, 0.0),
+    Point(0.5, 0.0, 0.0),
+    Point(0.25, 0.75, 0.0)
+    };
+    mGLWidget->setVertices(triangle);
 
 }
 
@@ -87,8 +101,12 @@ void Sketcher3D::menuBarElements()
 
     // Transformation Menu
     mTransformationMenu = mMenuBar.get()->addMenu("Transformations");
-
-
+    mTranslate = mTransformationMenu->addAction("Translate");
+    mScale = mTransformationMenu->addAction("Scale");
+    mRotate = mTransformationMenu->addMenu("Rotate");
+    mRotateX = mRotate->addAction("Rotate w.r.t x - Axis");
+    mRotateY = mRotate->addAction("Rotate w.r.t y - Axis");
+    mRotateZ = mRotate->addAction("Rotate w.r.t z - Axis");
 }
 
 void Sketcher3D::toolBarElements()
@@ -477,3 +495,23 @@ void Sketcher3D::onSaveActionTriggered()
     else
         QMessageBox::information(this, "Not Saved", "Shapes not saved!");
 }
+
+//void onTranslateActionTriggered() {
+//
+//}
+//
+//void onScaleActionTriggered() {
+//
+//}
+//
+//void onRotateXActionTriggered() {
+//
+//}
+//
+//void onRotateYActionTriggered() {
+//
+//}
+//
+//void onRotateZActionTriggered() {
+//
+//}

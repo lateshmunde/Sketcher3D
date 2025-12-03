@@ -15,42 +15,42 @@ void OpenGLWidget::initializeGL()
 
     // Simple vertex + fragment shaders (hardcoded)
     shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
-        R"(
-            layout(location = 0) in vec3 position;
-            void main()
-            {
-                gl_Position = vec4(position, 1.0);
-            }
-        )");
+        "(\
+        attribute vec3 position;\
+        void main()\
+        {\
+            gl_Position = vec4(position, 1.0);\
+        }\
+    )");
 
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
         R"(
-            out vec4 color;
-            void main()
-            {
-                color = vec4(0.0, 0.7, 1.0, 1.0);
-            }
-        )");
+        void main()
+        {
+            gl_FragColor = vec4(0.0, 0.7, 1.0, 1.0);
+        }
+    )");
+    shader.bindAttributeLocation("position", 0);
 
     shader.link();
-
-    float vertices[] =
-    {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };
 
     vao.create();
     vao.bind();
 
     vbo.create();
     vbo.bind();
-    vbo.allocate(vertices, sizeof(vertices));
+    vbo.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
     shader.bind();
-    shader.enableAttributeArray(0);
-    shader.setAttributeBuffer(0, GL_FLOAT, 0, 3, 3 * sizeof(float));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(
+        0,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        3 * sizeof(float),
+        nullptr
+    );
 
     vao.release();
     vbo.release();
@@ -66,4 +66,26 @@ void OpenGLWidget::paintGL()
     glDrawArrays(GL_TRIANGLES, 0, 3);
     vao.release();
     shader.release();
+}
+
+void OpenGLWidget::setVertices(const std::vector<Point>& points)
+{
+    // convert DOUBLE -> FLOAT only for OpenGL
+    std::vector<float> data;
+    data.reserve(points.size() * 3);
+
+    for (const auto& p : points)
+    {
+        data.push_back(static_cast<float>(p.getX()));
+        data.push_back(static_cast<float>(p.getY()));
+        data.push_back(static_cast<float>(p.getZ()));
+    }
+
+    vao.bind();
+    vbo.bind();
+    vbo.allocate(data.data(), data.size() * sizeof(float));
+    vbo.release();
+    vao.release();
+
+    update();
 }

@@ -4,6 +4,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
+#include "Point.h"
 
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -12,6 +13,7 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     explicit OpenGLWidget(QWidget* parent = nullptr);
     ~OpenGLWidget();
+    void setVertices(const std::vector<Point>& points);
 
 protected:
     void initializeGL() override;
