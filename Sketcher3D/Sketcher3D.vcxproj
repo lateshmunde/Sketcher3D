@@ -126,12 +126,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Matrix.cpp" />
+    <ClCompile Include="src\Transformations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="headers\Sketcher3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\FileHandle.h" />
+    <ClInclude Include="headers\Matrix.h" />
+    <ClInclude Include="headers\Transformations.h" />
     <QtMoc Include="headers\GLWidget.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
     <ClInclude Include="headers\ShapeManager.h" />
