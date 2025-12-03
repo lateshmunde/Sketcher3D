@@ -23,7 +23,7 @@ void ShapeSlots::dialogButtonBoxFn(QDialog& dlg, std::unique_ptr<QFormLayout>& l
 
     // Show dialog
     if (dlg.exec() != QDialog::Accepted)
-        return;
+        throw std::runtime_error("Dialog cancelled");
 }
 
 

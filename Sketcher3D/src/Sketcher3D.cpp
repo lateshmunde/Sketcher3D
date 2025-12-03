@@ -185,10 +185,16 @@ void Sketcher3D::onConeToolClicked()
 void Sketcher3D::onSphereToolClicked()
 {
     // Create Sphere object
-    std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
-    shapeManager.addShape(sp);
-    glWidget->drawShape(sp);
-    mStatusBar->showMessage("Sphere created");
+    try {
+        std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
+        shapeManager.addShape(sp);
+        glWidget->drawShape(sp);
+        mStatusBar->showMessage("Sphere created");
+    }
+    catch (...) {
+        // Do nothing — user cancelled
+    }
+    
 }
 
 void Sketcher3D::onSaveGNUActionTriggered()
