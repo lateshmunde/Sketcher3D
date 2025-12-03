@@ -54,7 +54,7 @@ Sphere ShapeCreator::createSphere(const std::string& name, double radius)
 
 Cylinder ShapeCreator::createCylinder(const std::string& name, double radius, double height)
 {
-	if (radius = 0 || height <= 0 )
+	if (radius <= 0 || height <= 0 )
 		std::cout << "Invalid input for Cylinder";
 
 	return Cylinder(name, radius, height);

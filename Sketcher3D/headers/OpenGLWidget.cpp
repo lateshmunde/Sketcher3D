@@ -1,7 +1,9 @@
 #include "OpenGLWidget.h"
 
 OpenGLWidget::OpenGLWidget(QWidget* parent)
-    : QOpenGLWidget(parent), vbo(QOpenGLBuffer::VertexBuffer)
+    : QOpenGLWidget(parent),
+    vbo(QOpenGLBuffer::VertexBuffer),
+    mTransform(Transformation::identity4())
 {
 }
 
@@ -13,14 +15,15 @@ void OpenGLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-    // Simple vertex + fragment shaders (hardcoded)
+    // Vertex + fragment shaders using a mat4 transform uniform
     shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
-        "(\
-            attribute vec3 position;\
-            void main()\
-            {\
-                gl_Position = vec4(position, 1.0);\
-            }\
+        R"(
+            attribute vec3 position;
+            uniform mat4 uTransform;
+            void main()
+            {
+                gl_Position = uTransform * vec4(position, 1.0);
+            }
         )");
 
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
@@ -31,9 +34,15 @@ void OpenGLWidget::initializeGL()
             }
         )");
 
+    shader.bindAttributeLocation("position", 0);
     shader.link();
 
-    float vertices[] =
+    shader.bind();
+    uTransformLoc = shader.uniformLocation("uTransform");
+    shader.release();
+
+    // Triangle vertices in XY plane
+    const float vertices[] =
     {
         -0.5f, -0.5f, 0.0f,
          0.5f, -0.5f, 0.0f,
@@ -45,15 +54,17 @@ void OpenGLWidget::initializeGL()
 
     vbo.create();
     vbo.bind();
-    vbo.allocate(vertices, sizeof(vertices));
+    vbo.allocate(vertices, static_cast<int>(sizeof(vertices)));
 
     shader.bind();
     shader.enableAttributeArray(0);
     shader.setAttributeBuffer(0, GL_FLOAT, 0, 3, 3 * sizeof(float));
+    shader.release();
 
     vao.release();
     vbo.release();
-    shader.release();
+
+    resetTransform(); // upload identity once
 }
 
 void OpenGLWidget::paintGL()
@@ -62,7 +73,45 @@ void OpenGLWidget::paintGL()
 
     shader.bind();
     vao.bind();
+    uploadTransform();
     glDrawArrays(GL_TRIANGLES, 0, 3);
     vao.release();
     shader.release();
+}
+
+void OpenGLWidget::uploadTransform() 
+{
+    float arr[16];
+    Transformation::toArrayRowMajor(mTransform, arr);
+    glUniformMatrix4fv(uTransformLoc, 1, GL_TRUE, arr);
+}
+
+void OpenGLWidget::resetTransform()
+{
+    mTransform = Transformation::identity4();
+    update();
+}
+
+void OpenGLWidget::applyTranslation(float dx, float dy)
+{
+    mTransform = Transformation::multiply(mTransform, Transformation::translate3D(dx, dy, 0.f));
+    update();
+}
+
+void OpenGLWidget::applyRotation(float degrees)
+{
+    mTransform = Transformation::multiply(mTransform, Transformation::rotateZ(degrees));
+    update();
+}
+
+void OpenGLWidget::applyScale(float sx, float sy)
+{
+    mTransform = Transformation::multiply(mTransform, Transformation::scale3D(sx, sy, 1.f));
+    update();
+}
+
+void OpenGLWidget::setTransform(const Transformation::Mat& m)
+{
+    mTransform = m;
+    update();
 }
