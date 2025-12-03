@@ -66,6 +66,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)headers;$(SolutionDir)\GeometryEngine3D\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -131,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\FileHandle.h" />
+    <ClInclude Include="headers\TransformManager.h" />
     <QtMoc Include="headers\OpenGLWidget.h" />
     <ClInclude Include="headers\Renderer.h" />
     <ClInclude Include="headers\ShapeCreator.h" />

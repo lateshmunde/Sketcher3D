@@ -1,44 +1,44 @@
 #pragma once
-#include <QtWidgets/QMainWindow> // For mCentralWidget
-#include <QGridLayout> // For mCentralgridWidget
-#include <QMenuBar> // For mMenuBar
-#include <QToolBar> // For mToolBar
-#include <QStatusBar> // For mStatusBar
-#include <memory> // For unique_ptr
+
+#include <QtWidgets/QMainWindow>
+#include <QGridLayout>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QStatusBar>
 #include <QToolButton>
-#include <fstream>
-#include <QMessageBox>
-#include <QFileDialog>
+#include <QMenu>
+#include <QAction>
+#include <memory>
+#include <vector>
+
 #include "Shape.h"
-#include "ShapeCreator.h"
 #include "ShapeManager.h"
 #include "FileHandle.h"
 #include "OpenGLWidget.h"
-
-#include <QtWidgets/QMainWindow>
-//#include "ui_Sketcher3D.h"
+#include "TransformManager.h"
 
 class Sketcher3D : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    Sketcher3D(QWidget *parent = nullptr);
+    explicit Sketcher3D(QWidget* parent = nullptr);
     ~Sketcher3D();
-    
 
 private:
-    //Ui::Sketcher3DClass ui;
-    void setupUI() ;
-    void toolBarElements();
-    void menuBarElements();
+    void setupUI();
+    void setupMenuBar();
+    void setupToolBar();
+
+    void addShapeWithTransform(const std::shared_ptr<Shape>& shape);
+    void updateGLScene();
 
 private:
-    std::unique_ptr<QWidget> mCentralWidget;
-    std::unique_ptr<QGridLayout> mCentralgridWidget;
+    std::unique_ptr<QWidget>      mCentralWidget;
+    std::unique_ptr<QGridLayout>  mCentralLayout;
 
-    std::unique_ptr<QMenuBar> mMenuBar;
-    std::unique_ptr<QToolBar> mToolBar;
+    std::unique_ptr<QMenuBar>  mMenuBar;
+    std::unique_ptr<QToolBar>  mToolBar;
     std::unique_ptr<QStatusBar> mStatusBar;
 
     std::unique_ptr<QToolButton> mCubeTool;
@@ -48,36 +48,44 @@ private:
     std::unique_ptr<QToolButton> mSphereTool;
     std::unique_ptr<QToolButton> mPyramidTool;
 
-    QMenu* mFileMenu;
-    QMenu* mSaveMenu;
-    QAction* mSaveAction;
-    QAction* mSaveGNUAction;
-    QAction* mNewAction;
-    QAction* mOpenAction;
+    // Menus / actions
+    QMenu* mFileMenu = nullptr;
+    QMenu* mSaveMenu = nullptr;
+    QAction* mSaveAction = nullptr;
+    QAction* mSaveGNUAction = nullptr;
+    QAction* mNewAction = nullptr;
+    QAction* mOpenAction = nullptr;
 
-    QMenu* mTransformationMenu;
-    QAction* mTranslate;
-    QAction* mScale;
-    QMenu* mRotate;
-    QAction* mRotateX;
-    QAction* mRotateY;
-    QAction* mRotateZ;
+    QMenu* mTransformMenu = nullptr;
+    QAction* mTranslateAction = nullptr;
+    QAction* mScaleAction = nullptr;
+    QMenu* mRotateMenu = nullptr;
+    QAction* mRotateXAction = nullptr;
+    QAction* mRotateYAction = nullptr;
+    QAction* mRotateZAction = nullptr;
 
-    ShapeManager shapeManager; // handles container(vector) of shapes
+    ShapeManager     mShapeManager;
+    TransformManager mTransformManager;
 
     std::unique_ptr<OpenGLWidget> mGLWidget;
-    
+
 private slots:
-    void onCuboidToolClicked();
+    // Shape creation
     void onCubeToolClicked();
-    void onConeToolClicked();
+    void onCuboidToolClicked();
     void onCylinderToolClicked();
-    void onPyramidClicked();
+    void onConeToolClicked();
     void onSphereToolClicked();
+    void onPyramidToolClicked();
 
-    //void onNewActionTriggered();
-    //void onOpenActionTriggered();
-    void onSaveActionTriggered(); 
-    void onSaveGNUActionTriggered(); // For GNU plot
+    // File
+    void onSaveActionTriggered();
+    void onSaveGNUActionTriggered();
+
+    // Transformations
+    void onTranslateTriggered();
+    void onScaleTriggered();
+    void onRotateXTriggered();
+    void onRotateYTriggered();
+    void onRotateZTriggered();
 };
-
