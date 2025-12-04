@@ -9,6 +9,9 @@ public:
 	Transformations();
 	~Transformations();
 
+	static Point calculatePivot(const std::vector<Point>& vertices); //centroid calculation
+	void applyTransform(const std::vector<Point>& vertices, Matrix& matrix) const ;
+	
 	static Matrix translate(double transX = 0, double transY = 0, double transZ = 0);
 	static Matrix scale(double scaleX = 1, double scaleY = 1, double scaleZ = 1);
 	static Matrix rotationX(double degreeX = 0);

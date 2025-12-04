@@ -9,6 +9,27 @@ Transformations::Transformations(){}
 
 Transformations::~Transformations(){}
 
+Point Transformations::calculatePivot(const std::vector<Point>& vertices)
+{
+    double cx = 0;
+    double cy = 0;
+    double cz = 0;
+
+    for (const auto& p : vertices)
+    {
+        cx += p.getX();
+        cy += p.getY();
+        cz += p.getZ();
+    }
+    int size = vertices.size();
+    cx /= size;
+    cy /= size;
+    cz /= size;
+
+    return Point(cx, cy, cz);
+}
+
+
 Matrix Transformations::translate(double transX, double transY, double transZ)
 {
     Matrix transMat = Matrix::getIdentity();
@@ -121,4 +142,23 @@ std::vector<Point> Transformations::getPtMatrix(const std::vector<Point>& vec)
     return transformedPts;
 }
 
+void Transformations::applyTransform(const std::vector<Point>& vertices, Matrix& matrix) const
+{
+    std::vector<Point> transformedPts;
 
+    for (const Point& p : vertices)
+    {
+        Matrix pt(4, 1);
+        pt(0, 0) = p.getX();
+        pt(1, 0) = p.getY();
+        pt(2, 0) = p.getZ();
+        pt(3, 0) = 1.0;
+
+        Matrix  result = matrix * pt;
+
+        double X = result(0, 0);
+        double Y = result(1, 0);
+        double Z = result(2, 0);
+        transformedPts.emplace_back(X, Y, Z);
+    }
+}
