@@ -16,7 +16,7 @@ Sketcher3D::Sketcher3D(QWidget *parent)
     // ui.setupUi(this);
 
     setupUI();
-    resize(800, 600);
+    resize(800, 800);
 }
 
 Sketcher3D::~Sketcher3D()
@@ -66,8 +66,8 @@ void Sketcher3D::setupUI()
 
     std::vector<Point> triangle = {
     Point(0.0, 0.0, 0.0),
-    Point(0.5, 0.0, 0.0),
-    Point(0.25, 0.75, 0.0)
+    Point(0.0, 0.75, 0.0),
+    Point(0.75, 0.0, 0.0)
     };
     mGLWidget->setVertices(triangle);
     /*triangle[1].setY(1.0);
