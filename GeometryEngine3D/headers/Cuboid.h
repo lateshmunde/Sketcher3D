@@ -2,7 +2,6 @@
 #include "Exports.h"
 #include "Shape.h"
 
-
 class GEOMETRYENGINE3D_API Cuboid : public Shape
 {
 private:

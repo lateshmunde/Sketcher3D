@@ -8,7 +8,7 @@
 #include "Cylinder.h"
 #include "Cone.h"
 #include "Pyramid.h"
-#include "Transform.h"
+#include "Transformation.h"
 
 Sketcher3D::Sketcher3D(QWidget *parent)
     : QMainWindow(parent)
@@ -557,7 +557,7 @@ void Sketcher3D::onTranslateActionTriggered()
     double tz = zSpin->value();
 
     std::vector<Point> currentVertices = mGLWidget->getVertices();
-    Transform::Translate(currentVertices, tx, ty, tz);
+    Transformation::Translate(currentVertices, tx, ty, tz);
 
     mGLWidget->setVertices(currentVertices);
 }
@@ -617,7 +617,7 @@ void Sketcher3D::onScaleActionTriggered()
 
     std::vector<Point> currentVertices = mGLWidget->getVertices();
 
-    Transform::Scale(currentVertices, sx, sy, sz);
+    Transformation::Scale(currentVertices, sx, sy, sz);
 
     mGLWidget->setVertices(currentVertices);
     mGLWidget->update();
@@ -659,7 +659,7 @@ void Sketcher3D::onRotateXActionTriggered()
 
     std::vector<Point> currentVertices = mGLWidget->getVertices();
 
-    Transform::RotateX(currentVertices, angle);
+    Transformation::RotateX(currentVertices, angle);
 
     mGLWidget->setVertices(currentVertices);
 }
@@ -700,7 +700,7 @@ void Sketcher3D::onRotateYActionTriggered()
 
     std::vector<Point> currentVertices = mGLWidget->getVertices();
 
-    Transform::RotateY(currentVertices, angle);
+    Transformation::RotateY(currentVertices, angle);
 
     mGLWidget->setVertices(currentVertices);
 }
@@ -741,7 +741,7 @@ void Sketcher3D::onRotateZActionTriggered()
 
     std::vector<Point> currentVertices = mGLWidget->getVertices();
 
-    Transform::RotateZ(currentVertices, angle);
+    Transformation::RotateZ(currentVertices, angle);
 
     mGLWidget->setVertices(currentVertices);
 }

@@ -1,9 +1,10 @@
 #pragma once
+#include "Exports.h"
 #include <vector>
 #include "Point.h"
 #include "Matrix4D.h"
 
-class Transform
+class GEOMETRYENGINE3D_API Transformation
 {
 public:
     static Point calculatePivot(const std::vector<Point>& vertices);

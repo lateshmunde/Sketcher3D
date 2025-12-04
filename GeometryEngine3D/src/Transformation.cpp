@@ -1,6 +1,7 @@
-#include "Transform.h"
+#include "pch.h"
+#include "Transformation.h"
 
-Point Transform::calculatePivot(const std::vector<Point>& vertices)
+Point Transformation::calculatePivot(const std::vector<Point>& vertices)
 {
     double cx = 0, cy = 0, cz = 0;
 
@@ -18,7 +19,7 @@ Point Transform::calculatePivot(const std::vector<Point>& vertices)
     return Point(cx, cy, cz);
 }
 
-void Transform::ApplyTransform(std::vector<Point>& vertices, Matrix4D& matrix)
+void Transformation::ApplyTransform(std::vector<Point>& vertices, Matrix4D& matrix)
 {
     for (Point& p : vertices)
     {
@@ -38,13 +39,13 @@ void Transform::ApplyTransform(std::vector<Point>& vertices, Matrix4D& matrix)
     }
 }
 
-void Transform::Translate(std::vector<Point>& vertices, double tx, double ty, double tz)
+void Transformation::Translate(std::vector<Point>& vertices, double tx, double ty, double tz)
 {
     Matrix4D T = Matrix4D::Translation(tx, ty, tz);
     ApplyTransform(vertices, T);
 }
 
-void Transform::Scale(std::vector<Point>& vertices, double sx, double sy, double sz)
+void Transformation::Scale(std::vector<Point>& vertices, double sx, double sy, double sz)
 {
     Point pivot = calculatePivot(vertices);
 
@@ -57,7 +58,7 @@ void Transform::Scale(std::vector<Point>& vertices, double sx, double sy, double
     ApplyTransform(vertices, final);
 }
 
-void Transform::RotateX(std::vector<Point>& vertices, double angle)
+void Transformation::RotateX(std::vector<Point>& vertices, double angle)
 {
     Point pivot = calculatePivot(vertices);
 
@@ -70,7 +71,7 @@ void Transform::RotateX(std::vector<Point>& vertices, double angle)
     ApplyTransform(vertices, final);
 }
 
-void Transform::RotateY(std::vector<Point>& vertices, double angle)
+void Transformation::RotateY(std::vector<Point>& vertices, double angle)
 {
     Point pivot = calculatePivot(vertices);
 
@@ -83,7 +84,7 @@ void Transform::RotateY(std::vector<Point>& vertices, double angle)
     ApplyTransform(vertices, final);
 }
 
-void Transform::RotateZ(std::vector<Point>& vertices, double angle)
+void Transformation::RotateZ(std::vector<Point>& vertices, double angle)
 {
     Point pivot = calculatePivot(vertices);
 

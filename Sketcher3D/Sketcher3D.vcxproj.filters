@@ -49,13 +49,7 @@
     <ClCompile Include="src\ShapeManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="headers\OpenGLWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Matrix4D.cpp">
+    <ClCompile Include="src\OpenGLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,12 +75,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Matrix4D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

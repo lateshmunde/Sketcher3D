@@ -1,8 +1,9 @@
 #pragma once
+#include "Exports.h"
 #include <vector>
 #include <cmath>
 
-class Matrix4D
+class GEOMETRYENGINE3D_API Matrix4D
 {
 public:
     std::vector<std::vector<double>> Mat4;
