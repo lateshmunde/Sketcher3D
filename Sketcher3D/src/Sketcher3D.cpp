@@ -78,6 +78,9 @@ void Sketcher3D::menuBarElements()
     connect(t1, &QAction::triggered, this, &Sketcher3D::onTranslateTriggered);
     connect(t2, &QAction::triggered, this, &Sketcher3D::onRotateTriggered);
     connect(t3, &QAction::triggered, this, &Sketcher3D::onScaleTriggered);
+
+    QAction* t4 = mTransformationMenu->addAction("Rot_arb_z");
+    connect(t4, &QAction::triggered, this, &Sketcher3D::onRotateArbZTriggered);
 }
 
 void Sketcher3D::toolBarElements()

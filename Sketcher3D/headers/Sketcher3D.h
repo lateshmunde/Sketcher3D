@@ -64,6 +64,8 @@ private:
     QAction* mRotateY = nullptr;
     QAction* mRotateZ = nullptr;
 
+    QMenu* mRotate_arb_z = nullptr;
+
     ShapeManager shapeManager;
 
     std::unique_ptr<OpenGLWidget> mGLWidget;
@@ -83,4 +85,6 @@ private slots:
     void onTranslateTriggered();
     void onRotateTriggered();
     void onScaleTriggered();
+
+	void onRotateArbZTriggered();//new
 };

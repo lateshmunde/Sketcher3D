@@ -60,6 +60,18 @@ namespace Transformation
         return C;
     }
 
+    // Rotate about an arbitrary point (px, py, pz) around Z-axis
+    
+    inline Mat rotateZ_aboutPoint(float degrees, float px, float py, float pz)
+    {
+        Mat T1 = translate3D(-px, -py, -pz);  // Move pivot to origin
+        Mat R = rotateZ(degrees);            // Rotate
+        Mat T2 = translate3D(px, py, pz);     // Move origin back to pivot
+
+        // M = T2 * R * T1
+        return multiply(T2, multiply(R, T1));
+    }
+
     inline void toArrayRowMajor(const Mat& M, float out[16])
     {
         out[0] = M[0][0]; out[1] = M[0][1]; out[2] = M[0][2]; out[3] = M[0][3];
