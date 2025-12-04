@@ -8,7 +8,7 @@
 GLWidget::GLWidget(QWidget* parent): QOpenGLWidget(parent)
     , rotationX(30.0f), rotationY(45.0f), rotationZ(30.0f), zoom(50.0f){}
 //Initialize rotation around X, Y, Z axis(30, 45, 30 deg resp.)
-//Initial zoom value = 5 (camera is 5 units away along - Z)
+//Initial zoom value = 50 (camera is 50 units away along - Z)
 
 GLWidget::~GLWidget(){}
 
@@ -41,8 +41,6 @@ void GLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    // Set background color (dark gray)
-    //glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     // Set background color (white)
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -57,24 +55,24 @@ void GLWidget::initializeGL()
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
-void GLWidget::resizeGL(int w, int h)
-{
-    if (h == 0) h = 1;
-
-    glViewport(0, 0, w, h);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    // Manual perspective calculation (avoiding gluPerspective)
-    GLfloat aspect = (GLfloat)w / (GLfloat)h;
-    GLfloat fH = tan(45.0f / 360.0f * 3.14159f) * 0.1f;
-    GLfloat fW = fH * aspect;
-
-    glFrustum(-fW, fW, -fH, fH, 0.1, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
-}
+//void GLWidget::resizeGL(int w, int h)
+//{
+//    if (h == 0) h = 1;
+//
+//    glViewport(0, 0, w, h);
+//
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//
+//    // Manual perspective calculation (avoiding gluPerspective)
+//    GLfloat aspect = (GLfloat)w / (GLfloat)h;
+//    GLfloat fH = tan(45.0f / 360.0f * 3.14159f) * 0.1f;
+//    GLfloat fW = fH * aspect;
+//
+//    glFrustum(-fW, fW, -fH, fH, 0.1, 100.0);
+//
+//    glMatrixMode(GL_MODELVIEW);
+//}
 
 void GLWidget::paintGL()
 {
@@ -115,7 +113,7 @@ void GLWidget::paintGL()
         glPointSize(6.0f);
 
         glBegin(GL_POINTS);
-        for (size_t i = 0; i < vertices.size(); i += 3) {
+        for (int i = 0; i < vertices.size(); i += 3) {
             glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
         }
         glEnd();

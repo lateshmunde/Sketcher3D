@@ -14,6 +14,15 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 
+private:
+    std::vector<float> vertices;
+
+    float rotationX;
+    float rotationY;
+    float rotationZ;
+    float zoom;
+    QPoint lastMousePos;
+
 public:
     GLWidget(QWidget* parent = nullptr);
     ~GLWidget();
@@ -23,21 +32,13 @@ public:
 
 protected:
     void initializeGL() override;
-    void resizeGL(int w, int h) override;
+    //void resizeGL(int w, int h) override;
     void paintGL() override;
 
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
 
-private:
-    std::vector<float> vertices;
-
-    float rotationX;
-    float rotationY;
-    float rotationZ;
-    float zoom;
-    QPoint lastMousePos;
 };
 
 #endif // GLWIDGET_H

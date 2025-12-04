@@ -70,8 +70,8 @@ Matrix Transformations::rotationZ(double degreeZ) {
     double cosZ = cos(radAngZ);
     double sinZ = sin(radAngZ);
 
-    rotZMat(0, 0) = cosZ;  rotZMat(0, 2) = -sinZ;
-    rotZMat(2, 0) = sinZ;  rotZMat(2, 2) = cosZ;
+    rotZMat(0, 0) = cosZ;  rotZMat(0, 1) = -sinZ;
+    rotZMat(1, 0) = sinZ;  rotZMat(1, 1) = cosZ;
     return rotZMat * transToOrigin;
 }
 
@@ -93,16 +93,17 @@ std::vector<Point> Transformations::getPtMatrix(const std::vector<Point>& vec)
 {
     std::vector<Point> transformedPts;
 
-    Matrix result = getMatrix();
-    Matrix pt(4, 1);
+    Matrix M = getMatrix(); // all transformations 4*4 matrix
+   
     for (const Point& p : vec)
     {
+         Matrix pt(4, 1);
         pt(0, 0) = p.getX();
         pt(1, 0) = p.getY();
         pt(2, 0) = p.getZ();
         pt(3, 0) = 1.0;
 
-        result = result * pt;
+        Matrix  result = M * pt;
 
         double fac = result(3, 0);
         double X;

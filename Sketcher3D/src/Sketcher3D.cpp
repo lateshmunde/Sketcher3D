@@ -49,7 +49,12 @@ void Sketcher3D::setupUI()
     connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
 
     connect(mTransformationTool.get(), &QToolButton::clicked, this, &Sketcher3D::onTransformToolClicked);
-
+    connect(mTranslateTool.get(), &QToolButton::clicked, this, &Sketcher3D::onTranslateToolClicked);
+    connect(mScaleTool.get(), &QToolButton::clicked, this, &Sketcher3D::onScaleToolClicked);
+    connect(mRotateXTool.get(), &QToolButton::clicked, this, &Sketcher3D::onRotateXToolClicked);
+    connect(mRotateYTool.get(), &QToolButton::clicked, this, &Sketcher3D::onRotateYToolClicked);
+    connect(mRotateZTool.get(), &QToolButton::clicked, this, &Sketcher3D::onRotateZToolClicked);
+    
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
 }
@@ -67,6 +72,31 @@ std::unique_ptr<QToolButton> Sketcher3D::createToolButton(
 
     toolbar->addWidget(btn.get());
     return btn;        // return unique_ptr
+}
+void Sketcher3D::toolBarElements()
+{
+    // ============================ TOOL BAR =================================
+    mToolBar = std::make_unique<QToolBar>(this);
+    addToolBar(mToolBar.get());
+    mToolBar->setIconSize(QSize(32, 32));
+
+    //Tool buttons
+    mCuboidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cuboid.png", "Cuboid");
+    mCubeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cube.png", "Cube");
+    mSphereTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/sphere.png", "Sphere");
+    mCylinderTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cylinder.png", "Cylinder");
+    mConeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cone.png", "Cone");
+    mPyramidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/pyramid.png", "Pyramid");
+    mTransformationTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/transformation.png", "Transform");
+    mTranslateTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/transformation.png", "Translate");
+    mScaleTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/transformation.png", "Scale");
+    mRotateXTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/transformation.png", "RotateX");
+    mRotateYTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/transformation.png", "RotateY");
+    mRotateZTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/transformation.png", "RotateZ");
+
+    //mTransformationTool->setPopupMode(QToolButton::MenuButtonPopup);   // IMPORTANT
+
+    //mToolBar->addWidget(mTransformationTool.get());
 }
 
 void Sketcher3D::menuBarElements()
@@ -94,24 +124,31 @@ void Sketcher3D::menuBarElements()
     undoAction->setShortcut(QKeySequence::Undo); // Ctrl+Z
     QAction* redoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowForward), "Redo");
     redoAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Z); // Ctrl+Shift+Z
+
+
+    // Transform Menu
+    /*mTransformationTool.get()->setMenu(mTransformMenu);
+
+    mTransformMenu = new QMenu(mTransformationTool.get());
+
+    mRotateXAction = new QAction("RotateX", this);
+    mRotateYAction = new QAction("RotateY", this);
+    mRotateZAction = new QAction("RotateZ", this);
+    mScaleAction = new QAction("Scale", this);
+    mTranslateAction = new QAction("Translate", this);
+  
+    mTransformMenu->addAction(mTranslateAction);
+    mTransformMenu->addAction(mScaleAction);
+    mTransformMenu->addSeparator();
+    mTransformMenu->addAction(mRotateXAction);
+    mTransformMenu->addAction(mRotateYAction);
+    mTransformMenu->addAction(mRotateZAction);*/
+    
+    
+
 }
 
-void Sketcher3D::toolBarElements()
-{
-    // ============================ TOOL BAR =================================
-    mToolBar = std::make_unique<QToolBar>(this);
-    addToolBar(mToolBar.get());
-    mToolBar->setIconSize(QSize(32, 32));
 
-    //Tool buttons
-    mCuboidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cuboid.png", "Cuboid");
-    mCubeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cube.png", "Cube");
-    mSphereTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/sphere.png", "Sphere");
-    mCylinderTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cylinder.png", "Cylinder");
-    mConeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cone.png", "Cone");
-    mPyramidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/pyramid.png", "Pyramid");
-    mTransformationTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cube.png", "Transform");
-}
 
 void Sketcher3D::onCuboidToolClicked()
 {
@@ -209,17 +246,6 @@ void Sketcher3D::onSphereToolClicked()
     }
 }
 
-void Sketcher3D::onTransformToolClicked()
-{
-    std::shared_ptr<Shape> py = std::make_shared<Pyramid>("py1", 2, 3, 6);
-    std::vector<Point> vec = py->getCoordinates();
-    vec = Transformations::getPtMatrix(vec);
-    glWidget->drawShape(vec);
-    mStatusBar->showMessage("Transform Done");
-}
-
-
-
 void Sketcher3D::onSaveGNUActionTriggered()
 {
     /*QString qFileName = QFileDialog::getSaveFileName(
@@ -256,4 +282,42 @@ void Sketcher3D::onSaveActionTriggered()
     {
         QMessageBox::warning(this, "Not Saved", "Shapes not saved!");
     }
+}
+
+
+void Sketcher3D::onTransformToolClicked()
+{
+    std::shared_ptr<Shape> py = std::make_shared<Pyramid>("py1", 2, 3, 6);
+    //shapeManager.addShape(py);
+    std::vector<Point> vec = py->getCoordinates();
+    vec = Transformations::getPtMatrix(vec);
+    glWidget->drawShape(vec);
+    mStatusBar->showMessage("Transform Done");
+}
+
+
+
+void Sketcher3D::onTranslateToolClicked()
+{
+    QMessageBox::information(this, "WIP", "Work in progress");
+}
+
+void Sketcher3D::onScaleToolClicked()
+{
+    QMessageBox::information(this, "WIP", "Work in progress");
+}
+
+void Sketcher3D::onRotateXToolClicked()
+{
+    QMessageBox::information(this, "WIP", "Work in progress");
+}
+
+void Sketcher3D::onRotateYToolClicked()
+{
+    QMessageBox::information(this, "WIP", "Work in progress");
+}
+
+void Sketcher3D::onRotateZToolClicked()
+{
+    QMessageBox::information(this, "WIP", "Work in progress");
 }

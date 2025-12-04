@@ -29,7 +29,7 @@ Matrix Matrix::getIdentity()
 Matrix Matrix::operator+(const Matrix& other)
 {
 	Matrix result(rows, cols);
-	if ((this->cols == other.rows))
+	if (this->rows == other.rows && this->cols == other.cols)
 	{
 
 		for (int i = 0; i < rows; i++)
@@ -49,7 +49,7 @@ Matrix Matrix::operator+(const Matrix& other)
 
 Matrix Matrix::operator*(const Matrix& other)
 {
-	Matrix result(this->cols, other.rows);
+	Matrix result(this->rows, other.cols);
 
 	for (int i = 0; i < this->rows; i++)
 	{
@@ -58,7 +58,7 @@ Matrix Matrix::operator*(const Matrix& other)
 			result.data[i][j] = 0;
 			for (int k = 0; k < this->cols; k++) // this->cols == other.rows
 			{
-				result.data[i][j] = result.data[i][j] + (data[i][k] * data[k][j]);
+				result.data[i][j] = result.data[i][j] + (data[i][k] * other.data[k][j]);
 			}
 		}
 	}

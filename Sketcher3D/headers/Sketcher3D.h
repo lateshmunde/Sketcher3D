@@ -52,7 +52,23 @@ private:
     std::unique_ptr<QToolButton> mSphereTool;
     std::unique_ptr<QToolButton> mPyramidTool;
 
+    // Tool Button for Transform
     std::unique_ptr<QToolButton> mTransformationTool;
+    std::unique_ptr<QToolButton> mTranslateTool;
+    std::unique_ptr<QToolButton> mScaleTool;
+    std::unique_ptr<QToolButton> mRotateXTool;
+    std::unique_ptr<QToolButton> mRotateYTool;
+    std::unique_ptr<QToolButton> mRotateZTool;
+
+
+    // Transform Menu
+   /* QMenu* mTransformMenu;
+    QAction* mTranslateAction;
+    QAction* mScaleAction;
+    QAction* mRotateXAction;
+    QAction* mRotateYAction;
+    QAction* mRotateZAction;*/
+   
 
     // Menu Items
     QMenu* mFileMenu;
@@ -75,9 +91,20 @@ private slots:
     void onSaveActionTriggered();
     void onSaveGNUActionTriggered();
 
+    /*void onTransformToolClicked();
+    void onTranslateActionClicked();
+    void onScaleActionClicked();
+    void onRotateXActionClicked();
+    void onRotateYActionClicked();
+    void onRotateZActionClicked();*/
+
     void onTransformToolClicked();
+    void onTranslateToolClicked();
+    void onScaleToolClicked();
+    void onRotateXToolClicked();
+    void onRotateYToolClicked();
+    void onRotateZToolClicked();
+    
+    
+
 };
-
-
-
-
