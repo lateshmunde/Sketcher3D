@@ -67,6 +67,7 @@ void Sketcher3D::setupUI()
     std::vector<Point> triangle = {
     Point(0.0, 0.0, 0.0),
     Point(0.0, 0.75, 0.0),
+    Point(0.75, 0.75, 0.0),
     Point(0.75, 0.0, 0.0)
     };
     mGLWidget->setVertices(triangle);
@@ -214,6 +215,7 @@ void Sketcher3D::onCuboidToolClicked()
     // Create cuboid 
     std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(name.toStdString(), length, width, height);
     shapeManager.addShape(cb);
+    mGLWidget->setVertices(cb->getCoordinates());
 
     QMessageBox::information(this, "Success", "Cuboid created.");
 }
