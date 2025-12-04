@@ -18,9 +18,12 @@ Matrix4D::operator*(std::vector<std::vector<double>>& other)
         std::vector<double>(colsB, 0.0));
 
     for (int i = 0; i < rowsA; ++i)
-        for (int j = 0; j < colsB; ++j)
+        for (int j = 0; j < colsB; ++j) {
+            result[i][j] = 0;
             for (int k = 0; k < colsA; ++k)
                 result[i][j] += Mat4[i][k] * other[k][j];
+        }
+           
 
     return result;
 }
@@ -42,7 +45,7 @@ Matrix4D Matrix4D::operator*(const Matrix4D& other)
     return result;
 }
 
-Matrix4D Matrix4D::Translation(double tx, double ty, double tz)
+Matrix4D Matrix4D::getTranslationMatrix(double tx, double ty, double tz)
 {
     Matrix4D m;
     m.Mat4 =
@@ -55,7 +58,7 @@ Matrix4D Matrix4D::Translation(double tx, double ty, double tz)
     return m;
 }
 
-Matrix4D Matrix4D::Scaling(double sx, double sy, double sz)
+Matrix4D Matrix4D::getScalingMatrix(double sx, double sy, double sz)
 {
     Matrix4D m;
     m.Mat4 =
@@ -68,7 +71,7 @@ Matrix4D Matrix4D::Scaling(double sx, double sy, double sz)
     return m;
 }
 
-Matrix4D Matrix4D::RotationX(double angle)
+Matrix4D Matrix4D::getRotationXMatrix(double angle)
 {
     Matrix4D m;
     double c = cos(angle);
@@ -85,7 +88,7 @@ Matrix4D Matrix4D::RotationX(double angle)
     return m;
 }
 
-Matrix4D Matrix4D::RotationY(double angle)
+Matrix4D Matrix4D::getRotationYMatrix(double angle)
 {
     Matrix4D m;
     double c = cos(angle);
@@ -102,7 +105,7 @@ Matrix4D Matrix4D::RotationY(double angle)
     return m;
 }
 
-Matrix4D Matrix4D::RotationZ(double angle)
+Matrix4D Matrix4D::getRotationZMatrix(double angle)
 {
     Matrix4D m;
     double c = cos(angle);

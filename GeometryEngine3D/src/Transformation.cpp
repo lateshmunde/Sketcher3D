@@ -41,7 +41,7 @@ void Transformation::ApplyTransform(std::vector<Point>& vertices, Matrix4D& matr
 
 void Transformation::Translate(std::vector<Point>& vertices, double tx, double ty, double tz)
 {
-    Matrix4D T = Matrix4D::Translation(tx, ty, tz);
+    Matrix4D T = Matrix4D::getTranslationMatrix(tx, ty, tz);
     ApplyTransform(vertices, T);
 }
 
@@ -49,50 +49,50 @@ void Transformation::Scale(std::vector<Point>& vertices, double sx, double sy, d
 {
     Point pivot = calculatePivot(vertices);
 
-    Matrix4D T1 = Matrix4D::Translation(-pivot.getX(), -pivot.getY(), -pivot.getZ());
-    Matrix4D S = Matrix4D::Scaling(sx, sy, sz);
-    Matrix4D T2 = Matrix4D::Translation(pivot.getX(), pivot.getY(), pivot.getZ());
+    Matrix4D T1 = Matrix4D::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getZ());
+    Matrix4D S = Matrix4D::getScalingMatrix(sx, sy, sz);
+    Matrix4D T2 = Matrix4D::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getZ());
 
-    Matrix4D final = T2 * S * T1;
+    Matrix4D transformed = T2 * S * T1;
 
-    ApplyTransform(vertices, final);
+    ApplyTransform(vertices, transformed);
 }
 
 void Transformation::RotateX(std::vector<Point>& vertices, double angle)
 {
     Point pivot = calculatePivot(vertices);
 
-    Matrix4D T1 = Matrix4D::Translation(-pivot.getX(), -pivot.getY(), -pivot.getZ());
-    Matrix4D R = Matrix4D::RotationX(angle);
-    Matrix4D T2 = Matrix4D::Translation(pivot.getX(), pivot.getY(), pivot.getZ());
+    Matrix4D T1 = Matrix4D::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getZ());
+    Matrix4D R = Matrix4D::getRotationXMatrix(angle);
+    Matrix4D T2 = Matrix4D::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getZ());
 
-    Matrix4D final = T2 * R * T1;
+    Matrix4D transformed = T2 * R * T1;
 
-    ApplyTransform(vertices, final);
+    ApplyTransform(vertices, transformed);
 }
 
 void Transformation::RotateY(std::vector<Point>& vertices, double angle)
 {
     Point pivot = calculatePivot(vertices);
 
-    Matrix4D T1 = Matrix4D::Translation(-pivot.getX(), -pivot.getY(), -pivot.getZ());
-    Matrix4D R = Matrix4D::RotationY(angle);
-    Matrix4D T2 = Matrix4D::Translation(pivot.getX(), pivot.getY(), pivot.getZ());
+    Matrix4D T1 = Matrix4D::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getZ());
+    Matrix4D R = Matrix4D::getRotationYMatrix(angle);
+    Matrix4D T2 = Matrix4D::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getZ());
 
-    Matrix4D final = T2 * R * T1;
+    Matrix4D transformed = T2 * R * T1;
 
-    ApplyTransform(vertices, final);
+    ApplyTransform(vertices, transformed);
 }
 
 void Transformation::RotateZ(std::vector<Point>& vertices, double angle)
 {
     Point pivot = calculatePivot(vertices);
 
-    Matrix4D T1 = Matrix4D::Translation(-pivot.getX(), -pivot.getY(), -pivot.getZ());
-    Matrix4D R = Matrix4D::RotationZ(angle);
-    Matrix4D T2 = Matrix4D::Translation(pivot.getX(), pivot.getY(), pivot.getZ());
+    Matrix4D T1 = Matrix4D::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getZ());
+    Matrix4D R = Matrix4D::getRotationZMatrix(angle);
+    Matrix4D T2 = Matrix4D::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getZ());
 
-    Matrix4D final = T2 * R * T1;
+    Matrix4D transformed = T2 * R * T1;
 
-    ApplyTransform(vertices, final);
+    ApplyTransform(vertices, transformed);
 }

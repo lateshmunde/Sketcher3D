@@ -17,9 +17,9 @@ public:
     Matrix4D operator*(const Matrix4D& other);
 
     // Static creators
-    static Matrix4D Translation(double tx, double ty, double tz);
-    static Matrix4D Scaling(double sx, double sy, double sz);
-    static Matrix4D RotationX(double angle);
-    static Matrix4D RotationY(double angle);
-    static Matrix4D RotationZ(double angle);
+    static Matrix4D getTranslationMatrix(double tx, double ty, double tz);
+    static Matrix4D getScalingMatrix(double sx, double sy, double sz);
+    static Matrix4D getRotationXMatrix(double angle);
+    static Matrix4D getRotationYMatrix(double angle);
+    static Matrix4D getRotationZMatrix(double angle);
 };
