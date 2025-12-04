@@ -5,7 +5,12 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
 {
 }
 
-OpenGLWidget::~OpenGLWidget() {}
+OpenGLWidget::~OpenGLWidget() {
+    makeCurrent();
+    vao.destroy();
+    vbo.destroy();
+    doneCurrent();
+}
 
 void OpenGLWidget::initializeGL()
 {
@@ -15,12 +20,12 @@ void OpenGLWidget::initializeGL()
 
     // Simple vertex + fragment shaders (hardcoded)
     shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
-        "(\
-        attribute vec3 position;\
-        void main()\
-        {\
-            gl_Position = vec4(position, 1.0);\
-        }\
+        R"(
+        attribute vec3 position;
+        void main()
+        {
+            gl_Position = vec4(position, 1.0);
+        }
     )");
 
     shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
@@ -39,7 +44,10 @@ void OpenGLWidget::initializeGL()
 
     vbo.create();
     vbo.bind();
-    vbo.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+
+    if (!mVertices.empty()) {
+        vbo.allocate(mVertices.data(), mVertices.size() * sizeof(float));
+    }
 
     shader.bind();
     glEnableVertexAttribArray(0);
@@ -61,6 +69,7 @@ void OpenGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    if (mVertices.empty()) return;
     shader.bind();
     vao.bind();
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -70,22 +79,40 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::setVertices(const std::vector<Point>& points)
 {
-    // convert DOUBLE -> FLOAT only for OpenGL
-    std::vector<float> data;
-    data.reserve(points.size() * 3);
+    mVertices.clear();
+    mVertices.reserve(points.size() * 3);
 
     for (const auto& p : points)
     {
-        data.push_back(static_cast<float>(p.getX()));
-        data.push_back(static_cast<float>(p.getY()));
-        data.push_back(static_cast<float>(p.getZ()));
+        mVertices.push_back(static_cast<float>(p.getX()));
+        mVertices.push_back(static_cast<float>(p.getY()));
+        mVertices.push_back(static_cast<float>(p.getZ()));
     }
 
-    vao.bind();
-    vbo.bind();
-    vbo.allocate(data.data(), data.size() * sizeof(float));
-    vbo.release();
-    vao.release();
+    if (isValid())
+    {
+        makeCurrent();
 
-    update();
+        vao.bind();
+        vbo.bind();
+        vbo.allocate(mVertices.data(), mVertices.size() * sizeof(float));
+        vbo.release();
+        vao.release();
+
+        update();
+    }
+}
+
+std::vector<Point> OpenGLWidget::getVertices() const
+{
+    std::vector<Point> points;
+    for (int i = 0; i < mVertices.size(); i += 3)
+    {
+        points.emplace_back(
+            static_cast<double>(mVertices[i]),
+            static_cast<double>(mVertices[i + 1]),
+            static_cast<double>(mVertices[i + 2])
+        );
+    }
+    return points;
 }

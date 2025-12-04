@@ -52,7 +52,10 @@
     <ClCompile Include="headers\OpenGLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Transformation.cpp">
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Matrix4D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,7 +83,10 @@
     <ClInclude Include="headers\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Transformation.h">
+    <ClInclude Include="headers\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Matrix4D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

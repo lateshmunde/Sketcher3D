@@ -8,6 +8,7 @@
 #include "Cylinder.h"
 #include "Cone.h"
 #include "Pyramid.h"
+#include "Transform.h"
 
 Sketcher3D::Sketcher3D(QWidget *parent)
     : QMainWindow(parent)
@@ -53,11 +54,11 @@ void Sketcher3D::setupUI()
     //connect(undoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     //connect(redoAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
 
-    /*connect(mTranslate, &QAction::triggered, this, &Sketcher3D::onTranslateActionTriggered);
+    connect(mTranslate, &QAction::triggered, this, &Sketcher3D::onTranslateActionTriggered);
     connect(mScale, &QAction::triggered, this, &Sketcher3D::onScaleActionTriggered);
     connect(mRotateX, &QAction::triggered, this, &Sketcher3D::onRotateXActionTriggered);
     connect(mRotateY, &QAction::triggered, this, &Sketcher3D::onRotateYActionTriggered);
-    connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);*/
+    connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);
 
 
     mGLWidget = std::make_unique<OpenGLWidget>(this);
@@ -69,6 +70,8 @@ void Sketcher3D::setupUI()
     Point(0.25, 0.75, 0.0)
     };
     mGLWidget->setVertices(triangle);
+    /*triangle[1].setY(1.0);
+    mGLWidget->setVertices(triangle);*/
 
 }
 
@@ -496,22 +499,249 @@ void Sketcher3D::onSaveActionTriggered()
         QMessageBox::information(this, "Not Saved", "Shapes not saved!");
 }
 
-//void onTranslateActionTriggered() {
-//
-//}
-//
-//void onScaleActionTriggered() {
-//
-//}
-//
-//void onRotateXActionTriggered() {
-//
-//}
-//
-//void onRotateYActionTriggered() {
-//
-//}
-//
-//void onRotateZActionTriggered() {
-//
-//}
+void Sketcher3D::onTranslateActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Translate Object");
+
+    QLabel* xLabel = new QLabel("Translate X");
+    QLabel* yLabel = new QLabel("Translate Y");
+    QLabel* zLabel = new QLabel("Translate Z");
+
+    QDoubleSpinBox* xSpin = new QDoubleSpinBox();
+    QDoubleSpinBox* ySpin = new QDoubleSpinBox();
+    QDoubleSpinBox* zSpin = new QDoubleSpinBox();
+
+    xSpin->setRange(-10000, 10000);
+    ySpin->setRange(-10000, 10000);
+    zSpin->setRange(-10000, 10000);
+
+    xSpin->setDecimals(2);
+    ySpin->setDecimals(2);
+    zSpin->setDecimals(2);
+
+    xSpin->setValue(0.0);
+    ySpin->setValue(0.0);
+    zSpin->setValue(0.0);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QGridLayout* layout = new QGridLayout();
+
+    layout->addWidget(xLabel, 0, 0);
+    layout->addWidget(xSpin, 0, 1);
+
+    layout->addWidget(yLabel, 1, 0);
+    layout->addWidget(ySpin, 1, 1);
+
+    layout->addWidget(zLabel, 2, 0);
+    layout->addWidget(zSpin, 2, 1);
+
+    layout->addLayout(buttonLayout, 3, 0, 1, 2);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double tx = xSpin->value();
+    double ty = ySpin->value();
+    double tz = zSpin->value();
+
+    std::vector<Point> currentVertices = mGLWidget->getVertices();
+    Transform::Translate(currentVertices, tx, ty, tz);
+
+    mGLWidget->setVertices(currentVertices);
+}
+
+void Sketcher3D::onScaleActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Scale Object");
+
+    QLabel* xLabel = new QLabel("Scale X");
+    QLabel* yLabel = new QLabel("Scale Y");
+    QLabel* zLabel = new QLabel("Scale Z");
+
+    QDoubleSpinBox* xSpin = new QDoubleSpinBox();
+    QDoubleSpinBox* ySpin = new QDoubleSpinBox();
+    QDoubleSpinBox* zSpin = new QDoubleSpinBox();
+
+    xSpin->setRange(0.01, 1000);
+    ySpin->setRange(0.01, 1000);
+    zSpin->setRange(0.01, 1000);
+
+    xSpin->setValue(1.0);
+    ySpin->setValue(1.0);
+    zSpin->setValue(1.0);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QGridLayout* layout = new QGridLayout();
+
+    layout->addWidget(xLabel, 0, 0);
+    layout->addWidget(xSpin, 0, 1);
+
+    layout->addWidget(yLabel, 1, 0);
+    layout->addWidget(ySpin, 1, 1);
+
+    layout->addWidget(zLabel, 2, 0);
+    layout->addWidget(zSpin, 2, 1);
+
+    layout->addLayout(buttonLayout, 3, 0, 1, 2);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double sx = xSpin->value();
+    double sy = ySpin->value();
+    double sz = zSpin->value();
+
+    std::vector<Point> currentVertices = mGLWidget->getVertices();
+
+    Transform::Scale(currentVertices, sx, sy, sz);
+
+    mGLWidget->setVertices(currentVertices);
+    mGLWidget->update();
+}
+
+void Sketcher3D::onRotateXActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Rotate X");
+
+    QLabel* angleLabel = new QLabel("Angle (degrees)");
+
+    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
+    angleSpin->setRange(-360, 360);
+    angleSpin->setValue(0.0);
+    angleSpin->setDecimals(2);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(angleLabel);
+    layout->addWidget(angleSpin);
+    layout->addLayout(buttonLayout);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double angle = ((MathConstants::PI * angleSpin->value()) / 180);
+
+    std::vector<Point> currentVertices = mGLWidget->getVertices();
+
+    Transform::RotateX(currentVertices, angle);
+
+    mGLWidget->setVertices(currentVertices);
+}
+
+void Sketcher3D::onRotateYActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Rotate Y");
+
+    QLabel* angleLabel = new QLabel("Angle (degrees)");
+
+    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
+    angleSpin->setRange(-360, 360);
+    angleSpin->setValue(0.0);
+    angleSpin->setDecimals(2);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(angleLabel);
+    layout->addWidget(angleSpin);
+    layout->addLayout(buttonLayout);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double angle = ((MathConstants::PI * angleSpin->value()) / 180);
+
+    std::vector<Point> currentVertices = mGLWidget->getVertices();
+
+    Transform::RotateY(currentVertices, angle);
+
+    mGLWidget->setVertices(currentVertices);
+}
+
+void Sketcher3D::onRotateZActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Rotate Z");
+
+    QLabel* angleLabel = new QLabel("Angle (degrees)");
+
+    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
+    angleSpin->setRange(-360, 360);
+    angleSpin->setValue(0.0);
+    angleSpin->setDecimals(2);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(angleLabel);
+    layout->addWidget(angleSpin);
+    layout->addLayout(buttonLayout);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double angle = ((MathConstants::PI*angleSpin->value())/180);
+
+    std::vector<Point> currentVertices = mGLWidget->getVertices();
+
+    Transform::RotateZ(currentVertices, angle);
+
+    mGLWidget->setVertices(currentVertices);
+}

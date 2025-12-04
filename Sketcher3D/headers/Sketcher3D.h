@@ -80,10 +80,10 @@ private slots:
     void onSaveGNUActionTriggered(); // For GNU plot
 
     // Transformation
-    /*void onTranslateActionTriggered();
+    void onTranslateActionTriggered();
     void onScaleActionTriggered();
     void onRotateXActionTriggered();
     void onRotateYActionTriggered();
-    void onRotateZActionTriggered();*/
+    void onRotateZActionTriggered();
 };
 

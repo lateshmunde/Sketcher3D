@@ -118,6 +118,7 @@
     <ClCompile Include="headers\OpenGLWidget.cpp" />
     <ClCompile Include="src\FileHandle.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Matrix4D.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
     <ClCompile Include="src\ShapeManager.cpp" />
     <ClCompile Include="src\Sketcher3D.cpp" />
@@ -125,14 +126,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Transformation.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="headers\Sketcher3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\FileHandle.h" />
-    <ClInclude Include="headers\Transformation.h" />
+    <ClInclude Include="headers\Matrix4D.h" />
+    <ClInclude Include="headers\Transform.h" />
     <QtMoc Include="headers\OpenGLWidget.h" />
     <ClInclude Include="headers\Renderer.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
