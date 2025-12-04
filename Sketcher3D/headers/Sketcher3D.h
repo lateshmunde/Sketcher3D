@@ -64,7 +64,6 @@ private:
     QAction* mRotateZ;
 
     ShapeManager shapeManager; // handles container(vector) of shapes
-
     std::unique_ptr<OpenGLWidget> mGLWidget;
     
 private slots:
@@ -79,5 +78,12 @@ private slots:
     //void onOpenActionTriggered();
     void onSaveActionTriggered(); 
     void onSaveGNUActionTriggered(); // For GNU plot
+
+    // Transformation
+    void onTranslateActionTriggered();
+    void onScaleActionTriggered();
+    void onRotateXActionTriggered();
+    void onRotateYActionTriggered();
+    void onRotateZActionTriggered();
 };
 
