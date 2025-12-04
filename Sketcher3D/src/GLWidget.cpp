@@ -117,7 +117,7 @@ void GLWidget::paintGL()
             glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
         }
         glEnd();
-
+        
         // Draw connecting lines
         glColor3f(0.5f, 0.8f, 1.0f);
         glLineWidth(2.0f);

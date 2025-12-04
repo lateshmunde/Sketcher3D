@@ -20,15 +20,15 @@ Matrix Transformations::translate(double transX, double transY, double transZ)
 
 
 
-Matrix Transformations::scale(double scaleFac)
+Matrix Transformations::scale(double scaleX, double scaleY, double scaleZ)
 {
     Matrix transToOrigin = translate(0,0,0);
 
     Matrix scaleMat(4, 4);
     scaleMat = Matrix::getIdentity();
-    scaleMat(0, 0) = scaleFac;
-    scaleMat(1, 1) = scaleFac;
-    scaleMat(2, 2) = scaleFac;
+    scaleMat(0, 0) = scaleX;
+    scaleMat(1, 1) = scaleY;
+    scaleMat(2, 2) = scaleZ;
     return scaleMat* transToOrigin;
 }
 
