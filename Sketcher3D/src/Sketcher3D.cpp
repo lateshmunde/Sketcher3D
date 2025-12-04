@@ -288,7 +288,7 @@ void Sketcher3D::onSaveActionTriggered()
 void Sketcher3D::onTransformToolClicked()
 {
     std::shared_ptr<Shape> py = std::make_shared<Pyramid>("py1", 2, 3, 6);
-    //shapeManager.addShape(py);
+    shapeManager.addShape(py);
     std::vector<Point> vec = py->getCoordinates();
     vec = Transformations::getPtMatrix(vec);
     glWidget->drawShape(vec);

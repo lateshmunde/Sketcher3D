@@ -55,24 +55,24 @@ void GLWidget::initializeGL()
     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
-//void GLWidget::resizeGL(int w, int h)
-//{
-//    if (h == 0) h = 1;
-//
-//    glViewport(0, 0, w, h);
-//
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//
-//    // Manual perspective calculation (avoiding gluPerspective)
-//    GLfloat aspect = (GLfloat)w / (GLfloat)h;
-//    GLfloat fH = tan(45.0f / 360.0f * 3.14159f) * 0.1f;
-//    GLfloat fW = fH * aspect;
-//
-//    glFrustum(-fW, fW, -fH, fH, 0.1, 100.0);
-//
-//    glMatrixMode(GL_MODELVIEW);
-//}
+void GLWidget::resizeGL(int w, int h)
+{
+    if (h == 0) h = 1;
+
+    glViewport(0, 0, w, h);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    // Manual perspective calculation (avoiding gluPerspective)
+    GLfloat aspect = (GLfloat)w / (GLfloat)h;
+    GLfloat fH = tan(45.0f / 360.0f * 3.14159f) * 0.1f;
+    GLfloat fW = fH * aspect;
+
+    glFrustum(-fW, fW, -fH, fH, 0.1, 100.0);
+
+    glMatrixMode(GL_MODELVIEW);
+}
 
 void GLWidget::paintGL()
 {
