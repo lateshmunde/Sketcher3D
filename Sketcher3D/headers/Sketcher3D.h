@@ -64,7 +64,7 @@ private:
     QAction* mRotateY = nullptr;
     QAction* mRotateZ = nullptr;
 
-    QMenu* mRotate_arb_z = nullptr;
+    QAction* mRotate_arb_z = nullptr;
 
     ShapeManager shapeManager;
 
@@ -86,5 +86,5 @@ private slots:
     void onRotateTriggered();
     void onScaleTriggered();
 
-	void onRotateArbZTriggered();//new
+	//void onRotateArbZTriggered();//new
 };
