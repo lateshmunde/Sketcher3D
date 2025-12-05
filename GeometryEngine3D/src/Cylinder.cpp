@@ -47,43 +47,64 @@ const std::vector<Point> Cylinder::coodinatesForGLTriangle() const
 {
 	std::vector<Point> pts;
 	std::vector<Point> baseCirclePts;
-	std::vector<Point> UpCirclePts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-	Point origin(x, y, z);
-	Point hOrigin(x, y, z + mHeight);
+	std::vector<Point> upCirclePts;
+
+	Point origin(0, 0, 0);
+	Point hOrigin(0, 0, mHeight);
 
 	int number = 72;
 	double dTheta = 2 * MathConstants::PI / number;
 
-	for (int i = 0; i <= number; i++) //base
+	// --- Base circle ---
+	for (int i = 0; i < number; i++)
 	{
 		double theta = i * dTheta;
 		double x_ = mRadius * cos(theta);
 		double y_ = mRadius * sin(theta);
-		baseCirclePts.emplace_back(x + x_, y + y_, z);
+		baseCirclePts.emplace_back(x_, y_, 0);
 	}
-	for (int i = 0; i <= number; i++) // height
+	// close base circle
+	baseCirclePts.push_back(baseCirclePts[0]);
+
+	// --- Top circle ---
+	for (int i = 0; i < number; i++)
 	{
 		double theta = i * dTheta;
 		double x_ = mRadius * cos(theta);
 		double y_ = mRadius * sin(theta);
-		UpCirclePts.emplace_back(x + x_, y + y_, z + mHeight);
+		upCirclePts.emplace_back(x_, y_, mHeight);
+	}
+	// close top circle
+	upCirclePts.push_back(upCirclePts[0]);
+
+	// --- Side triangles ---
+	for (int i = 0; i < number; i++)
+	{
+		// First triangle
+		pts.push_back(baseCirclePts[i]);
+		pts.push_back(baseCirclePts[i + 1]);
+		pts.push_back(upCirclePts[i]);
+
+		// Second triangle
+		pts.push_back(upCirclePts[i]);
+		pts.push_back(baseCirclePts[i + 1]);
+		pts.push_back(upCirclePts[i + 1]);
 	}
 
+	// --- Bottom cap ---
 	for (int i = 0; i < number; i++)
 	{
-		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i+1]); pts.push_back(UpCirclePts[i]);
-		pts.push_back(UpCirclePts[i]); pts.push_back(UpCirclePts[i+1]); pts.push_back(baseCirclePts[i+1]);
+		pts.push_back(baseCirclePts[i]);
+		pts.push_back(baseCirclePts[i + 1]);
+		pts.push_back(origin);
 	}
+
+	// --- Top cap ---
 	for (int i = 0; i < number; i++)
 	{
-		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(origin);
-	}
-	for (int i = 0; i < number; i++)
-	{
-		pts.push_back(UpCirclePts[i]); pts.push_back(UpCirclePts[i + 1]); pts.push_back(hOrigin);
+		pts.push_back(upCirclePts[i]);
+		pts.push_back(upCirclePts[i + 1]);
+		pts.push_back(hOrigin);
 	}
 
 	return pts;
