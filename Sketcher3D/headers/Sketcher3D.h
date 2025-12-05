@@ -15,9 +15,6 @@
 #include "FileHandle.h"
 #include "OpenGLWidget.h"
 
-#include <QtWidgets/QMainWindow>
-//#include "ui_Sketcher3D.h"
-
 class Sketcher3D : public QMainWindow
 {
     Q_OBJECT

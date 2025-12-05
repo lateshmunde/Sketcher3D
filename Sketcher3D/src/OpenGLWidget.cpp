@@ -72,7 +72,7 @@ void OpenGLWidget::paintGL()
     if (mVertices.empty()) return;
     shader.bind();
     vao.bind();
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
     vao.release();
     shader.release();
 }

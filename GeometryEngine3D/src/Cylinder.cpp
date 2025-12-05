@@ -43,6 +43,18 @@ const std::vector<Point> Cylinder::getCoordinates() const
 	return pts;
 }
 
+const std::vector<Point> Cylinder::coodinatesForGLTriangle() const
+{
+	std::vector<Point> pts;
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	Point p1(x, y, z);
+	pts.push_back(p1);
+	return pts;
+}
+
 void Cylinder::save(std::ostream& out) const
 {
 	out << getType() << " " << getName() << " "

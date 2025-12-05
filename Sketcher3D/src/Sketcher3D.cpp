@@ -13,8 +13,6 @@
 Sketcher3D::Sketcher3D(QWidget *parent)
     : QMainWindow(parent)
 {
-    // ui.setupUi(this);
-
     setupUI();
     resize(800, 800);
 }
@@ -70,9 +68,6 @@ void Sketcher3D::setupUI()
     Point(0.75, 0.0, 0.0)
     };
     mGLWidget->setVertices(triangle);
-    /*triangle[1].setY(1.0);
-    mGLWidget->setVertices(triangle);*/
-
 }
 
 void Sketcher3D::menuBarElements()
@@ -258,6 +253,7 @@ void Sketcher3D::onCubeToolClicked()
     // Create Cube object
     std::shared_ptr<Shape> c = std::make_shared<Cube>(name.toStdString(), side);
     shapeManager.addShape(c);
+    mGLWidget->setVertices(c->coodinatesForGLTriangle());
 
     // Inform user
     QMessageBox::information(this, "Success", "cube created");
