@@ -126,19 +126,84 @@
 //};
 
 
+//#pragma once
+//
+//#include <QOpenGLWidget>
+//#include <QOpenGLFunctions>
+//#include <QOpenGLShaderProgram>
+//#include <QOpenGLBuffer>
+//#include <QOpenGLVertexArrayObject>
+//#include <QMatrix4x4>
+//#include <QPoint>
+//#include <QVector3D>
+//#include <vector>
+//
+//#include "Point.h"  // Your own Point class with getX(), getY(), getZ()
+//
+//class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
+//{
+//    Q_OBJECT
+//
+//public:
+//    explicit OpenGLWidget(QWidget* parent = nullptr);
+//    ~OpenGLWidget();
+//
+//    // Provide geometry (as triangles) to be drawn
+//    void drawShape(std::vector<Point>& vec);
+//
+//    // Clear geometry
+//    void clearShape();
+//
+//protected:
+//    void initializeGL() override;
+//    void resizeGL(int w, int h) override;
+//    void paintGL() override;
+//
+//    void mousePressEvent(QMouseEvent* event) override;
+//    void mouseMoveEvent(QMouseEvent* event) override;
+//    void wheelEvent(QWheelEvent* event) override;
+//
+//private:
+//    // Shader program (vertex + fragment)
+//    QOpenGLShaderProgram m_program;
+//
+//    // Shape geometry
+//    QOpenGLVertexArrayObject m_shapeVAO;
+//    QOpenGLBuffer            m_shapeVBO;
+//    std::vector<float>       m_vertices;   // x,y,z,x,y,z,...
+//
+//    // Axes geometry
+//    QOpenGLVertexArrayObject m_axesVAO;
+//    QOpenGLBuffer            m_axesVBO;
+//
+//    // Matrices
+//    QMatrix4x4 m_projection;
+//
+//    // Camera (orbit)
+//    float   m_camDistance;   // radius
+//    float   m_camYaw;        // degrees
+//    float   m_camPitch;      // degrees
+//    QPoint  m_lastMousePos;
+//
+//    // Lighting
+//    QVector3D m_lightPos;
+//    QVector3D m_lightColor;
+//    QVector3D m_shapeColor;
+//};
+
+
 #pragma once
 
-#include <QOpenGLWidget>
-#include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLBuffer>
-#include <QOpenGLVertexArrayObject>
-#include <QMatrix4x4>
-#include <QPoint>
-#include <QVector3D>
+#include <QOpenGLWidget>              // Base OpenGL widget
+#include <QOpenGLFunctions>           // OpenGL functions
+#include <QOpenGLShaderProgram>       // Shader program wrapper
+#include <QOpenGLBuffer>              // VBO
+#include <QOpenGLVertexArrayObject>   // VAO
+#include <QMatrix4x4>                 // 4×4 matrices
+#include <QPoint>                     // For mouse position
 #include <vector>
 
-#include "Point.h"  // Your own Point class with getX(), getY(), getZ()
+#include "Point.h"                    // Your Point class
 
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -148,45 +213,44 @@ public:
     explicit OpenGLWidget(QWidget* parent = nullptr);
     ~OpenGLWidget();
 
-    // Provide geometry (as triangles) to be drawn
+    // Called to draw a new shape (triangle vertices)
     void drawShape(std::vector<Point>& vec);
 
-    // Clear geometry
+    // Clears the shape
     void clearShape();
 
 protected:
-    void initializeGL() override;
-    void resizeGL(int w, int h) override;
-    void paintGL() override;
+    void initializeGL() override;     // Create VAO, VBO, shaders
+    void resizeGL(int w, int h) override; // Update projection
+    void paintGL() override;          // Render the shape
 
+    // Camera controls (rotate + zoom)
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
 
 private:
-    // Shader program (vertex + fragment)
-    QOpenGLShaderProgram m_program;
+    // GPU objects for shape
+    QOpenGLVertexArrayObject mShapeVAO;
+    QOpenGLBuffer            mShapeVBO;
 
-    // Shape geometry
-    QOpenGLVertexArrayObject m_shapeVAO;
-    QOpenGLBuffer            m_shapeVBO;
-    std::vector<float>       m_vertices;   // x,y,z,x,y,z,...
+    // CPU-side vertex storage
+    std::vector<float> mVertices;
 
-    // Axes geometry
-    QOpenGLVertexArrayObject m_axesVAO;
-    QOpenGLBuffer            m_axesVBO;
+    // Shader program
+    QOpenGLShaderProgram mShader;
 
     // Matrices
-    QMatrix4x4 m_projection;
+    QMatrix4x4 mProjection;
 
-    // Camera (orbit)
-    float   m_camDistance;   // radius
-    float   m_camYaw;        // degrees
-    float   m_camPitch;      // degrees
-    QPoint  m_lastMousePos;
+    // Mouse + rotation controls
+    QPoint mLastMousePos;
+    float mRotationX;
+    float mRotationY;
+    float mZoom;
 
-    // Lighting
-    QVector3D m_lightPos;
-    QVector3D m_lightColor;
-    QVector3D m_shapeColor;
+    // Light + object color
+    QVector3D mLightDir;
+    QVector3D mObjectColor;
 };
+

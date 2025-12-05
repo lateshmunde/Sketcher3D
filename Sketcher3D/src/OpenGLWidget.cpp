@@ -341,6 +341,336 @@
 //    update();
 //}
 
+//#include "OpenGLWidget.h"
+//
+//#include <QMouseEvent>
+//#include <QWheelEvent>
+//#include <QtMath>
+//#include <QDebug>
+//
+//OpenGLWidget::OpenGLWidget(QWidget* parent)
+//    : QOpenGLWidget(parent)
+//    , m_shapeVBO(QOpenGLBuffer::VertexBuffer)
+//    , m_axesVBO(QOpenGLBuffer::VertexBuffer)
+//    , m_camDistance(20.0f)
+//    , m_camYaw(45.0f)
+//    , m_camPitch(25.0f)
+//    , m_lightPos(10.0f, 10.0f, 10.0f)
+//    , m_lightColor(1.0f, 1.0f, 1.0f)
+//    , m_shapeColor(0.0f, 0.7f, 1.0f)    // cyan-ish
+//{
+//}
+//
+//OpenGLWidget::~OpenGLWidget()
+//{
+//    makeCurrent();
+//    m_shapeVAO.destroy();
+//    m_shapeVBO.destroy();
+//    m_axesVAO.destroy();
+//    m_axesVBO.destroy();
+//    m_program.removeAllShaders();
+//    doneCurrent();
+//}
+//
+//void OpenGLWidget::drawShape(std::vector<Point>& vec)
+//{
+//    m_vertices.clear();
+//    m_vertices.reserve(vec.size() * 3);
+//
+//    for (const Point& p : vec)
+//    {
+//        m_vertices.push_back(static_cast<float>(p.getX()));
+//        m_vertices.push_back(static_cast<float>(p.getY()));
+//        m_vertices.push_back(static_cast<float>(p.getZ()));
+//    }
+//
+//    update();   // trigger paintGL() //Tells Qt: call paintGL() again
+//}
+//
+//void OpenGLWidget::clearShape()
+//{
+//    m_vertices.clear();
+//    update();
+//}
+//
+//void OpenGLWidget::initializeGL()
+//{
+//    initializeOpenGLFunctions();
+//
+//    glEnable(GL_DEPTH_TEST);
+//    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);   // white background
+//    glClearColor(0.1f, 0.1f, 0.1f, 0.1f);   // white background
+//
+//    //SHADERS
+//
+//    const char* vsSrc = R"(
+//        #version 330 core
+//
+//        layout(location = 0) in vec3 aPos;
+//
+//        uniform mat4 uModel;
+//        uniform mat4 uView;
+//        uniform mat4 uProj;
+//
+//        uniform bool uUseLighting;
+//        uniform vec3 uBaseColor;
+//
+//        out vec3 vColor;
+//        out vec3 vFragPos;
+//        out vec3 vNormal;
+//
+//        void main()
+//        {
+//            vec4 worldPos = uModel * vec4(aPos, 1.0);
+//            vFragPos = worldPos.xyz;
+//
+//            // Fake normal from position (ok for simple shapes/demo)
+//            vNormal = normalize(mat3(uModel) * aPos);
+//
+//            vColor = uBaseColor;
+//
+//            gl_Position = uProj * uView * worldPos;
+//        }
+//    )";
+//
+//    const char* fsSrc = R"(
+//        #version 330 core
+//
+//        in vec3 vColor;
+//        in vec3 vFragPos;
+//        in vec3 vNormal;
+//
+//        uniform bool uUseLighting;
+//        uniform vec3 uLightPos;
+//        uniform vec3 uLightColor;
+//        uniform vec3 uViewPos;
+//
+//        out vec4 FragColor;
+//
+//        void main()
+//        {
+//            if (!uUseLighting)
+//            {
+//                FragColor = vec4(vColor, 1.0);
+//                return;
+//            }
+//
+//            vec3 norm = normalize(vNormal);
+//            vec3 lightDir = normalize(uLightPos - vFragPos);
+//
+//            float diff = max(dot(norm, lightDir), 0.0);
+//            vec3 diffuse = diff * uLightColor;
+//
+//            vec3 ambient = 0.2 * uLightColor;
+//
+//            vec3 result = (ambient + diffuse) * vColor;
+//            FragColor = vec4(result, 1.0);
+//        }
+//    )";
+//
+//    if (!m_program.addShaderFromSourceCode(QOpenGLShader::Vertex, vsSrc))
+//        qDebug() << "Vertex shader error:" << m_program.log();
+//
+//    if (!m_program.addShaderFromSourceCode(QOpenGLShader::Fragment, fsSrc))
+//        qDebug() << "Fragment shader error:" << m_program.log();
+//
+//    if (!m_program.link())
+//        qDebug() << "Shader link error:" << m_program.log();
+//
+//    // ------------ SHAPE VAO/VBO ------------
+//
+//    m_shapeVAO.create();
+//    m_shapeVAO.bind();
+//
+//    m_shapeVBO.create();
+//    m_shapeVBO.bind();
+//    m_shapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+//
+//    m_program.bind();
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(
+//        0,                      // location = 0 in shader
+//        3,                      // vec3
+//        GL_FLOAT,
+//        GL_FALSE,
+//        3 * sizeof(float),
+//        (void*)0
+//    );
+//    m_program.release();
+//
+//    m_shapeVBO.release();
+//    m_shapeVAO.release();
+//
+//    // ------------ AXES VAO/VBO ------------
+//
+//    m_axesVAO.create();
+//    m_axesVAO.bind();
+//
+//    m_axesVBO.create();
+//    m_axesVBO.bind();
+//    m_axesVBO.setUsagePattern(QOpenGLBuffer::StaticDraw);
+//
+//    // 3 axes, 2 points each => 6 vertices
+//    float axisVerts[] = {
+//        // X axis
+//        0.0f, 0.0f, 0.0f,
+//        10.0f, 0.0f, 0.0f,
+//        // Y axis
+//        0.0f, 0.0f, 0.0f,
+//        0.0f, 10.0f, 0.0f,
+//        // Z axis
+//        0.0f, 0.0f, 0.0f,
+//        0.0f, 0.0f, 10.0f
+//    };
+//    m_axesVBO.allocate(axisVerts, sizeof(axisVerts));
+//
+//    m_program.bind();
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(
+//        0,
+//        3,
+//        GL_FLOAT,
+//        GL_FALSE,
+//        3 * sizeof(float),
+//        (void*)0
+//    );
+//    m_program.release();
+//
+//    m_axesVBO.release();
+//    m_axesVAO.release();
+//}
+//
+//void OpenGLWidget::resizeGL(int w, int h)
+//{
+//    if (h == 0) h = 1;
+//    glViewport(0, 0, w, h);
+//
+//    m_projection.setToIdentity();
+//    float aspect = float(w) / float(h);
+//    m_projection.perspective(45.0f, aspect, 0.1f, 500.0f);
+//}
+//
+//void OpenGLWidget::paintGL()
+//{
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//    // --------- Compute camera (orbit) ---------
+//
+//    float yawRad = qDegreesToRadians(m_camYaw);
+//    float pitchRad = qDegreesToRadians(m_camPitch);
+//
+//    QVector3D camPos;
+//    camPos.setX(m_camDistance * qCos(pitchRad) * qSin(yawRad));
+//    camPos.setY(m_camDistance * qSin(pitchRad));
+//    camPos.setZ(m_camDistance * qCos(pitchRad) * qCos(yawRad));
+//
+//    QVector3D target(0.0f, 0.0f, 0.0f);
+//    QVector3D up(0.0f, 1.0f, 0.0f);
+//
+//    QMatrix4x4 view;
+//    view.setToIdentity();
+//    view.lookAt(camPos, target, up);
+//
+//    m_program.bind();
+//
+//    // Common uniforms
+//    m_program.setUniformValue("uView", view);
+//    m_program.setUniformValue("uProj", m_projection);
+//    m_program.setUniformValue("uLightPos", m_lightPos);
+//    m_program.setUniformValue("uLightColor", m_lightColor);
+//    m_program.setUniformValue("uViewPos", camPos);
+//
+//    // --------- Draw axes (no lighting) ---------
+//    QMatrix4x4 axesModel;
+//    axesModel.setToIdentity();
+//
+//    m_program.setUniformValue("uModel", axesModel);
+//    m_program.setUniformValue("uUseLighting", false);
+//
+//    m_axesVAO.bind();
+//
+//    // X axis - red
+//    m_program.setUniformValue("uBaseColor", QVector3D(1.0f, 0.0f, 0.0f));
+//    glDrawArrays(GL_LINES, 0, 2);
+//
+//    // Y axis - green
+//    m_program.setUniformValue("uBaseColor", QVector3D(0.0f, 1.0f, 0.0f));
+//    glDrawArrays(GL_LINES, 2, 2);
+//
+//    // Z axis - blue
+//    m_program.setUniformValue("uBaseColor", QVector3D(0.0f, 0.0f, 1.0f));
+//    glDrawArrays(GL_LINES, 4, 2);
+//
+//    m_axesVAO.release();
+//
+//    // --------- Draw shape (with lighting) ---------
+//    if (!m_vertices.empty())
+//    {
+//        QMatrix4x4 model;
+//        model.setToIdentity();  // you can add rotations/scales here later
+//
+//        m_program.setUniformValue("uModel", model);
+//        m_program.setUniformValue("uUseLighting", true);
+//        m_program.setUniformValue("uBaseColor", m_shapeColor);
+//
+//        m_shapeVAO.bind();
+//        m_shapeVBO.bind();
+//
+//        m_shapeVBO.allocate(
+//            m_vertices.data(),
+//            static_cast<int>(m_vertices.size() * sizeof(float))
+//        );
+//
+//        int vertexCount = static_cast<int>(m_vertices.size() / 3);
+//        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+//
+//        m_shapeVBO.release();
+//        m_shapeVAO.release();
+//    }
+//
+//    m_program.release();
+//}
+//
+//// --------- Mouse & wheel: camera control ---------
+//
+//void OpenGLWidget::mousePressEvent(QMouseEvent* event)
+//{
+//    m_lastMousePos = event->pos();
+//}
+//
+//void OpenGLWidget::mouseMoveEvent(QMouseEvent* event)
+//{
+//    int dx = event->pos().x() - m_lastMousePos.x();
+//    int dy = event->pos().y() - m_lastMousePos.y();
+//
+//    if (event->buttons() & Qt::LeftButton) {
+//        m_camYaw += dx * 0.5f;
+//        m_camPitch += dy * 0.5f;
+//
+//        if (m_camPitch > 89.0f)  m_camPitch = 89.0f;
+//        if (m_camPitch < -89.0f) m_camPitch = -89.0f;
+//
+//        update();
+//    }
+//
+//    m_lastMousePos = event->pos();
+//}
+//
+//void OpenGLWidget::wheelEvent(QWheelEvent* event)
+//{
+//    if (event->angleDelta().y() > 0)
+//        m_camDistance -= 1.0f;
+//    else
+//        m_camDistance += 1.0f;
+//
+//    if (m_camDistance < 2.0f)   m_camDistance = 2.0f;
+//    if (m_camDistance > 200.0f) m_camDistance = 200.0f;
+//
+//    update();
+//}
+
+
+
 #include "OpenGLWidget.h"
 
 #include <QMouseEvent>
@@ -348,62 +678,66 @@
 #include <QtMath>
 #include <QDebug>
 
+// ---------------- Constructor ----------------
+
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
-    , m_shapeVBO(QOpenGLBuffer::VertexBuffer)
-    , m_axesVBO(QOpenGLBuffer::VertexBuffer)
-    , m_camDistance(20.0f)
-    , m_camYaw(45.0f)
-    , m_camPitch(25.0f)
-    , m_lightPos(10.0f, 10.0f, 10.0f)
-    , m_lightColor(1.0f, 1.0f, 1.0f)
-    , m_shapeColor(0.0f, 0.7f, 1.0f)    // cyan-ish
+    , mShapeVBO(QOpenGLBuffer::VertexBuffer)
+    , mRotationX(0.0f)                     // initial rotation around X
+    , mRotationY(0.0f)                     // initial rotation around Y
+    , mZoom(20.0f)                          // camera distance
+    , mLightDir(0.0f, 0.0f, 1.0f)           // light coming from +Z toward screen
+    , mObjectColor(0.0f, 0.7f, 1.0f)        // blue-cyan color
 {
 }
+
+// ---------------- Destructor ----------------
 
 OpenGLWidget::~OpenGLWidget()
 {
-    makeCurrent();
-    m_shapeVAO.destroy();
-    m_shapeVBO.destroy();
-    m_axesVAO.destroy();
-    m_axesVBO.destroy();
-    m_program.removeAllShaders();
+    makeCurrent();               // Ensure the GL context is active before deleting
+    mShapeVAO.destroy();
+    mShapeVBO.destroy();
+    mShader.removeAllShaders();
     doneCurrent();
 }
 
+// ---------------- API: draw new shape ----------------
+
 void OpenGLWidget::drawShape(std::vector<Point>& vec)
 {
-    m_vertices.clear();
-    m_vertices.reserve(vec.size() * 3);
+    // Convert input Points into flat float list (x,y,z)
+    mVertices.clear();
+    mVertices.reserve(vec.size() * 3);
 
     for (const Point& p : vec)
     {
-        m_vertices.push_back(static_cast<float>(p.getX()));
-        m_vertices.push_back(static_cast<float>(p.getY()));
-        m_vertices.push_back(static_cast<float>(p.getZ()));
+        mVertices.push_back(p.getX());
+        mVertices.push_back(p.getY());
+        mVertices.push_back(p.getZ());
     }
 
-    update();   // trigger paintGL()
+    update();     // Request paintGL()
 }
+
+// ---------------- API: clear shape ----------------
 
 void OpenGLWidget::clearShape()
 {
-    m_vertices.clear();
+    mVertices.clear();
     update();
 }
 
+// ---------------- Create OpenGL resources ----------------
+
 void OpenGLWidget::initializeGL()
 {
-    initializeOpenGLFunctions();
+    initializeOpenGLFunctions();      // REQUIRED: enables OpenGL function calls
+    glEnable(GL_DEPTH_TEST);          // 3D depth handling
+    glClearColor(1, 1, 1, 1);          // white background
 
-    glEnable(GL_DEPTH_TEST);
-    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);   // white background
-    glClearColor(0.1f, 0.1f, 0.1f, 0.1f);   // white background
-
-    // ------------ SHADERS (modern GLSL 330 core) ------------
-
-    const char* vsSrc = R"(
+    // -------- Minimal Vertex Shader --------
+    const char* vs = R"(
         #version 330 core
 
         layout(location = 0) in vec3 aPos;
@@ -412,259 +746,161 @@ void OpenGLWidget::initializeGL()
         uniform mat4 uView;
         uniform mat4 uProj;
 
-        uniform bool uUseLighting;
-        uniform vec3 uBaseColor;
+        uniform vec3 uLightDir;       // Direction light
+        uniform vec3 uColor;          // Base object color
 
-        out vec3 vColor;
-        out vec3 vFragPos;
-        out vec3 vNormal;
+        out vec3 vColor;              // Final color to fragment shader
 
         void main()
         {
-            vec4 worldPos = uModel * vec4(aPos, 1.0);
-            vFragPos = worldPos.xyz;
+            // Transform vertex position to clip space
+            gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
-            // Fake normal from position (ok for simple shapes/demo)
-            vNormal = normalize(mat3(uModel) * aPos);
+            // Compute normal from vertex (works OK for convex poly shapes)
+            vec3 normal = normalize(aPos);
 
-            vColor = uBaseColor;
+            // Lighting = max(dot(N,L), 0)
+            float diff = max(dot(normal, normalize(uLightDir)), 0.0);
 
-            gl_Position = uProj * uView * worldPos;
+            // Combine base color with diffuse lighting
+            vColor = uColor * (0.2 + diff);  // add little ambient light
         }
     )";
 
-    const char* fsSrc = R"(
+    // -------- Minimal Fragment Shader --------
+    const char* fs = R"(
         #version 330 core
 
-        in vec3 vColor;
-        in vec3 vFragPos;
-        in vec3 vNormal;
-
-        uniform bool uUseLighting;
-        uniform vec3 uLightPos;
-        uniform vec3 uLightColor;
-        uniform vec3 uViewPos;
-
+        in vec3 vColor;         // Color from vertex shader
         out vec4 FragColor;
 
         void main()
         {
-            if (!uUseLighting)
-            {
-                FragColor = vec4(vColor, 1.0);
-                return;
-            }
-
-            vec3 norm = normalize(vNormal);
-            vec3 lightDir = normalize(uLightPos - vFragPos);
-
-            float diff = max(dot(norm, lightDir), 0.0);
-            vec3 diffuse = diff * uLightColor;
-
-            vec3 ambient = 0.2 * uLightColor;
-
-            vec3 result = (ambient + diffuse) * vColor;
-            FragColor = vec4(result, 1.0);
+            FragColor = vec4(vColor, 1.0);   // Output final color
         }
     )";
 
-    if (!m_program.addShaderFromSourceCode(QOpenGLShader::Vertex, vsSrc))
-        qDebug() << "Vertex shader error:" << m_program.log();
+    // Compile + link shader program
+    mShader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs);
+    mShader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs);
+    if (!mShader.link())
+        qDebug() << "Shader link error:" << mShader.log();
 
-    if (!m_program.addShaderFromSourceCode(QOpenGLShader::Fragment, fsSrc))
-        qDebug() << "Fragment shader error:" << m_program.log();
+    // -------- Create VAO + VBO for shape --------
+    mShapeVAO.create();
+    mShapeVAO.bind();
 
-    if (!m_program.link())
-        qDebug() << "Shader link error:" << m_program.log();
+    mShapeVBO.create();
+    mShapeVBO.bind();
+    mShapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
-    // ------------ SHAPE VAO/VBO ------------
-
-    m_shapeVAO.create();
-    m_shapeVAO.bind();
-
-    m_shapeVBO.create();
-    m_shapeVBO.bind();
-    m_shapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
-
-    m_program.bind();
-    glEnableVertexAttribArray(0);
+    mShader.bind();
+    glEnableVertexAttribArray(0);                 // enable layout(location=0)
     glVertexAttribPointer(
-        0,                      // location = 0 in shader
-        3,                      // vec3
+        0,                                         // index
+        3,                                         // vec3
         GL_FLOAT,
         GL_FALSE,
         3 * sizeof(float),
-        (void*)0
+        nullptr
     );
-    m_program.release();
+    mShader.release();
 
-    m_shapeVBO.release();
-    m_shapeVAO.release();
-
-    // ------------ AXES VAO/VBO ------------
-
-    m_axesVAO.create();
-    m_axesVAO.bind();
-
-    m_axesVBO.create();
-    m_axesVBO.bind();
-    m_axesVBO.setUsagePattern(QOpenGLBuffer::StaticDraw);
-
-    // 3 axes, 2 points each => 6 vertices
-    float axisVerts[] = {
-        // X axis
-        0.0f, 0.0f, 0.0f,
-        10.0f, 0.0f, 0.0f,
-        // Y axis
-        0.0f, 0.0f, 0.0f,
-        0.0f, 10.0f, 0.0f,
-        // Z axis
-        0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 10.0f
-    };
-    m_axesVBO.allocate(axisVerts, sizeof(axisVerts));
-
-    m_program.bind();
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(
-        0,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        3 * sizeof(float),
-        (void*)0
-    );
-    m_program.release();
-
-    m_axesVBO.release();
-    m_axesVAO.release();
+    mShapeVBO.release();
+    mShapeVAO.release();
 }
+
+// ---------------- Handle window resize ----------------
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
     if (h == 0) h = 1;
     glViewport(0, 0, w, h);
 
-    m_projection.setToIdentity();
-    float aspect = float(w) / float(h);
-    m_projection.perspective(45.0f, aspect, 0.1f, 500.0f);
+    // Simple perspective projection (viewbox)
+    mProjection.setToIdentity();
+    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 500.0f);
 }
+
+// ---------------- Render frame ----------------
 
 void OpenGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // --------- Compute camera (orbit) ---------
+    if (mVertices.empty())
+        return;    // nothing to draw
 
-    float yawRad = qDegreesToRadians(m_camYaw);
-    float pitchRad = qDegreesToRadians(m_camPitch);
+    // ----- Build Model Matrix (rotate shape) -----
+    QMatrix4x4 model;
+    model.setToIdentity();
+    model.rotate(mRotationX, 1, 0, 0);
+    model.rotate(mRotationY, 0, 1, 0);
 
-    QVector3D camPos;
-    camPos.setX(m_camDistance * qCos(pitchRad) * qSin(yawRad));
-    camPos.setY(m_camDistance * qSin(pitchRad));
-    camPos.setZ(m_camDistance * qCos(pitchRad) * qCos(yawRad));
-
-    QVector3D target(0.0f, 0.0f, 0.0f);
-    QVector3D up(0.0f, 1.0f, 0.0f);
-
+    // ----- Build View Matrix (fixed camera) -----
     QMatrix4x4 view;
     view.setToIdentity();
-    view.lookAt(camPos, target, up);
+    view.translate(0, 0, -mZoom);   // move backward on Z
 
-    m_program.bind();
+    // Bind shader
+    mShader.bind();
 
-    // Common uniforms
-    m_program.setUniformValue("uView", view);
-    m_program.setUniformValue("uProj", m_projection);
-    m_program.setUniformValue("uLightPos", m_lightPos);
-    m_program.setUniformValue("uLightColor", m_lightColor);
-    m_program.setUniformValue("uViewPos", camPos);
+    // Send minimal uniforms
+    mShader.setUniformValue("uModel", model);
+    mShader.setUniformValue("uView", view);
+    mShader.setUniformValue("uProj", mProjection);
+    mShader.setUniformValue("uLightDir", mLightDir);
+    mShader.setUniformValue("uColor", mObjectColor);
 
-    // --------- Draw axes (no lighting) ---------
-    QMatrix4x4 axesModel;
-    axesModel.setToIdentity();
+    // Bind VAO + upload vertex data
+    mShapeVAO.bind();
+    mShapeVBO.bind();
+    mShapeVBO.allocate(mVertices.data(), mVertices.size() * sizeof(float));
 
-    m_program.setUniformValue("uModel", axesModel);
-    m_program.setUniformValue("uUseLighting", false);
+    // Draw shape as triangles
+    int vertexCount = mVertices.size() / 3;
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
-    m_axesVAO.bind();
-
-    // X axis - red
-    m_program.setUniformValue("uBaseColor", QVector3D(1.0f, 0.0f, 0.0f));
-    glDrawArrays(GL_LINES, 0, 2);
-
-    // Y axis - green
-    m_program.setUniformValue("uBaseColor", QVector3D(0.0f, 1.0f, 0.0f));
-    glDrawArrays(GL_LINES, 2, 2);
-
-    // Z axis - blue
-    m_program.setUniformValue("uBaseColor", QVector3D(0.0f, 0.0f, 1.0f));
-    glDrawArrays(GL_LINES, 4, 2);
-
-    m_axesVAO.release();
-
-    // --------- Draw shape (with lighting) ---------
-    if (!m_vertices.empty())
-    {
-        QMatrix4x4 model;
-        model.setToIdentity();  // you can add rotations/scales here later
-
-        m_program.setUniformValue("uModel", model);
-        m_program.setUniformValue("uUseLighting", true);
-        m_program.setUniformValue("uBaseColor", m_shapeColor);
-
-        m_shapeVAO.bind();
-        m_shapeVBO.bind();
-
-        m_shapeVBO.allocate(
-            m_vertices.data(),
-            static_cast<int>(m_vertices.size() * sizeof(float))
-        );
-
-        int vertexCount = static_cast<int>(m_vertices.size() / 3);
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
-        m_shapeVBO.release();
-        m_shapeVAO.release();
-    }
-
-    m_program.release();
+    mShapeVBO.release();
+    mShapeVAO.release();
+    mShader.release();
 }
 
-// --------- Mouse & wheel: camera control ---------
+// ---------------- Mouse: store click ----------------
 
 void OpenGLWidget::mousePressEvent(QMouseEvent* event)
 {
-    m_lastMousePos = event->pos();
+    mLastMousePos = event->pos();
 }
+
+// ---------------- Mouse: rotate model ----------------
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    int dx = event->pos().x() - m_lastMousePos.x();
-    int dy = event->pos().y() - m_lastMousePos.y();
+    int dx = event->pos().x() - mLastMousePos.x();
+    int dy = event->pos().y() - mLastMousePos.y();
 
-    if (event->buttons() & Qt::LeftButton) {
-        m_camYaw += dx * 0.5f;
-        m_camPitch += dy * 0.5f;
-
-        if (m_camPitch > 89.0f)  m_camPitch = 89.0f;
-        if (m_camPitch < -89.0f) m_camPitch = -89.0f;
-
+    if (event->buttons() & Qt::LeftButton)
+    {
+        mRotationX += dy * 0.5f;  // rotate up/down
+        mRotationY += dx * 0.5f;  // rotate left/right
         update();
     }
 
-    m_lastMousePos = event->pos();
+    mLastMousePos = event->pos();
 }
+
+// ---------------- Mouse wheel: zoom camera ----------------
 
 void OpenGLWidget::wheelEvent(QWheelEvent* event)
 {
     if (event->angleDelta().y() > 0)
-        m_camDistance -= 1.0f;
+        mZoom -= 1.0f;
     else
-        m_camDistance += 1.0f;
+        mZoom += 1.0f;
 
-    if (m_camDistance < 2.0f)   m_camDistance = 2.0f;
-    if (m_camDistance > 200.0f) m_camDistance = 200.0f;
+    if (mZoom < 5.0f)   mZoom = 5.0f;
+    if (mZoom > 200.0f) mZoom = 200.0f;
 
     update();
 }
