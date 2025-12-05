@@ -46,14 +46,49 @@ const std::vector<Point> Cylinder::getCoordinates() const
 const std::vector<Point> Cylinder::coodinatesForGLTriangle() const
 {
 	std::vector<Point> pts;
+	std::vector<Point> baseCirclePts;
+	std::vector<Point> UpCirclePts;
 	double x = 0;
 	double y = 0;
 	double z = 0;
+	Point origin(x, y, z);
+	Point hOrigin(x, y, z + mHeight);
 
-	Point p1(x, y, z);
-	pts.push_back(p1);
+	int number = 72;
+	double dTheta = 2 * MathConstants::PI / number;
+
+	for (int i = 0; i <= number; i++) //base
+	{
+		double theta = i * dTheta;
+		double x_ = mRadius * cos(theta);
+		double y_ = mRadius * sin(theta);
+		baseCirclePts.emplace_back(x + x_, y + y_, z);
+	}
+	for (int i = 0; i <= number; i++) // height
+	{
+		double theta = i * dTheta;
+		double x_ = mRadius * cos(theta);
+		double y_ = mRadius * sin(theta);
+		UpCirclePts.emplace_back(x + x_, y + y_, z + mHeight);
+	}
+
+	for (int i = 0; i < number; i++)
+	{
+		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(UpCirclePts[i]);
+		pts.push_back(UpCirclePts[i]); pts.push_back(UpCirclePts[i + 1]); pts.push_back(baseCirclePts[i + 1]);
+	}
+	for (int i = 0; i < number; i++)
+	{
+		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(origin);
+	}
+	for (int i = 0; i < number; i++)
+	{
+		pts.push_back(UpCirclePts[i]); pts.push_back(UpCirclePts[i + 1]); pts.push_back(hOrigin);
+	}
+
 	return pts;
 }
+
 
 void Cylinder::save(std::ostream& out) const
 {

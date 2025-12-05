@@ -116,7 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FileHandle.cpp" />
-    <ClCompile Include="src\GLWidget.cpp" />
+    <ClCompile Include="src\OpenGLWidget.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
     <ClCompile Include="src\ShapeManager.cpp" />
@@ -136,7 +136,7 @@
     <ClInclude Include="headers\FileHandle.h" />
     <ClInclude Include="headers\Matrix.h" />
     <ClInclude Include="headers\Transformations.h" />
-    <QtMoc Include="headers\GLWidget.h" />
+    <QtMoc Include="headers\OpenGLWidget.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
     <ClInclude Include="headers\ShapeManager.h" />
     <ClInclude Include="headers\ShapeSlots.h" />

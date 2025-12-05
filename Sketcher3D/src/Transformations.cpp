@@ -15,16 +15,16 @@ Point Transformations::calculatePivot(const std::vector<Point>& vertices)
     double cy = 0;
     double cz = 0;
 
-    for (const auto& p : vertices)
-    {
-        cx += p.getX();
+   /* for (const auto& p : vertices)
+    {*/
+        /*cx += p.getX();
         cy += p.getY();
-        cz += p.getZ();
-    }
-    int size = vertices.size();
+        cz += p.getZ();*/
+    //}
+   /* int size = vertices.size();
     cx /= size;
     cy /= size;
-    cz /= size;
+    cz /= size;*/
 
     return Point(cx, cy, cz);
 }

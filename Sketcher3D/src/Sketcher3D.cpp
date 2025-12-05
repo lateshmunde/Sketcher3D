@@ -28,7 +28,7 @@ void Sketcher3D::setupUI()
     toolBarElements();
 
     // ============= CREATE OPENGL WIDGET =============
-    glWidget = new GLWidget(this);
+    glWidget = new OpenGLWidget(this);
     glWidget->setMinimumSize(800, 600);
 
     // Add OpenGL widget to the central grid layout
@@ -157,7 +157,8 @@ void Sketcher3D::onCubeToolClicked()
     try {
         std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
         shapeManager.addShape(c);
-        std::vector<Point> vec = c->getCoordinates();
+        //std::vector<Point> vec = c->getCoordinates();
+        std::vector<Point> vec = c->coodinatesForGLTriangle();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Cube created");
     }
@@ -173,7 +174,7 @@ void Sketcher3D::onPyramidClicked()
     try {
         std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
         shapeManager.addShape(py);
-        std::vector<Point> vec = py->getCoordinates();
+        std::vector<Point> vec = py->coodinatesForGLTriangle();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Pyramid created");
     }
@@ -189,7 +190,7 @@ void Sketcher3D::onCylinderToolClicked()
     try {
         std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
         shapeManager.addShape(cyl);
-        std::vector<Point> vec = cyl->getCoordinates();
+        std::vector<Point> vec = cyl->coodinatesForGLTriangle();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Cylinder created");
     }
@@ -205,7 +206,7 @@ void Sketcher3D::onConeToolClicked()
     try {
         std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
         shapeManager.addShape(cone);
-        std::vector<Point> vec = cone->getCoordinates();
+        std::vector<Point> vec = cone->coodinatesForGLTriangle();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Cone created");
     }
@@ -221,7 +222,7 @@ void Sketcher3D::onSphereToolClicked()
     try {
         std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
         shapeManager.addShape(sp);
-        std::vector<Point> vec = sp->getCoordinates();
+        std::vector<Point> vec = sp->coodinatesForGLTriangle();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Sphere created");
     }
@@ -332,7 +333,7 @@ void Sketcher3D::onTranslateActionTriggered()
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
     //shapeManager.addShape(shape);
-    std::vector<Point> vec = shape->getCoordinates();
+    std::vector<Point> vec = shape->coodinatesForGLTriangle();
 
     std::vector<Point> transformed = Transformations::translate(vec, tx, ty, tz);
 
@@ -394,7 +395,7 @@ void Sketcher3D::onScaleActionTriggered()
     double sz = zSpin->value();
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-    std::vector<Point> vec = shape->getCoordinates();
+    std::vector<Point> vec = shape->coodinatesForGLTriangle();
 
     std::vector<Point> transformed = Transformations::scale(vec, sx, sy, sz);
 
@@ -436,7 +437,7 @@ void Sketcher3D::onRotateXActionTriggered()
     double angleX = ((MathConstants::PI * angleSpin->value()) / 180);
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-    std::vector<Point> vec = shape->getCoordinates();
+    std::vector<Point> vec = shape->coodinatesForGLTriangle();
 
     std::vector<Point> transformed = Transformations::rotationX(vec, angleX);
 
@@ -478,7 +479,7 @@ void Sketcher3D::onRotateYActionTriggered()
     double angleY = ((MathConstants::PI * angleSpin->value()) / 180);
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-    std::vector<Point> vec = shape->getCoordinates();
+    std::vector<Point> vec = shape->coodinatesForGLTriangle();
 
     std::vector<Point> transformed = Transformations::rotationY(vec, angleY);
 
@@ -520,7 +521,7 @@ void Sketcher3D::onRotateZActionTriggered()
     double angleZ = ((MathConstants::PI * angleSpin->value()) / 180);
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-    std::vector<Point> vec = shape->getCoordinates();
+    std::vector<Point> vec = shape->coodinatesForGLTriangle();
 
     std::vector<Point> transformed = Transformations::rotationZ(vec, angleZ);
 

@@ -13,7 +13,7 @@
 #include "ShapeCreator.h"
 #include "ShapeManager.h"
 #include "FileHandle.h"
-#include "GLWidget.h"  // OpenGL Widget
+#include "OpenGLWidget.h"  // OpenGL Widget
 
 class Sketcher3D : public QMainWindow
 {
@@ -35,7 +35,7 @@ private:
    
 private:
     // OpenGL Widget for 3D rendering
-    GLWidget* glWidget;
+    OpenGLWidget* glWidget;
 
     // UI Components
     std::unique_ptr<QWidget> mCentralWidget;
