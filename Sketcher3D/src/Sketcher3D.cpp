@@ -56,12 +56,12 @@ void Sketcher3D::setupUI()
     mGLWidget = std::make_unique<OpenGLWidget>(this);
     mCentralgridWidget->addWidget(mGLWidget.get(), 0, 0);
 
-    std::vector<Point> triangle = {
+    /*std::vector<Point> triangle = {
     Point(0.0, 0.0, 0.0),
     Point(0.0, 0.75, 0.0),
     Point(0.75, 0.0, 0.0)
     };
-    mGLWidget->setVertices(triangle);
+    mGLWidget->setVertices(triangle);*/
 }
 
 void Sketcher3D::menuBarElements()
