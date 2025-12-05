@@ -62,6 +62,18 @@ const std::vector<Point> Pyramid::getCoordinates() const
 	return pts;
 }
 
+const std::vector<Point> Pyramid::coodinatesForGLTriangle() const
+{
+	std::vector<Point> pts;
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	Point p1(x, y, z);
+	pts.push_back(p1);
+	return pts;
+}
+
 
 void Pyramid::save(std::ostream& out) const
 {
