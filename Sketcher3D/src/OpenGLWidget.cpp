@@ -9,12 +9,12 @@
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
     , mShapeVBO(QOpenGLBuffer::VertexBuffer)
-    , mRotationX(0.0f)                     // initial rotation around X
-    , mRotationY(0.0f)                     // initial rotation around Y
-    , mRotationZ(0.0f)                     // initial rotation around Y
-    , mZoom(20.0f)                          // camera distance
-    , mLightDir(0.0f, 0.0f, 1.0f)           // light coming from +Z toward screen
-    , mObjectColor(0.0f, 0.7f, 1.0f)        // blue-cyan color
+    , mRotationX(0.0f) // initial rotation around X
+    , mRotationY(0.0f) // initial rotation around Y
+    , mRotationZ(0.0f) // initial rotation around Y
+    , mZoom(20.0f) // camera distance
+    , mLightDir(0.0f, 0.0f, 1.0f) // light coming from +Z toward screen
+    , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
 {
 }
 
@@ -22,7 +22,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
-    makeCurrent();               // Ensure the GL context is active before deleting
+    makeCurrent(); 
     mShapeVAO.destroy();
     mShapeVBO.destroy();
     mShader.removeAllShaders();
@@ -44,7 +44,7 @@ void OpenGLWidget::drawShape(std::vector<Point>& vec)
         mVertices.push_back(p.getZ());
     }
 
-    update();     // Request paintGL() //tells qt to call paint
+    update();  // Request paintGL() //tells qt to call paint
 }
 
 
@@ -54,15 +54,15 @@ void OpenGLWidget::clearShape()
     update();
 }
 
-// ---------------- Create OpenGL resources ----------------
+
 
 void OpenGLWidget::initializeGL()
 {
-    initializeOpenGLFunctions();      // REQUIRED: enables OpenGL function calls
-    glEnable(GL_DEPTH_TEST);          // 3D depth handling
-    glClearColor(1, 1, 1, 1);          // white background
+    initializeOpenGLFunctions();  
+    glEnable(GL_DEPTH_TEST); // 3D depth handling
+    glClearColor(1, 1, 1, 1); // white background
 
-    // -------- Minimal Vertex Shader --------
+    //Vertex Shade
     const char* vs = R"(
         #version 330 core
 
@@ -93,7 +93,7 @@ void OpenGLWidget::initializeGL()
         }
     )";
 
-    // -------- Minimal Fragment Shader --------
+    //Fragment Shader 
     const char* fs = R"(
         #version 330 core
 
@@ -106,13 +106,13 @@ void OpenGLWidget::initializeGL()
         }
     )";
 
-    // Compile + link shader program
+    
     mShader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs);
     mShader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs);
     if (!mShader.link())
         qDebug() << "Shader link error:" << mShader.log();
 
-    // -------- Create VAO + VBO for shape --------
+    // Create VAO + VBO for shape
     mShapeVAO.create();
     mShapeVAO.bind();
 
@@ -142,15 +142,15 @@ void OpenGLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (mVertices.empty())
-        return;    // nothing to draw
+        return;    
 
-    // ----- Build Model Matrix (rotate shape) -----
+    // Build Model Matrix (rotate shape)
     QMatrix4x4 model;
     model.setToIdentity();
     model.rotate(mRotationX, 1, 0, 0);
     model.rotate(mRotationY, 0, 1, 0);
 
-    // ----- Build View Matrix (fixed camera) -----
+    //  View Matrix (fixed camera)
     QMatrix4x4 view;
     view.setToIdentity();
     view.translate(0, 0, -mZoom);   // move backward on Z
