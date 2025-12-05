@@ -5,20 +5,20 @@
 #include <QtMath>
 #include <QDebug>
 
-// ---------------- Constructor ----------------
 
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
     , mShapeVBO(QOpenGLBuffer::VertexBuffer)
     , mRotationX(0.0f)                     // initial rotation around X
     , mRotationY(0.0f)                     // initial rotation around Y
+    , mRotationZ(0.0f)                     // initial rotation around Y
     , mZoom(20.0f)                          // camera distance
     , mLightDir(0.0f, 0.0f, 1.0f)           // light coming from +Z toward screen
     , mObjectColor(0.0f, 0.7f, 1.0f)        // blue-cyan color
 {
 }
 
-// ---------------- Destructor ----------------
+
 
 OpenGLWidget::~OpenGLWidget()
 {
@@ -29,7 +29,7 @@ OpenGLWidget::~OpenGLWidget()
     doneCurrent();
 }
 
-// ---------------- API: draw new shape ----------------
+
 
 void OpenGLWidget::drawShape(std::vector<Point>& vec)
 {
@@ -44,10 +44,9 @@ void OpenGLWidget::drawShape(std::vector<Point>& vec)
         mVertices.push_back(p.getZ());
     }
 
-    update();     // Request paintGL()
+    update();     // Request paintGL() //tells qt to call paint
 }
 
-// ---------------- API: clear shape ----------------
 
 void OpenGLWidget::clearShape()
 {
@@ -138,17 +137,6 @@ void OpenGLWidget::initializeGL()
 }
 
 
-void OpenGLWidget::resizeGL(int w, int h)
-{
-    if (h == 0) h = 1;
-    glViewport(0, 0, w, h);
-
-    //perspective projection - viewbox
-    mProjection.setToIdentity();
-    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 500.0f);
-}
-
-
 void OpenGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -192,12 +180,21 @@ void OpenGLWidget::paintGL()
 }
 
 
+//Reference from QT example
+void OpenGLWidget::resizeGL(int w, int h)
+{
+    if (h == 0) h = 1;
+    glViewport(0, 0, w, h);
+
+    //perspective projection - viewbox
+    mProjection.setToIdentity();
+    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 500.0f);
+}
+
 void OpenGLWidget::mousePressEvent(QMouseEvent* event)
 {
     mLastMousePos = event->pos();
 }
-
-
 
 void OpenGLWidget::mouseMoveEvent(QMouseEvent* event)
 {
