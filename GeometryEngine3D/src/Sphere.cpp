@@ -37,7 +37,7 @@ const std::vector<Point> Sphere::coodinatesForGLTriangle() const
 {
 	std::vector<Point> pts;
 
-	int stacks = 18;
+	int stacks = 36;
 	int number = 72;
 	double pi = MathConstants::PI;
 
