@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "Matrix.h"
 
 Matrix::Matrix(int row, int col): rows(row), cols(col), data(row, std::vector<double>(col, 0.0))
@@ -40,10 +40,6 @@ Matrix Matrix::operator+(const Matrix& other)
 			}
 		}
 		return result;
-	}
-	else
-	{
-		QMessageBox::information(nullptr, "Info", "Incorrect rows and columns");
 	}
 }
 

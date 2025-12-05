@@ -1,9 +1,10 @@
 #pragma once
+#include "Exports.h"
 #include <vector>
 #include "Constants.h"
 
 
-class Matrix {
+class GEOMETRYENGINE3D_API Matrix {
 private:
     int rows;
     int cols;

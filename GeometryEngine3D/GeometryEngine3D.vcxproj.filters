@@ -54,6 +54,12 @@
     <ClInclude Include="headers\Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Transformations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -87,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

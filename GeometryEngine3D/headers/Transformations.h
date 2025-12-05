@@ -1,9 +1,9 @@
 #pragma once
+#include "Exports.h"
 #include "Matrix.h"
-//#include "Point.h"
 #include "Shape.h"
 
-class Transformations
+class GEOMETRYENGINE3D_API Transformations
 {
 public:
 	Transformations();

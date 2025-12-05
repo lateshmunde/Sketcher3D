@@ -52,12 +52,6 @@
     <ClCompile Include="src\ShapeSlots.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Matrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Transformations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\OpenGLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -84,12 +78,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\ShapeSlots.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\Transformations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
