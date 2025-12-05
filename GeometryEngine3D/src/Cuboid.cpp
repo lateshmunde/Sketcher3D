@@ -36,7 +36,27 @@ const std::vector<Point> Cuboid::coodinatesForGLTriangle() const
 	double z = 0;
 
 	Point p1(x, y, z);
-	pts.push_back(p1);
+	Point p2(x + mLength, y, z);
+	Point p3(x + mLength, y + mWidth, z);
+	Point p4(x, y + mWidth, z);
+	Point p5(x, y, z + mHeight);
+	Point p6(x + mLength, y, z + mHeight);
+	Point p7(x + mLength, y + mWidth, z + mHeight);
+	Point p8(x, y + mWidth, z + mHeight);
+
+	pts.push_back(p1); pts.push_back(p2); pts.push_back(p3);
+	pts.push_back(p3); pts.push_back(p4); pts.push_back(p1);
+	pts.push_back(p1); pts.push_back(p5); pts.push_back(p8);
+	pts.push_back(p8); pts.push_back(p4); pts.push_back(p1);
+	pts.push_back(p1); pts.push_back(p5); pts.push_back(p6);
+	pts.push_back(p6); pts.push_back(p1); pts.push_back(p2);
+	pts.push_back(p2); pts.push_back(p6); pts.push_back(p7);
+	pts.push_back(p7); pts.push_back(p2); pts.push_back(p3);
+	pts.push_back(p3); pts.push_back(p7); pts.push_back(p4);
+	pts.push_back(p4); pts.push_back(p7); pts.push_back(p8);
+	pts.push_back(p8); pts.push_back(p7); pts.push_back(p6);
+	pts.push_back(p6); pts.push_back(p5); pts.push_back(p8);
+
 	return pts;
 }
 

@@ -56,12 +56,12 @@ void Sketcher3D::setupUI()
     mGLWidget = std::make_unique<OpenGLWidget>(this);
     mCentralgridWidget->addWidget(mGLWidget.get(), 0, 0);
 
-    std::vector<Point> triangle = {
+    /*std::vector<Point> triangle = {
     Point(0.0, 0.0, 0.0),
     Point(0.0, 0.75, 0.0),
     Point(0.75, 0.0, 0.0)
     };
-    mGLWidget->setVertices(triangle);
+    mGLWidget->setVertices(triangle);*/
 }
 
 void Sketcher3D::menuBarElements()
@@ -157,7 +157,7 @@ void Sketcher3D::onCuboidToolClicked()
     try {
         std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
         shapeManager.addShape(cb);
-        //mGLWidget->setVertices(cb->coodinatesForGLTriangle());
+        mGLWidget->setVertices(cb->coodinatesForGLTriangle());
         mStatusBar->showMessage("Cuboid created");
     }
     catch (const std::runtime_error& e)
@@ -187,7 +187,7 @@ void Sketcher3D::onPyramidClicked()
     try {
         std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
         shapeManager.addShape(py);
-        //mGLWidget->setVertices(py->coodinatesForGLTriangle());
+        mGLWidget->setVertices(py->coodinatesForGLTriangle());
         mStatusBar->showMessage("Pyramid created");
     }
     catch (const std::runtime_error& e)
@@ -202,7 +202,7 @@ void Sketcher3D::onCylinderToolClicked()
     try {
         std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
         shapeManager.addShape(cyl);
-        //mGLWidget->setVertices(cyl->coodinatesForGLTriangle());
+        mGLWidget->setVertices(cyl->coodinatesForGLTriangle());
         mStatusBar->showMessage("Cylinder created");
     }
     catch (const std::runtime_error& e)
@@ -217,7 +217,7 @@ void Sketcher3D::onConeToolClicked()
     try {
         std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
         shapeManager.addShape(cone);
-        //mGLWidget->setVertices(cone->coodinatesForGLTriangle());
+        mGLWidget->setVertices(cone->coodinatesForGLTriangle());
         mStatusBar->showMessage("Cone created");
     }
     catch (const std::runtime_error& e)
@@ -232,7 +232,7 @@ void Sketcher3D::onSphereToolClicked()
     try {
         std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
         shapeManager.addShape(sp);
-        //mGLWidget->setVertices(sp->coodinatesForGLTriangle());
+        mGLWidget->setVertices(sp->coodinatesForGLTriangle());
         mStatusBar->showMessage("Sphere created");
     }
     catch (const std::runtime_error& e)
