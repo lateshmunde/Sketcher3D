@@ -3,6 +3,9 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <vector>
@@ -15,7 +18,11 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
     Q_OBJECT
 
 private:
-    std::vector<float> vertices;
+    QOpenGLShaderProgram shader;
+    QOpenGLBuffer vbo;
+    QOpenGLVertexArrayObject vao;
+
+    std::vector<float> mVertices;
 
     float rotationX;
     float rotationY;
@@ -24,7 +31,7 @@ private:
     QPoint lastMousePos;
 
 public:
-    GLWidget(QWidget* parent = nullptr);
+    explicit GLWidget(QWidget* parent = nullptr);
     ~GLWidget();
 
     void drawShape(std::vector<Point>& vec);
@@ -38,6 +45,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
+
 
 };
 

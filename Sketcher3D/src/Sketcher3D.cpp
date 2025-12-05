@@ -140,7 +140,8 @@ void Sketcher3D::onCuboidToolClicked()
     try {
         std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
         shapeManager.addShape(cb);
-        std::vector<Point> vec = cb->getCoordinates();
+        //std::vector<Point> vec = cb->getCoordinates();
+        std::vector<Point> vec = cb->coodinatesForGLTriangle();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Cuboid created");
     }

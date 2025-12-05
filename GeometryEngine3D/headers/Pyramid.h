@@ -14,6 +14,7 @@ public:
 	~Pyramid() override = default;
 
 	const std::vector<Point> getCoordinates() const override;
+	const std::vector<Point> coodinatesForGLTriangle() const override;
 	void save(std::ostream& out) const override;
 	void saveForGnu(std::ostream& out) const override;
 

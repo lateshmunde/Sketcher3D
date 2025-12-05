@@ -11,6 +11,7 @@ public:
 	~Cube() override = default;
 
 	const std::vector<Point> getCoordinates() const override;
+	const std::vector<Point> coodinatesForGLTriangle() const override;
 	void save(std::ostream& fout) const override;
 	void saveForGnu(std::ostream& fout) const override;
 

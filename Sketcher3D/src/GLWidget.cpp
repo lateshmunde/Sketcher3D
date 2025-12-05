@@ -5,35 +5,50 @@
 #include <QtMath>
 
 
-GLWidget::GLWidget(QWidget* parent): QOpenGLWidget(parent)
+GLWidget::GLWidget(QWidget* parent): QOpenGLWidget(parent), vbo(QOpenGLBuffer::VertexBuffer)
     , rotationX(30.0f), rotationY(45.0f), rotationZ(30.0f), zoom(50.0f){}
 //Initialize rotation around X, Y, Z axis(30, 45, 30 deg resp.)
 //Initial zoom value = 50 (camera is 50 units away along - Z)
 
-GLWidget::~GLWidget(){}
+GLWidget::~GLWidget()
+{
+    makeCurrent();
+    vao.destroy();
+    vbo.destroy();
+    doneCurrent();
+}
 
 void GLWidget::drawShape(std::vector<Point>& vec) // from pts
 {
-    vertices.clear();
+    mVertices.clear();
+    mVertices.reserve(vec.size() * 3);
 
     std::vector <Point> pts = vec;
 
     for (const Point& pt : pts)
     {
-        float x = pt.getX();
-        float y = pt.getY();
-        float z = pt.getZ();
-        vertices.push_back(x);
-        vertices.push_back(y);
-        vertices.push_back(z);
+        mVertices.push_back(static_cast<float>(pt.getX()));
+        mVertices.push_back(static_cast<float>(pt.getY()));
+        mVertices.push_back(static_cast<float>(pt.getZ()));
     }
 
-    update();
+    if (isValid())
+    {
+        makeCurrent();
+
+        vao.bind();
+        vbo.bind();
+        vbo.allocate(mVertices.data(), mVertices.size() * sizeof(float));
+        vbo.release();
+        vao.release();
+
+        update();
+    }
 }
 
 void GLWidget::clearShape()
 {
-    vertices.clear();
+    mVertices.clear();
     update();
 }
 
@@ -46,6 +61,55 @@ void GLWidget::initializeGL()
 
     // Enable depth testing for 3D
     glEnable(GL_DEPTH_TEST);
+
+    // Simple vertex + fragment shaders (hardcoded)
+    shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
+        R"(
+        attribute vec3 position;
+        void main()
+        {
+            gl_Position = vec4(position, 1.0);
+        }
+    )");
+
+    shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
+        R"(
+        void main()
+        {
+            gl_FragColor = vec4(0.0, 0.7, 1.0, 1.0);
+        }
+    )");
+    shader.bindAttributeLocation("position", 0);
+
+    shader.link();
+
+    vao.create();
+    vao.bind();
+
+    vbo.create();
+    vbo.bind();
+
+    if (!mVertices.empty()) {
+        vbo.allocate(mVertices.data(), mVertices.size() * sizeof(float));
+    }
+
+    shader.bind();
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(
+        0,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        3 * sizeof(float),
+        nullptr
+    );
+
+    vao.release();
+    vbo.release();
+    shader.release();
+
+
+
 
     // Set point size
     glPointSize(5.0f);
@@ -106,27 +170,35 @@ void GLWidget::paintGL()
     glVertex3f(0.0f, 0.0f, 10.0f);
     glEnd();
 
-    // Draw the shape
-    if (!vertices.empty()) {
-        // Draw points
-        glColor3f(1.0f, 1.0f, 1.0f);
-        glPointSize(6.0f);
+    if (mVertices.empty()) return;
+    shader.bind();
+    vao.bind();
+    glDrawArrays(GL_TRIANGLES, 0, (mVertices.size() / 3));
+    vao.release();
+    shader.release();
 
-        glBegin(GL_POINTS);
-        for (int i = 0; i < vertices.size(); i += 3) {
-            glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-        }
-        glEnd();
-        
-        // Draw connecting lines
-        glColor3f(0.5f, 0.8f, 1.0f);
-        glLineWidth(2.0f);
-        glBegin(GL_LINE_LOOP);
-        for (size_t i = 0; i < vertices.size(); i += 3) {
-            glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-        }
-        glEnd();
-    }
+    // Draw the shape
+    //if (!mVertices.empty()) 
+    //{
+    //    // Draw points
+    //    glColor3f(1.0f, 1.0f, 1.0f);
+    //    glPointSize(6.0f);
+
+    //    glBegin(GL_POINTS);
+    //    for (int i = 0; i < mVertices.size(); i += 3) {
+    //        glVertex3f(mVertices[i], mVertices[i + 1], mVertices[i + 2]);
+    //    }
+    //    glEnd();
+    //    
+    //    // Draw connecting lines
+    //    glColor3f(0.5f, 0.8f, 1.0f);
+    //    glLineWidth(2.0f);
+    //    glBegin(GL_LINE_LOOP);
+    //    for (size_t i = 0; i < mVertices.size(); i += 3) {
+    //        glVertex3f(mVertices[i], mVertices[i + 1], mVertices[i + 2]);
+    //    }
+    //    glEnd();
+    //}
 }
 
 void GLWidget::mousePressEvent(QMouseEvent* event)

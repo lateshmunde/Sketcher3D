@@ -33,6 +33,20 @@ const std::vector<Point> Sphere::getCoordinates() const
 	return pts;
 }
 
+const std::vector<Point> Sphere::coodinatesForGLTriangle() const
+{
+	std::vector<Point> pts;
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	Point p1(x, y, z);
+	pts.push_back(p1);
+	return pts;
+}
+
+
+
 void Sphere::save(std::ostream& out) const
 {
 	out << getType() << " " << getName() 
