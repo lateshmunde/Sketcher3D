@@ -10,13 +10,11 @@ public:
 	~Transformations();
 
 	static Point calculatePivot(const std::vector<Point>& vertices); //centroid calculation
-	void applyTransform(const std::vector<Point>& vertices, Matrix& matrix) const ;
+	static std::vector<Point> applyTransform(std::vector<Point>& vertices, Matrix& matrix);
 	
-	static Matrix translate(double transX = 0, double transY = 0, double transZ = 0);
-	static Matrix scale(double scaleX = 1, double scaleY = 1, double scaleZ = 1);
-	static Matrix rotationX(double degreeX = 0);
-	static Matrix rotationY(double degreeY = 0);
-	static Matrix rotationZ(double degreeZ = 0);
-	static std::vector<Point> getPtMatrix(const std::vector<Point>& vec);
-	static Matrix getMatrix();
+	static std::vector<Point> translate(std::vector<Point>& vertices, double transX = 0, double transY = 0, double transZ = 0);
+	static std::vector<Point> scale(std::vector<Point>& vertices, double scaleX = 1, double scaleY = 1, double scaleZ = 1);
+	static std::vector<Point> rotationX(std::vector<Point>& vertices, double degreeX = 0);
+	static std::vector<Point> rotationY(std::vector<Point>& vertices, double degreeY = 0);
+	static std::vector<Point> rotationZ(std::vector<Point>& vertices, double degreeZ = 0);
 };

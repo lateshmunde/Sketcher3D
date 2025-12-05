@@ -29,124 +29,12 @@ Point Transformations::calculatePivot(const std::vector<Point>& vertices)
     return Point(cx, cy, cz);
 }
 
-
-Matrix Transformations::translate(double transX, double transY, double transZ)
-{
-    Matrix transMat = Matrix::getIdentity();
-    transMat(0, 3) = transX;
-    transMat(1, 3) = transY;
-    transMat(2, 3) = transZ;
-    return transMat;
-}
-
-
-
-Matrix Transformations::scale(double scaleX, double scaleY, double scaleZ)
-{
-    Matrix transToOrigin = translate(0,0,0);
-
-    Matrix scaleMat(4, 4);
-    scaleMat = Matrix::getIdentity();
-    scaleMat(0, 0) = scaleX;
-    scaleMat(1, 1) = scaleY;
-    scaleMat(2, 2) = scaleZ;
-    return scaleMat* transToOrigin;
-}
-
-Matrix Transformations::rotationX(double degreeX)  {
-    Matrix transToOrigin = translate(0, 0, 0);
-
-    Matrix rotXMat(4, 4);
-    rotXMat = Matrix::getIdentity();
-    double radAngX = degreeX * MathConstants::PI / 180.0;
-    double cosX = cos(radAngX);
-    double sinX = sin(radAngX);
-
-    rotXMat(1, 1) = cosX;  rotXMat(1, 2) = -sinX;
-    rotXMat(2, 1) = sinX;  rotXMat(2, 2) = cosX;
-    return rotXMat* transToOrigin;
-}
-
-Matrix Transformations::rotationY(double degreeY) {
-    Matrix transToOrigin = translate(0, 0, 0);
-
-    Matrix rotYMat(4, 4);
-    rotYMat = Matrix::getIdentity();
-    double radAngY = degreeY * MathConstants::PI / 180.0;
-    double cosY = cos(radAngY);
-    double sinY = sin(radAngY);
-
-    rotYMat(0, 0) = cosY;  rotYMat(0, 2) = sinY;
-    rotYMat(2, 0) = -sinY;  rotYMat(2, 2) = cosY;
-    return rotYMat * transToOrigin;
-}
-
-
-Matrix Transformations::rotationZ(double degreeZ) {
-    Matrix transToOrigin = translate(0, 0, 0);
-
-    Matrix rotZMat(4, 4);
-    rotZMat = Matrix::getIdentity();
-    double radAngZ = degreeZ * MathConstants::PI / 180.0;
-    double cosZ = cos(radAngZ);
-    double sinZ = sin(radAngZ);
-
-    rotZMat(0, 0) = cosZ;  rotZMat(0, 1) = -sinZ;
-    rotZMat(1, 0) = sinZ;  rotZMat(1, 1) = cosZ;
-    return rotZMat * transToOrigin;
-}
-
-Matrix Transformations::getMatrix()  
-{
-    Matrix result = Matrix::getIdentity();
-
-    Matrix trans = translate(7,7,7);
-    Matrix scaleM = scale();
-    Matrix rotX = rotationX();
-    Matrix rotY = rotationY();
-    Matrix rotZ = rotationZ();
-   
-    return rotZ * rotY * rotX * scaleM * trans;
-}
-
-
-std::vector<Point> Transformations::getPtMatrix(const std::vector<Point>& vec)
+//void Transformations::applyTransform(const std::vector<Point>& vertices, Matrix& matrix) const
+std::vector<Point> Transformations::applyTransform(std::vector<Point>& vertices, Matrix& matrix)
 {
     std::vector<Point> transformedPts;
 
-    Matrix M = getMatrix(); // all transformations 4*4 matrix
-   
-    for (const Point& p : vec)
-    {
-         Matrix pt(4, 1);
-        pt(0, 0) = p.getX();
-        pt(1, 0) = p.getY();
-        pt(2, 0) = p.getZ();
-        pt(3, 0) = 1.0;
-
-        Matrix  result = M * pt;
-
-        double fac = result(3, 0);
-        double X;
-        double Y;
-        double Z;
-
-        if (fac != 0)
-        {
-            X = result(0, 0) / fac;
-            Y = result(1, 0) / fac;
-            Z = result(2, 0) / fac;
-        }
-        transformedPts.emplace_back(X, Y, Z);
-    }
-    return transformedPts;
-}
-
-void Transformations::applyTransform(const std::vector<Point>& vertices, Matrix& matrix) const
-{
-    std::vector<Point> transformedPts;
-
-    for (const Point& p : vertices)
+    for (Point& p : vertices)
     {
         Matrix pt(4, 1);
         pt(0, 0) = p.getX();
@@ -156,9 +44,74 @@ void Transformations::applyTransform(const std::vector<Point>& vertices, Matrix&
 
         Matrix  result = matrix * pt;
 
+       /* p.setX(result(0, 0));
+        p.setY(result(1, 0));
+        p.setZ(result(2, 0));*/
+
         double X = result(0, 0);
         double Y = result(1, 0);
         double Z = result(2, 0);
         transformedPts.emplace_back(X, Y, Z);
     }
+    return transformedPts;
+}
+
+std::vector<Point> Transformations::translate(std::vector<Point>& vertices, double transX, double transY, double transZ)
+{
+
+    Matrix transMat = Matrix::getTranslationMatrix(transX, transY, transZ);
+    std::vector<Point> transformedPts = applyTransform(vertices, transMat);
+    return transformedPts;
+}
+
+std::vector<Point> Transformations::scale(std::vector<Point>& vertices, double scaleX, double scaleY, double scaleZ)
+{
+    Point pivot = calculatePivot(vertices); //Centroid
+
+    Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
+    Matrix scaleMat = Matrix::getScalingMatrix(scaleX, scaleY, scaleZ);
+    Matrix translate2 = Matrix::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getY());
+
+    Matrix transformed = translate2 * scaleMat * translate1;
+    std::vector<Point> transformedPts = applyTransform(vertices, transformed);
+
+    return transformedPts;
+}
+
+std::vector<Point> Transformations::rotationX(std::vector<Point>& vertices, double degreeX)  {
+    Point pivot = calculatePivot(vertices); //Centroid
+
+    Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
+    Matrix rotateXMat = Matrix::getRotationXMatrix(degreeX);
+    Matrix translate2 = Matrix::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getY());
+
+    Matrix transformed = translate2 * rotateXMat * translate1;
+    std::vector<Point> transformedPts = applyTransform(vertices, transformed);
+
+    return transformedPts;
+}
+
+std::vector<Point> Transformations::rotationY(std::vector<Point>& vertices, double degreeY) {
+    Point pivot = calculatePivot(vertices); //Centroid
+
+    Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
+    Matrix rotateYMat = Matrix::getRotationYMatrix(degreeY);
+    Matrix translate2 = Matrix::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getY());
+
+    Matrix transformed = translate2 * rotateYMat * translate1;
+    std::vector<Point> transformedPts = applyTransform(vertices, transformed);
+
+    return transformedPts;
+}
+
+std::vector<Point> Transformations::rotationZ(std::vector<Point>& vertices, double degreeZ) {
+    Point pivot = calculatePivot(vertices); //Centroid
+
+    Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
+    Matrix rotateZMat = Matrix::getRotationZMatrix(degreeZ);
+    Matrix translate2 = Matrix::getTranslationMatrix(pivot.getX(), pivot.getY(), pivot.getY());
+
+    Matrix transformed = translate2 * rotateZMat * translate1;
+    std::vector<Point> transformedPts = applyTransform(vertices, transformed);
+    return transformedPts;
 }

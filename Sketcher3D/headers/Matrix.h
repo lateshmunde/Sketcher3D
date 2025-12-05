@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Constants.h"
 
 
 class Matrix {
@@ -18,4 +19,10 @@ public:
     Matrix operator+(const Matrix& other);
     Matrix operator*(const Matrix& other);
 
+    // Static creators
+    static Matrix getTranslationMatrix(double tx, double ty, double tz);
+    static Matrix getScalingMatrix(double sx, double sy, double sz);
+    static Matrix getRotationXMatrix(double angle);
+    static Matrix getRotationYMatrix(double angle);
+    static Matrix getRotationZMatrix(double angle);
 };
