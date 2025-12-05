@@ -1,10 +1,8 @@
 #include "OpenGLWidget.h"
-
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QtMath>
 #include <QDebug>
-
 
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
@@ -13,12 +11,10 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
     , mRotationY(0.0f) // initial rotation around Y
     , mRotationZ(0.0f) // initial rotation around Y
     , mZoom(20.0f) // camera distance
-    , mLightDir(0.0f, 0.0f, 1.0f) // light coming from +Z toward screen
+    , mLightDir(0.0f, 0.0f, 1.0f) // light  from +Z toward screen
     , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
 {
 }
-
-
 
 OpenGLWidget::~OpenGLWidget()
 {
@@ -28,8 +24,6 @@ OpenGLWidget::~OpenGLWidget()
     mShader.removeAllShaders();
     doneCurrent();
 }
-
-
 
 void OpenGLWidget::drawShape(std::vector<Point>& vec)
 {
@@ -54,13 +48,11 @@ void OpenGLWidget::clearShape()
     update();
 }
 
-
-
 void OpenGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();  
     glEnable(GL_DEPTH_TEST); // 3D depth handling
-    glClearColor(1, 1, 1, 1); // white background
+    glClearColor(0.1f, 0.1f, 0.1f, 0.1f); // dark background
 
     //Vertex Shade
     const char* vs = R"(
@@ -68,24 +60,24 @@ void OpenGLWidget::initializeGL()
 
         layout(location = 0) in vec3 aPos;
 
-        uniform mat4 uModel;
-        uniform mat4 uView;
-        uniform mat4 uProj;
+        uniform mat4 uModel; //uniform - same value for all vertices.
+        uniform mat4 uView; //Moves the camera
+        uniform mat4 uProj; //Projection matrix - Perspective
 
-        uniform vec3 uLightDir;       // Direction light
-        uniform vec3 uColor;          // Base object color
+        uniform vec3 uLightDir;  // Direction light
+        uniform vec3 uColor;  // Base object color
 
-        out vec3 vColor;              // Final color to fragment shader
+        out vec3 vColor;  // output color to fragment shader
 
         void main()
         {
-            // Transform vertex position to clip space
+            // Transform vertex position to clip space //Converts local coordinates
             gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
-            // Compute normal from vertex (works OK for convex poly shapes)
+           // Compute normal from vertex
             vec3 normal = normalize(aPos);
 
-            // Lighting = max(dot(N,L), 0)
+            // Lighting = max(dot(N,L), 0) //diffuse lighting.
             float diff = max(dot(normal, normalize(uLightDir)), 0.0);
 
             // Combine base color with diffuse lighting
@@ -97,34 +89,33 @@ void OpenGLWidget::initializeGL()
     const char* fs = R"(
         #version 330 core
 
-        in vec3 vColor;         // Color from vertex shader
+        in vec3 vColor; // Color from vertex shader
         out vec4 FragColor;
 
         void main()
         {
-            FragColor = vec4(vColor, 1.0);   // Output final color
+            FragColor = vec4(vColor, 1.0);  // Output final color //1 (opaque)
         }
     )";
 
     
     mShader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs);
     mShader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs);
-    if (!mShader.link())
-        qDebug() << "Shader link error:" << mShader.log();
+ 
 
     // Create VAO + VBO for shape
-    mShapeVAO.create();
+    mShapeVAO.create(); //VAO stores vertex attribute configuration
     mShapeVAO.bind();
 
-    mShapeVBO.create();
+    mShapeVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
     mShapeVBO.bind();
     mShapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
     mShader.bind();
-    glEnableVertexAttribArray(0);                 // enable layout(location=0)
+    glEnableVertexAttribArray(0); // enable layout(location=0)
     glVertexAttribPointer(
-        0,                                         // index
-        3,                                         // vec3
+        0,  // index , matches layout(location = 0)
+        3,  // vec3
         GL_FLOAT,
         GL_FALSE,
         3 * sizeof(float),
@@ -149,6 +140,7 @@ void OpenGLWidget::paintGL()
     model.setToIdentity();
     model.rotate(mRotationX, 1, 0, 0);
     model.rotate(mRotationY, 0, 1, 0);
+    model.rotate(mRotationZ, 0, 0, 1);
 
     //  View Matrix (fixed camera)
     QMatrix4x4 view;
