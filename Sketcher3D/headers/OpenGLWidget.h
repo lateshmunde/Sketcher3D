@@ -22,6 +22,8 @@ public slots:
     void applyScale(float sx, float sy);              // sz=1
     void setTransform(const Transformation::Mat& m);
 
+    void applyRotateArbZ(float degrees, float px, float py, float pz);         // rotate about Z in arbitrary order
+
 protected:
     void initializeGL() override;
     void paintGL() override;

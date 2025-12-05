@@ -86,5 +86,5 @@ private slots:
     void onRotateTriggered();
     void onScaleTriggered();
 
-	//void onRotateArbZTriggered();//new
+	void onRotateArbZTriggered();//new
 };

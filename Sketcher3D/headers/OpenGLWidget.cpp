@@ -115,3 +115,20 @@ void OpenGLWidget::setTransform(const Transformation::Mat& m)
     mTransform = m;
     update();
 }
+
+
+void OpenGLWidget::applyRotateArbZ(float angleDeg, float px, float py, float pz)
+{
+    // 1. Build the transforms in DEGREES (your rotateZ accepts degrees)
+    Transformation::Mat T1 = Transformation::translate3D(-px, -py, -pz);
+    Transformation::Mat Rz = Transformation::rotateZ(angleDeg);
+    Transformation::Mat T2 = Transformation::translate3D(px, py, pz);
+
+    // 2. Combined local rotation around pivot
+    Transformation::Mat local = Transformation::multiply(T2, Transformation::multiply(Rz, T1));
+
+    // 3. Apply it AFTER the existing transform
+    mTransform = Transformation::multiply(mTransform, local);
+
+    update();
+}

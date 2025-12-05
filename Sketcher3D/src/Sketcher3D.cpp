@@ -15,7 +15,7 @@ Sketcher3D::Sketcher3D(QWidget* parent)
     : QMainWindow(parent)
 {
     setupUI();
-    resize(800, 600);
+    resize(800, 800);
 }
 
 Sketcher3D::~Sketcher3D() {}
@@ -75,12 +75,15 @@ void Sketcher3D::menuBarElements()
     QAction* t1 = mTransformationMenu->addAction("Translation");
     QAction* t2 = mTransformationMenu->addAction("Rotation");
     QAction* t3 = mTransformationMenu->addAction("Scaling");
+
+    QAction* t4 = mTransformationMenu->addAction("Rot_arb_z");//new
+
     connect(t1, &QAction::triggered, this, &Sketcher3D::onTranslateTriggered);
     connect(t2, &QAction::triggered, this, &Sketcher3D::onRotateTriggered);
     connect(t3, &QAction::triggered, this, &Sketcher3D::onScaleTriggered);
 
-    /*QAction* t4 = mTransformationMenu->addAction("Rot_arb_z");
-    connect(t4, &QAction::triggered, this, &Sketcher3D::onRotateArbZTriggered);*/
+    
+    connect(t4, &QAction::triggered, this, &Sketcher3D::onRotateArbZTriggered);//new
 }
 
 void Sketcher3D::toolBarElements()
@@ -404,4 +407,58 @@ void Sketcher3D::onScaleTriggered()
     if (dlg.exec() == QDialog::Accepted)
         mGLWidget->applyScale(static_cast<float>(sx->value()),
             static_cast<float>(sy->value()));
+}
+
+void Sketcher3D::onRotateArbZTriggered()
+{
+    QDialog dlg(this);
+    dlg.setWindowTitle("Rotate About Arbitrary Point (Z-axis)");
+
+    auto layout = new QFormLayout(&dlg);
+
+    // Angle
+    auto deg = new QDoubleSpinBox(&dlg);
+    deg->setRange(-36000, 36000);
+    deg->setDecimals(3);
+    layout->addRow("Angle (degrees, about Z):", deg);
+
+    // Pivot Point X
+    auto px = new QDoubleSpinBox(&dlg);
+    px->setRange(-10000, 10000);
+    px->setDecimals(3);
+    px->setValue(0.0);
+    layout->addRow("Pivot X:", px);
+
+    // Pivot Point Y
+    auto py = new QDoubleSpinBox(&dlg);
+    py->setRange(-10000, 10000);
+    py->setDecimals(3);
+    py->setValue(0.0);
+    layout->addRow("Pivot Y:", py);
+
+    // Pivot Point Z
+    auto pz = new QDoubleSpinBox(&dlg);
+    pz->setRange(-10000, 10000);
+    pz->setDecimals(3);
+    pz->setValue(0.0);
+    layout->addRow("Pivot Z:", pz);
+
+    // OK / Cancel buttons
+    auto buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+        Qt::Horizontal, &dlg);
+
+    layout->addRow(buttons);
+    connect(buttons, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+
+    // Execute dialog
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        mGLWidget->applyRotateArbZ(
+            static_cast<float>(deg->value()),
+            static_cast<float>(px->value()),
+            static_cast<float>(py->value()),
+            static_cast<float>(pz->value())
+        );
+    }
 }
