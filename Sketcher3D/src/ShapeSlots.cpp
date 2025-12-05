@@ -7,7 +7,7 @@ std::unique_ptr<QDoubleSpinBox> ShapeSlots::dimensionField(QDialog& dlg,
     // Dimension
     std::unique_ptr<QDoubleSpinBox> dimensionSpin = std::make_unique<QDoubleSpinBox>(&dlg);
     dimensionSpin->setRange(0.0, 10000);
-    dimensionSpin->setValue(1.0);
+    dimensionSpin->setValue(0.5);
     layout->addRow(name + " :", dimensionSpin.get());
     return dimensionSpin;
 }

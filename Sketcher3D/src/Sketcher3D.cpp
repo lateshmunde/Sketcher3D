@@ -157,7 +157,7 @@ void Sketcher3D::onCuboidToolClicked()
     try {
         std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
         shapeManager.addShape(cb);
-        //mGLWidget->setVertices(cb->coodinatesForGLTriangle());
+        mGLWidget->setVertices(cb->coodinatesForGLTriangle());
         mStatusBar->showMessage("Cuboid created");
     }
     catch (const std::runtime_error& e)
@@ -187,7 +187,7 @@ void Sketcher3D::onPyramidClicked()
     try {
         std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
         shapeManager.addShape(py);
-        //mGLWidget->setVertices(py->coodinatesForGLTriangle());
+        mGLWidget->setVertices(py->coodinatesForGLTriangle());
         mStatusBar->showMessage("Pyramid created");
     }
     catch (const std::runtime_error& e)
