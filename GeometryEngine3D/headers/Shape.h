@@ -23,6 +23,7 @@ public:
     const std::string&  getType() const;
 
     virtual const std::vector<Point> getCoordinates() const = 0;
+    virtual const std::vector<Point> coodinatesForGLTriangle() const = 0;
     virtual void save(std::ostream& os) const = 0;
     virtual void saveForGnu(std::ostream& os) const = 0;
 

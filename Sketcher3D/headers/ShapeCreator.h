@@ -1,10 +1,12 @@
 #pragma once
+#include "Shape.h"
 #include "Cuboid.h"
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Cone.h"
 #include "Cube.h"
 #include "Pyramid.h"
+
 
 class ShapeCreator
 {
@@ -15,7 +17,7 @@ public:
 	// Direct creation helpers
 	static Cuboid createCuboid(const std::string& name, double length, double width, double height);
 	static Cube createCube(const std::string& name, double side);
-	static  Sphere createSphere(const std::string& name, double radius);
+	static Sphere createSphere(const std::string& name, double radius);
 	static Cylinder createCylinder(const std::string& name, double radius, double height);
 	static Cone createCone(const std::string& name, double radius, double height);
 	static Pyramid createPyramid(const std::string& name, double baseLength, double baseWidth, double height);

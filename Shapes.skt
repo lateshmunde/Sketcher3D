@@ -1,4 +1,2 @@
-Sphere Sphere1 R 1
-Cube Cube1 S 2
-Cone Cone1 R 3 H 4
-Cylinder Cylinder1 R 5 H 5
+Pyramid Pyramid1 L 2 W 3 H 6
+Pyramid py1 L 2 W 3 H 6

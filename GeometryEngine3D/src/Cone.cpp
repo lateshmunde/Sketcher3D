@@ -46,6 +46,40 @@ const std::vector<Point> Cone::getCoordinates() const
 	return pts;
 }
 
+const std::vector<Point> Cone::coodinatesForGLTriangle() const
+{
+	std::vector<Point> pts;
+	std::vector<Point> baseCirclePts;
+	double x = 0;
+	double y = 0;
+	double z = 0;
+	Point origin(x, y, z);
+	Point apex(x, y, z + mHeight);
+
+	int number = 72;
+	double dTheta = 2 * MathConstants::PI / number; // 0 to 180
+	for (int i = 0; i <= number; i++) //base
+	{
+		double theta = i * dTheta;
+		double x_ = mRadius * cos(theta);
+		double y_ = mRadius * sin(theta);
+		baseCirclePts.emplace_back(x + x_, y + y_, z);
+	}
+
+	// base triangles
+	for (int i = 0; i < number; i++) {
+		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(origin);
+	}
+
+	// surface triangles
+	for (int i = 0; i < number; i++) {
+		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(apex);
+	}
+
+	return pts;
+}
+
+
 void Cone::save(std::ostream& out) const
 {
 	out <<getType() << " " << getName() << " " 

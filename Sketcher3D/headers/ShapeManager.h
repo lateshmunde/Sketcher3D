@@ -10,6 +10,9 @@ public:
 	ShapeManager() = default;
 
 	void addShape(std::shared_ptr<Shape> shapes);
-	const std::vector<std::shared_ptr<Shape>>& getShapesVec();
+	const std::vector<std::shared_ptr<Shape>>& getShapesVec() const ;
 	void deleteShape(const int index);
+
+	std::shared_ptr<Shape> getLastShape();      // or selected shape
+
 };

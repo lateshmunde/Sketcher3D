@@ -49,7 +49,10 @@
     <ClCompile Include="src\ShapeManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GLWidget.cpp">
+    <ClCompile Include="src\ShapeSlots.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenGLWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,7 +60,7 @@
     <QtMoc Include="headers\Sketcher3D.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="headers\GLWidget.h">
+    <QtMoc Include="headers\OpenGLWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\ShapeManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ShapeSlots.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
