@@ -67,29 +67,29 @@ Triangulation Cube::makeCube() const
 	double y = 0;
 	double z = 0;
 
-	int p0 = cube.addPoint(Point(x, y, z));
-	int p1 = cube.addPoint(Point(x + mSide, y, z));
-	int p2 = cube.addPoint(Point(x + mSide, y + mSide, z));
-	int p3 = cube.addPoint(Point(x, y + mSide, z));
+	int p0 = cube.addPoint(mPoints, Point(x, y, z));
+	int p1 = cube.addPoint(mPoints, Point(x + mSide, y, z));
+	int p2 = cube.addPoint(mPoints, Point(x + mSide, y + mSide, z));
+	int p3 = cube.addPoint(mPoints, Point(x, y + mSide, z));
 
-	int p4 = cube.addPoint(Point(x, y, z + mSide));
-	int p5 = cube.addPoint(Point(x + mSide, y, z + mSide));
-	int p6 = cube.addPoint(Point(x + mSide, y + mSide, z + mSide));
-	int p7 = cube.addPoint(Point(x, y + mSide, z + mSide));
+	int p4 = cube.addPoint(mPoints, Point(x, y, z + mSide));
+	int p5 = cube.addPoint(mPoints, Point(x + mSide, y, z + mSide));
+	int p6 = cube.addPoint(mPoints, Point(x + mSide, y + mSide, z + mSide));
+	int p7 = cube.addPoint(mPoints, Point(x, y + mSide, z + mSide));
 
 
-	cube.addTriangle(p0, p1, p2);   
-	cube.addTriangle(p0, p3, p2);
-	cube.addTriangle(p4, p5, p6);
-	cube.addTriangle(p4, p7, p6);
-	cube.addTriangle(p4, p5, p1);
-	cube.addTriangle(p4, p0, p1);
-	cube.addTriangle(p3, p2, p6);
-	cube.addTriangle(p3, p7, p6);
-	cube.addTriangle(p1, p5, p6);
-	cube.addTriangle(p1, p2, p6);
-	cube.addTriangle(p4, p0, p3);
-	cube.addTriangle(p4, p7, p3);
+	cube.addTriangle(mTriangles, p0, p1, p2);   
+	cube.addTriangle(mTriangles, p0, p3, p2);
+	cube.addTriangle(mTriangles, p4, p5, p6);
+	cube.addTriangle(mTriangles, p4, p7, p6);
+	cube.addTriangle(mTriangles, p4, p5, p1);
+	cube.addTriangle(mTriangles, p4, p0, p1);
+	cube.addTriangle(mTriangles, p3, p2, p6);
+	cube.addTriangle(mTriangles, p3, p7, p6);
+	cube.addTriangle(mTriangles, p1, p5, p6);
+	cube.addTriangle(mTriangles, p1, p2, p6);
+	cube.addTriangle(mTriangles, p4, p0, p3);
+	cube.addTriangle(mTriangles, p4, p7, p3);
 	
 	return cube;
 }

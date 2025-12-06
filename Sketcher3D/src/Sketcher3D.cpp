@@ -57,6 +57,7 @@ void Sketcher3D::setupUI()
     
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
+    connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
 }
 
 
@@ -106,6 +107,7 @@ void Sketcher3D::menuBarElements()
     mSaveAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
     mSaveAction->setShortcut(QKeySequence::Save); // Ctrl+S
     mSaveGNUAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveGNU");
+    mLoadSTLAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "LoadSTL");
     mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
     mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
     mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
@@ -159,9 +161,11 @@ void Sketcher3D::onCubeToolClicked()
         shapeManager.addShape(c);
         //std::vector<Point> vec = c->getCoordinates();
         //std::vector<Point> vec = c->coodinatesForGLTriangle();
-        Triangulation cube = c->makeCube();
+        /*Triangulation cube = c->makeCube();
         std::vector <Point> pts = cube.getPoints();
-        std::vector <Triangle> tris = cube.getTriangles();
+        std::vector <Triangle> tris = cube.getTriangles();*/
+        std::vector <Point> pts = c->mPoints;
+        std::vector <Triangle> tris = c->mTriangles;
         glWidget->drawShapeCube(pts, tris);
         mStatusBar->showMessage("Cube created");
     }
@@ -253,6 +257,28 @@ void Sketcher3D::onSaveGNUActionTriggered()
         QMessageBox::warning(this, "Not Saved", "Shapes not saved!");
     }
 }
+
+
+void Sketcher3D::onLoadSTLTriggered()
+{
+   /**QString qFileName = QFileDialog::getSaveFileName(
+       this, "Save Shapes", "", ".stl");*/
+
+       // load stl file
+    std::string fileName = "../cube.stl";
+    std::vector <Point> pts = FileHandle::readSTL(fileName);
+
+    if (!pts.empty())
+    {
+        glWidget->drawShape(pts);
+        QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
+    }
+}
+
 
 void Sketcher3D::onSaveActionTriggered()
 {

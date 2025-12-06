@@ -57,6 +57,8 @@ private:
     QMenu* mSaveMenu;
     QAction* mSaveAction;
     QAction* mSaveGNUAction;
+    QAction* mLoadSTLAction;
+
     QAction* mNewAction;
     QAction* mOpenAction;
 
@@ -83,6 +85,7 @@ private slots:
     //void onOpenActionTriggered();
     void onSaveActionTriggered();
     void onSaveGNUActionTriggered();
+    void onLoadSTLTriggered();
 
 
     // Transformation

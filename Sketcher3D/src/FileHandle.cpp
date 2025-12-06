@@ -1,5 +1,8 @@
 #include "FileHandle.h"
+#include <iostream>
 #include <fstream>
+#include <sstream>
+#include <string>
 
 bool FileHandle::saveToFile(const std::string& fileName,
 	 const std::vector<std::shared_ptr<Shape>>& shapes)
@@ -75,7 +78,40 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 	return true;
 
 }
+ 
+std::vector <Point>  FileHandle::readSTL(const std::string& fileName) { //for now, cube only
+	std::ifstream fin(fileName);
 
+	std::string line;
+	std::vector <Point> pts;
+
+	while (std::getline(fin, line)) 
+	{
+		// Remove leading spaces
+		size_t start = line.find_first_not_of(" \t");
+		if (start == std::string::npos)
+			continue;   // skip empty or only-space lines
+
+		std::string trimmed = line.substr(start);
+
+		// Check if line starts with "vertex"
+		if (trimmed.rfind("vertex", 0) != 0)
+			continue;   // skip non-vertex lines
+
+		// Parse: vertex x y z
+		std::string word;
+		float x;
+		float y;
+		float z;
+
+		std::stringstream ss(trimmed);
+		ss >> word >> x >> y >> z;   // word = "vertex"
+
+		pts.emplace_back(x, y, z);
+	}
+
+	return pts;
+}
 
 
 

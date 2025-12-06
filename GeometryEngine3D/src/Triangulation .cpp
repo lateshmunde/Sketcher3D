@@ -4,19 +4,19 @@
 Triangulation::Triangulation(){}
 Triangulation::~Triangulation(){}
 
-int Triangulation::addPoint(const Point& p)
+int Triangulation::addPoint(std::vector <Point> pts,const Point& p)
 {
-	mPoints.push_back(p);
-	int index = mPoints.size() - 1;
+	pts.push_back(p);
+	int index = pts.size() - 1;
 	return index;
 		
 }
 
-void Triangulation::addTriangle(int a, int b, int c)
+void Triangulation::addTriangle(std::vector <Triangle> tris, int a, int b, int c)
 {
-	mTriangles.emplace_back(a, b, c);
+	tris.emplace_back(a, b, c);
 }
 
-const std::vector <Point> Triangulation::getPoints() const {return mPoints;}
+//const std::vector <Point> Triangulation::getPoints() const {return mPoints;}
 
-const std::vector <Triangle> Triangulation::getTriangles() const { return mTriangles; }
+//const std::vector <Triangle> Triangulation::getTriangles() const { return mTriangles; }

@@ -50,14 +50,20 @@ void OpenGLWidget::drawShapeCube(std::vector<Point>& pts, std::vector<Triangle>&
 
     for (const Triangle& t : tris)
     {
-        mVertices.push_back(pts[0].getX());
+        mVertices.push_back(pts[t.m1].getX());
+        mVertices.push_back(pts[t.m1].getY());
+        mVertices.push_back(pts[t.m1].getZ());
 
-        /*mVertices.push_back(p.getX());
-        mVertices.push_back(p.getY());
-        mVertices.push_back(p.getZ());*/
+        mVertices.push_back(pts[t.m2].getX());
+        mVertices.push_back(pts[t.m2].getY());
+        mVertices.push_back(pts[t.m2].getZ());
+
+        mVertices.push_back(pts[t.m3].getX());
+        mVertices.push_back(pts[t.m3].getY());
+        mVertices.push_back(pts[t.m3].getZ());
     }
 
-    update();  // Request paintGL() //tells qt to call paint
+    update();  // Request paintGL() //tells qt to call paint 
 }
 
 

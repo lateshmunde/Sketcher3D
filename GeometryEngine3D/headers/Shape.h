@@ -16,6 +16,10 @@ private:
     std::string mName;
 
 public:
+    std::vector <Point> mPoints;
+    std::vector <Triangle> mTriangles;
+
+public:
     Shape(const std::string& type,const std::string& name);
     virtual ~Shape() = default;
 
