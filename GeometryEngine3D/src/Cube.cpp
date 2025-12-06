@@ -78,7 +78,7 @@ Triangulation Cube::makeCube() const
 	int p7 = cube.addPoint(Point(x, y + mSide, z + mSide));
 
 
-	cube.addTriangle(p0, p1, p2);
+	cube.addTriangle(p0, p1, p2);   
 	cube.addTriangle(p0, p3, p2);
 	cube.addTriangle(p4, p5, p6);
 	cube.addTriangle(p4, p7, p6);

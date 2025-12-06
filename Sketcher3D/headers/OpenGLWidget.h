@@ -9,7 +9,7 @@
 #include <QPoint> // For mouse position
 #include <vector>
 
-#include "Point.h"  
+#include "Shape.h"  
 
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -20,7 +20,7 @@ public:
     ~OpenGLWidget();
 
     void drawShape(std::vector<Point>& vec);
-    void drawShapeCube(std::vector<Point>& vec); //for cube
+    void drawShapeCube(std::vector<Point>& pts, std::vector<Triangle>& tris); //for cube
     void clearShape(); 
 
 protected:

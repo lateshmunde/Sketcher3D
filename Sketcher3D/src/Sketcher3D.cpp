@@ -160,8 +160,9 @@ void Sketcher3D::onCubeToolClicked()
         //std::vector<Point> vec = c->getCoordinates();
         //std::vector<Point> vec = c->coodinatesForGLTriangle();
         Triangulation cube = c->makeCube();
-        std::vector <Point> vec = cube.getPoints();
-        glWidget->drawShape(vec);
+        std::vector <Point> pts = cube.getPoints();
+        std::vector <Triangle> tris = cube.getTriangles();
+        glWidget->drawShapeCube(pts, tris);
         mStatusBar->showMessage("Cube created");
     }
     catch (const std::runtime_error& e)
