@@ -60,6 +60,40 @@ const std::vector<Point> Cube::coodinatesForGLTriangle() const
 	return pts;
 }
 
+Triangulation Cube::makeCube() const
+{
+	Triangulation cube;
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	int p0 = cube.addPoint(Point(x, y, z));
+	int p1 = cube.addPoint(Point(x + mSide, y, z));
+	int p2 = cube.addPoint(Point(x + mSide, y + mSide, z));
+	int p3 = cube.addPoint(Point(x, y + mSide, z));
+
+	int p4 = cube.addPoint(Point(x, y, z + mSide));
+	int p5 = cube.addPoint(Point(x + mSide, y, z + mSide));
+	int p6 = cube.addPoint(Point(x + mSide, y + mSide, z + mSide));
+	int p7 = cube.addPoint(Point(x, y + mSide, z + mSide));
+
+
+	cube.addTriangle(p0, p1, p2);
+	cube.addTriangle(p0, p3, p2);
+	cube.addTriangle(p4, p5, p6);
+	cube.addTriangle(p4, p7, p6);
+	cube.addTriangle(p4, p5, p1);
+	cube.addTriangle(p4, p0, p1);
+	cube.addTriangle(p3, p2, p6);
+	cube.addTriangle(p3, p7, p6);
+	cube.addTriangle(p1, p5, p6);
+	cube.addTriangle(p1, p2, p6);
+	cube.addTriangle(p4, p0, p3);
+	cube.addTriangle(p4, p7, p3);
+	
+	return cube;
+}
+
 void Cube::save(std::ostream& out) const
 {
 	out << getType() << " " << getName() << " " << "S " << mSide << "\n";

@@ -41,6 +41,22 @@ void OpenGLWidget::drawShape(std::vector<Point>& vec)
     update();  // Request paintGL() //tells qt to call paint
 }
 
+void OpenGLWidget::drawShapeCube(std::vector<Point>& vec)
+{
+    // Convert input Points into flat float list (x,y,z)
+    mVertices.clear();
+    mVertices.reserve(vec.size() * 3);
+
+    for (const Point& p : vec)
+    {
+        mVertices.push_back(p.getX());
+        mVertices.push_back(p.getY());
+        mVertices.push_back(p.getZ());
+    }
+
+    update();  // Request paintGL() //tells qt to call paint
+}
+
 
 void OpenGLWidget::clearShape()
 {

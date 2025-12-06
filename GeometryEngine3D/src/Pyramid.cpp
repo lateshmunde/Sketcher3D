@@ -88,6 +88,13 @@ const std::vector<Point> Pyramid::coodinatesForGLTriangle() const
 	return pts;
 }
 
+Triangulation Pyramid::makeCube() const
+{
+	Triangulation pyramid;
+	return pyramid;
+}
+
+
 
 
 void Pyramid::save(std::ostream& out) const

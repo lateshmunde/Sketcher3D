@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "Point.h"
+#include "Triangulation.h"
 #include "Constants.h"
 
 
@@ -27,6 +28,7 @@ public:
     virtual void save(std::ostream& os) const = 0;
     virtual void saveForGnu(std::ostream& os) const = 0;
 
+    virtual Triangulation makeCube() const = 0;
 };
 
  

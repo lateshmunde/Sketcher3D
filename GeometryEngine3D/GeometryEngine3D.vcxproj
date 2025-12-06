@@ -163,6 +163,8 @@
     <ClInclude Include="headers\Shape.h" />
     <ClInclude Include="headers\Sphere.h" />
     <ClInclude Include="headers\Transformations.h" />
+    <ClInclude Include="headers\Triangle.h" />
+    <ClInclude Include="headers\Triangulation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cone.cpp" />
@@ -178,6 +180,8 @@
     <ClCompile Include="src\Shape.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
     <ClCompile Include="src\Transformations.cpp" />
+    <ClCompile Include="src\Triangle.cpp" />
+    <ClCompile Include="src\Triangulation .cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

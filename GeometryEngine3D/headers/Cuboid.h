@@ -22,6 +22,8 @@ public:
 	double getLength() const;
 	double getWidth() const;
 	double getHeight() const;
+
+	Triangulation makeCube() const override;
 };
 
 //GEOMETRY3D_API std::ostream& operator<<(std::ostream& out, const Cuboid& c);

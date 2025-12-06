@@ -60,6 +60,12 @@ const std::vector<Point> Cuboid::coodinatesForGLTriangle() const
 	return pts;
 }
 
+Triangulation Cuboid::makeCube() const
+{
+	Triangulation cuboid;
+	return cuboid;
+}
+
 void Cuboid::save(std::ostream& out) const
 {
 	out << getType() << " " << getName() << " "

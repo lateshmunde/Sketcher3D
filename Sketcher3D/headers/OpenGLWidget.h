@@ -20,6 +20,7 @@ public:
     ~OpenGLWidget();
 
     void drawShape(std::vector<Point>& vec);
+    void drawShapeCube(std::vector<Point>& vec); //for cube
     void clearShape(); 
 
 protected:

@@ -90,6 +90,14 @@ const std::vector<Point> Cylinder::coodinatesForGLTriangle() const
 }
 
 
+Triangulation Cylinder::makeCube() const
+{
+	Triangulation cylinder;
+	return cylinder;
+}
+
+
+
 void Cylinder::save(std::ostream& out) const
 {
 	out << getType() << " " << getName() << " "

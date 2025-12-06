@@ -60,6 +60,12 @@
     <ClInclude Include="headers\Transformations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Triangulation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">
@@ -99,6 +105,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Transformations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Triangulation .cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

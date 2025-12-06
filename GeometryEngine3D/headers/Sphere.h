@@ -17,4 +17,7 @@ public:
 	void saveForGnu(std::ostream& out) const override;
 
 	double getRadius() const;
+
+	Triangulation makeCube() const override;
+
 };

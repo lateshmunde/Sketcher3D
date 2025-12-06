@@ -80,6 +80,14 @@ const std::vector<Point> Cone::coodinatesForGLTriangle() const
 }
 
 
+Triangulation Cone::makeCube() const
+{
+	Triangulation cone;
+	return cone;
+}
+
+
+
 void Cone::save(std::ostream& out) const
 {
 	out <<getType() << " " << getName() << " " 

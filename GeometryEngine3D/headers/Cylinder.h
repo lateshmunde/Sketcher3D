@@ -20,4 +20,6 @@ public:
 
 	double getRadius() const;
 	double getHeight() const;
+
+	Triangulation makeCube() const override;
 };

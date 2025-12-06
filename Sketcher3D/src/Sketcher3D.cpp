@@ -158,7 +158,9 @@ void Sketcher3D::onCubeToolClicked()
         std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
         shapeManager.addShape(c);
         //std::vector<Point> vec = c->getCoordinates();
-        std::vector<Point> vec = c->coodinatesForGLTriangle();
+        //std::vector<Point> vec = c->coodinatesForGLTriangle();
+        Triangulation cube = c->makeCube();
+        std::vector <Point> vec = cube.getPoints();
         glWidget->drawShape(vec);
         mStatusBar->showMessage("Cube created");
     }
