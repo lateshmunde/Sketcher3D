@@ -88,14 +88,14 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 //	while (std::getline(fin, line)) 
 //	{
 //		// Remove leading spaces
-//		size_t start = line.find_first_not_of(" \t");
+//		int start = line.find_first_not_of(" \t");
 //		if (start == std::string::npos)
 //			continue;   // skip empty or only-space lines
 //
 //		std::string trimmed = line.substr(start);
 //
 //		// Check if line starts with "vertex"
-//		if (trimmed.rfind("vertex", 0) != 0)
+//		if (required.rfind("vertex", 0) != 0)
 //			continue;   // skip non-vertex lines
 //
 //		// Parse: vertex x y z
@@ -104,7 +104,7 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 //		float y;
 //		float z;
 //
-//		std::stringstream ss(trimmed);
+//		std::stringstream ss(required);
 //		ss >> word >> x >> y >> z;   // word = "vertex"
 //
 //		pts.emplace_back(x, y, z);
@@ -122,28 +122,34 @@ Triangulation FileHandle::readSTL(const std::string& fileName)
 	Triangulation T;
 	std::vector<Point> pts;
 
-	while (std::getline(fin, line))
+	while (std::getline(fin, line)) //Reads every line from STL.(fileName)
 	{
-		size_t start = line.find_first_not_of(" \t");
-		if (start == std::string::npos)
-			continue;
+		int start = line.find_first_not_of(" \t"); //returns index of first character that is not a space or a tab -> " \t"
 
-		std::string trimmed = line.substr(start);
+		//find_first_not_of() returns npos when : line is empty,  line contains only tabs, spaces
+		if (start == std::string::npos) //no valid position found
+			continue; //if empty move to next line
 
-		if (trimmed.rfind("vertex", 0) != 0)
-			continue;
+		std::string required = line.substr(start); // Returns a substring beginning from index "start" to the end of the string.
 
-		std::stringstream ss(trimmed);
+		//rfind(substring, position) : Search for "substring" starting at position 0
+		if (required.rfind("vertex", 0) != 0) 
+			continue; //if vertex is not at positon 0, then skip line (facet, normal, etc)
+
+		std::stringstream ss(required); //treat a string as if it were a stream
 		std::string word;
-		float x, y, z;
-		ss >> word >> x >> y >> z;
+		float x;
+		float y;
+		float z;
+				
+		ss >> word >> x >> y >> z; //Automatically skips spaces, Converts text "1.0" -> float 1.0
 
 		pts.emplace_back(x, y, z);
 
 		// When 3 points are collected - make triangle
 		if (pts.size() == 3)
 		{
-			int i1 = T.addPoint(pts[0]);
+			int i1 = T.addPoint(pts[0]); // checks duplicate, return index
 			int i2 = T.addPoint(pts[1]);
 			int i3 = T.addPoint(pts[2]);
 

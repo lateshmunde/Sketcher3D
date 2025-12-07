@@ -286,7 +286,10 @@ void Sketcher3D::onLoadSTLTriggered()
         this, "Save Shapes", "", ".stl");*/
 
         // load stl file
-    std::string fileName = "../cube.stl";
+    //std::string fileName = "../cube.stl";
+    //std::string fileName = "../solid-cube.stl";
+    std::string fileName = "../pyramid.stl";
+
     Triangulation t = FileHandle::readSTL(fileName);
     std::vector <Point> pts = t.getPoints();
     std::vector <Triangle> tris = t.getTriangles();

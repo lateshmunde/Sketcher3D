@@ -81,4 +81,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cube.stl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\pyramid.stl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\solid-cube.stl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
