@@ -12,11 +12,30 @@ int Triangulation::addPoint(std::vector <Point> pts,const Point& p)
 		
 }
 
+int Triangulation::addPoint(const Point& p)
+{
+    // Already exists? return existing index
+    auto itr = pointIndex.find(p);
+    if (itr != pointIndex.end())
+        return itr->second;
+
+    // Otherwise add new unique point
+    int index = mTPoints.size();
+    mTPoints.push_back(p);
+    pointIndex[p] = index;
+    return index;
+}
+
+void Triangulation::addTriangle(int a, int b, int c)
+{
+    mTTriangles.emplace_back(a, b, c);
+}
+
 void Triangulation::addTriangle(std::vector <Triangle> tris, int a, int b, int c)
 {
 	tris.emplace_back(a, b, c);
 }
 
-//const std::vector <Point> Triangulation::getPoints() const {return mPoints;}
+const std::vector <Point> Triangulation::getPoints() const {return mTPoints;}
 
-//const std::vector <Triangle> Triangulation::getTriangles() const { return mTriangles; }
+const std::vector <Triangle> Triangulation::getTriangles() const { return mTTriangles; }

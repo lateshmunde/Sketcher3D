@@ -259,18 +259,43 @@ void Sketcher3D::onSaveGNUActionTriggered()
 }
 
 
+//void Sketcher3D::onLoadSTLTriggered()
+//{
+//   /**QString qFileName = QFileDialog::getSaveFileName(
+//       this, "Save Shapes", "", ".stl");*/
+//
+//       // load stl file
+//    std::string fileName = "../cube.stl";
+//    std::vector <Point> pts = FileHandle::readSTL(fileName);
+//
+//    if (!pts.empty())
+//    {
+//        glWidget->drawShape(pts);
+//        QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
+//    }
+//    else
+//    {
+//        QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
+//    }
+//}
+
+
 void Sketcher3D::onLoadSTLTriggered()
 {
-   /**QString qFileName = QFileDialog::getSaveFileName(
-       this, "Save Shapes", "", ".stl");*/
+    /**QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", ".stl");*/
 
-       // load stl file
+        // load stl file
     std::string fileName = "../cube.stl";
-    std::vector <Point> pts = FileHandle::readSTL(fileName);
+    Triangulation t = FileHandle::readSTL(fileName);
+    std::vector <Point> pts = t.getPoints();
+    std::vector <Triangle> tris = t.getTriangles();
+    
+   
 
     if (!pts.empty())
     {
-        glWidget->drawShape(pts);
+        glWidget->drawShapeCube(pts, tris);
         QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
     }
     else
@@ -278,6 +303,7 @@ void Sketcher3D::onLoadSTLTriggered()
         QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
     }
 }
+
 
 
 void Sketcher3D::onSaveActionTriggered()
