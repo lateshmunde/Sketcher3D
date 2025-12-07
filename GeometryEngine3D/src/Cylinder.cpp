@@ -90,7 +90,7 @@ const std::vector<Point> Cylinder::coodinatesForGLTriangle() const
 }
 
 
-Triangulation Cylinder::makeCube() const
+Triangulation Cylinder::makeShape() const
 {
 	Triangulation cylinder;
 	return cylinder;

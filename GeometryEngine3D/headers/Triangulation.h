@@ -16,8 +16,8 @@ public:
 	Triangulation();
 	~Triangulation();
 
-	int addPoint(std::vector <Point> pts, const Point& p); // for writing shapes
-	void addTriangle(std::vector <Triangle>tris, int a, int b , int c); //for writing shapes
+	int addPoint(std::vector <Point> pts, const Point& p); // for drawing shapes
+	void addTriangle(std::vector <Triangle>tris, int a, int b , int c); //for drawing shapes
 
 	int addPoint(const Point& p); // for reading shapes from stl
 	void addTriangle(int a, int b, int c); // for reading shapes from stl

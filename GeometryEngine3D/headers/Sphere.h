@@ -18,6 +18,6 @@ public:
 
 	double getRadius() const;
 
-	Triangulation makeCube() const override;
+	Triangulation makeShape() const override;
 
 };

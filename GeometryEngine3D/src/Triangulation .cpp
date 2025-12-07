@@ -15,12 +15,12 @@ int Triangulation::addPoint(std::vector <Point> pts,const Point& p)
 int Triangulation::addPoint(const Point& p)
 {
     // Already exists? return existing index
-    auto itr = pointIndex.find(p);
-    if (itr != pointIndex.end())
-        return itr->second;
+    auto itr = pointIndex.find(p); //find(p) returns: iterator pointing to the entry if found
+    if (itr != pointIndex.end()) //end() if not found
+        return itr->second; //if found return value(index) for that key(point)
 
     // Otherwise add new unique point
-    int index = mTPoints.size();
+    int index = mTPoints.size(); //new index
     mTPoints.push_back(p);
     pointIndex[p] = index;
     return index;

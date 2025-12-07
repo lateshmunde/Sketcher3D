@@ -22,6 +22,6 @@ public:
 	 double getHeight() const;
 	 double getSlantHeight() const;
 
-	 Triangulation makeCube() const override;
+	 Triangulation makeShape() const override;
 };
 

@@ -32,7 +32,7 @@ public:
     virtual void save(std::ostream& os) const = 0;
     virtual void saveForGnu(std::ostream& os) const = 0;
 
-    virtual Triangulation makeCube() const = 0;
+    virtual Triangulation makeShape() const = 0;
 };
 
  

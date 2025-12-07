@@ -120,7 +120,7 @@ Triangulation FileHandle::readSTL(const std::string& fileName)
 	std::string line;
 
 	Triangulation T;
-	std::vector<Point> triPts;
+	std::vector<Point> pts;
 
 	while (std::getline(fin, line))
 	{
@@ -138,17 +138,17 @@ Triangulation FileHandle::readSTL(const std::string& fileName)
 		float x, y, z;
 		ss >> word >> x >> y >> z;
 
-		triPts.emplace_back(x, y, z);
+		pts.emplace_back(x, y, z);
 
 		// When 3 points are collected - make triangle
-		if (triPts.size() == 3)
+		if (pts.size() == 3)
 		{
-			int i1 = T.addPoint(triPts[0]);
-			int i2 = T.addPoint(triPts[1]);
-			int i3 = T.addPoint(triPts[2]);
+			int i1 = T.addPoint(pts[0]);
+			int i2 = T.addPoint(pts[1]);
+			int i3 = T.addPoint(pts[2]);
 
 			T.addTriangle(i1, i2, i3);
-			triPts.clear();
+			pts.clear();
 		}
 	}
 

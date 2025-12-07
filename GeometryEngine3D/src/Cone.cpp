@@ -80,7 +80,7 @@ const std::vector<Point> Cone::coodinatesForGLTriangle() const
 }
 
 
-Triangulation Cone::makeCube() const
+Triangulation Cone::makeShape() const
 {
 	Triangulation cone;
 	return cone;

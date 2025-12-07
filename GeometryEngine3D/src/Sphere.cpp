@@ -81,7 +81,7 @@ const std::vector<Point> Sphere::coodinatesForGLTriangle() const
 }
 
 
-Triangulation Sphere::makeCube() const
+Triangulation Sphere::makeShape() const
 {
 	Triangulation sphere;
 	return sphere;

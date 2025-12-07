@@ -19,3 +19,6 @@ public:
 
 
 
+// Read STL branch - read stl with 36 points in pts vector
+// OpenGL branch - no reading STL
+// Triangulation BRanch - read stl with pts vector, triangle vector and map

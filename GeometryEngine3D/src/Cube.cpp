@@ -60,7 +60,7 @@ const std::vector<Point> Cube::coodinatesForGLTriangle() const
 	return pts;
 }
 
-Triangulation Cube::makeCube() const
+Triangulation Cube::makeShape() const
 {
 	Triangulation cube;
 	double x = 0;

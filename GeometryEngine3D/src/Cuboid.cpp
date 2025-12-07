@@ -60,7 +60,7 @@ const std::vector<Point> Cuboid::coodinatesForGLTriangle() const
 	return pts;
 }
 
-Triangulation Cuboid::makeCube() const
+Triangulation Cuboid::makeShape() const
 {
 	Triangulation cuboid;
 	return cuboid;

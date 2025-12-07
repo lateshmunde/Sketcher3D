@@ -16,5 +16,5 @@ public:
 	void saveForGnu(std::ostream& fout) const override;
 
 	double getSide() const;
-	Triangulation makeCube() const override;
+	Triangulation makeShape() const override;
 };
