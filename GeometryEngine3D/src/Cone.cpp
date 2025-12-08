@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "Cone.h"
 
-void Cone::build()
-{
-}
 
-Cone::Cone(const std::string& name,double radius, double height)
-	:Shape("Cone", name), mRadius(radius), mHeight(height){}
+
+Cone::Cone(const std::string& name, double radius, double height)
+	:Shape("Cone", name), mRadius(radius), mHeight(height) {
+	build();
+}
 
 void Cone::save(std::ostream& out) const
 {
@@ -21,6 +21,37 @@ double Cone::getSlantHeight() const
 	return std::sqrt((mRadius * mRadius) + (mHeight * mHeight));
 }
 
+void Cone::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+	Point origin(x, y, z);
+	Point apex(x, y, mHeight);
+
+	std::vector <int> ptsIndex;
+	ptsIndex.push_back(mTriag.addPoint(origin)); //index 0 of ptsIndex: origin
+	ptsIndex.push_back(mTriag.addPoint(apex)); // index 1 of ptsIndex: apex
+
+	int number = 72;
+	double dTheta = 2 * MathConstants::PI / number; // 0 to 180
+
+	for (int i = 0; i < number; i++) //base circle
+	{
+		double theta = i * dTheta;
+		double x_ = mRadius * cos(theta);
+		double y_ = mRadius * sin(theta);
+
+		ptsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z))); // index 2 to 73 of ptsIndex: Circle surface points
+	}
+	ptsIndex.push_back(ptsIndex[2]); //74 index of ptsIndex: 2nd index of ptsIndex to complete circle loop.
+
+	for (int i = 0; i < number; i++)
+	{
+		mTriag.addTriangle(ptsIndex[0], ptsIndex[i + 2], ptsIndex[i + 3]);
+		mTriag.addTriangle(ptsIndex[i + 3], ptsIndex[1], ptsIndex[i + 2]);
+	}
+}
 
 void Cone::saveForGnu(std::ostream& out) const
 {

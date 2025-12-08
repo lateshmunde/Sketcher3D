@@ -1,12 +1,47 @@
 #include "pch.h"
 #include "Cylinder.h"
 
-void Cylinder::build()
-{
-}
+
 
 Cylinder::Cylinder(const std::string& name, double radius, double height)
 	:Shape("Cylinder", name), mRadius(radius), mHeight(height) {
+	build();
+}
+
+void Cylinder::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+	Point baseCenter(x, y, z);
+	Point topCenter(x, y, mHeight);
+
+	std::vector<int> bPtsIndex;
+	std::vector<int> tPtsIndex;
+	int baseCenterInd = mTriag.addPoint(baseCenter);
+	int topCenterInd = mTriag.addPoint(topCenter);
+
+	bPtsIndex.push_back(mTriag.addPoint(Point(x + mRadius * cos(0), y + mRadius * sin(0), z)));
+	tPtsIndex.push_back(mTriag.addPoint(Point(x + mRadius * cos(0), y + mRadius * sin(0), z + mHeight)));
+
+	int number = 72;
+	double dTheta = 2 * MathConstants::PI / number; // 0 to 180
+
+	for (int i = 1; i <= number; i++)
+	{
+		double theta = i * dTheta;
+		double x_ = mRadius * cos(theta);
+		double y_ = mRadius * sin(theta);
+
+		bPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z)));
+		tPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z + mHeight)));
+
+		// each 0.5 degree section has 4 triangles.
+		mTriag.addTriangle(baseCenterInd, bPtsIndex[i - 1], bPtsIndex[i]);		// Base circle center, two points on it's circumference
+		mTriag.addTriangle(bPtsIndex[i], tPtsIndex[i], bPtsIndex[i - 1]);		// Cylinder surface triangle: b1, t1, b0 
+		mTriag.addTriangle(bPtsIndex[i - 1], tPtsIndex[i], tPtsIndex[i - 1]);	// Cylinder surface triangle: b0, t1, t0
+		mTriag.addTriangle(tPtsIndex[i - 1], tPtsIndex[i], topCenterInd);		// Top circle center, two points on it's circumference
+	}
 }
 
 void Cylinder::save(std::ostream& out) const
