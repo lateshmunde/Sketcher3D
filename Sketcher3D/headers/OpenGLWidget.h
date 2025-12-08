@@ -5,7 +5,7 @@
 #include <QOpenGLShaderProgram> // Shader program wrapper
 #include <QOpenGLBuffer> // VBO
 #include <QOpenGLVertexArrayObject> // VAO
-#include <QMatrix4x4> // 4×4 matrices
+#include <QMatrix4x4> // 4ï¿½4 matrices
 #include <QPoint> // For mouse position
 #include <vector>
 

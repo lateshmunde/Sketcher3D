@@ -155,7 +155,7 @@ void Sketcher3D::onCuboidToolClicked()
     }
 }
 
-void Sketcher3D::onCubeToolClicked()
+void Sketcher3D::onTranslateActionTriggered()
 {
     // Create Cube object
     try {
@@ -203,7 +203,7 @@ void Sketcher3D::onCylinderToolClicked()
     }
 }
 
-void Sketcher3D::onConeToolClicked()
+void Sketcher3D::onRotateXActionTriggered()
 {
     // Create Cone object
     try {
@@ -219,7 +219,7 @@ void Sketcher3D::onConeToolClicked()
     }
 }
 
-void Sketcher3D::onSphereToolClicked()
+void Sketcher3D::onRotateYActionTriggered()
 {
     // Create Sphere object
     try {
