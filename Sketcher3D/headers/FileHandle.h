@@ -15,7 +15,7 @@ public:
 
 	static std::vector<float> readSTL(const std::string& fileName);
 
-	static bool writeSTL(const std::string& filename, const Triangulation& mesh);
+	static bool writeSTL(const std::string& filename, const std::vector<std::shared_ptr<Shape>>& shapes);
 };
 
 

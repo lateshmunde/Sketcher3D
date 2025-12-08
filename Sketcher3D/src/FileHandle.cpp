@@ -151,34 +151,37 @@ std::vector<float> FileHandle::readSTL(const std::string& fileName)
 	return vertices;
 }
 
-
-bool FileHandle::writeSTL(const std::string& filename, const Triangulation& mesh)
+bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::shared_ptr<Shape>>& shapes)
 {
     std::ofstream file(filename);
     if (!file.is_open()) return false;
 
-    file << "Start Cube mesh\n";
+	for (const std::shared_ptr<Shape> &it : shapes)
+	{
+		file << "Start " << it->getType() << " mesh\n";
 
-    const std::vector<Point>& points = mesh.getPoints();
-    const std::vector<Triangle>& triangles = mesh.getTriangles();
+		const std::vector<Point>& points = it->getTriangulation().getPoints();
+		const std::vector<Triangle>& triangles = it->getTriangulation().getTriangles();
 
-    for (const Triangle& tri : triangles)
-    {
-        // Get the 3 points
-        const Point& p1 = points[tri.m1];
-        const Point& p2 = points[tri.m2];
-        const Point& p3 = points[tri.m3];
+		for (const Triangle& tri : triangles)
+		{
+			// Get the 3 points
+			const Point& p1 = points[tri.m1];
+			const Point& p2 = points[tri.m2];
+			const Point& p3 = points[tri.m3];
 
-        // Normal (dummy 0 0 0 for now)
-        file << "  facet normal 0.0 0.0 0.0\n";
-        file << "    outer loop\n";
-        file << "      vertex " << p1.getX() << " " << p1.getY() << " " << p1.getZ() << "\n";
-        file << "      vertex " << p2.getX() << " " << p2.getY() << " " << p2.getZ() << "\n";
-        file << "      vertex " << p3.getX() << " " << p3.getY() << " " << p3.getZ() << "\n";
-        file << "    endloop\n";
-        file << "  endfacet\n";
-    }
+			// Normal (dummy 0 0 0 for now)
+			file << "  facet normal 0.0 0.0 0.0\n";
+			file << "    outer loop\n";
+			file << "      vertex " << p1.getX() << " " << p1.getY() << " " << p1.getZ() << "\n";
+			file << "      vertex " << p2.getX() << " " << p2.getY() << " " << p2.getZ() << "\n";
+			file << "      vertex " << p3.getX() << " " << p3.getY() << " " << p3.getZ() << "\n";
+			file << "    endloop\n";
+			file << "  endfacet\n";
+		}
 
-    file << "End Cube mesh\n";
+		file << "End " << it->getType() << " mesh\n\n";
+	}
+    
     return true;
 }

@@ -58,6 +58,7 @@ void Sketcher3D::setupUI()
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
+    connect(mSaveSTLAction, &QAction::triggered, this, &Sketcher3D::onSaveSTLTriggered);
 }
 
 
@@ -107,7 +108,9 @@ void Sketcher3D::menuBarElements()
     mSaveAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
     mSaveAction->setShortcut(QKeySequence::Save); // Ctrl+S
     mSaveGNUAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveGNU");
+    mSaveSTLAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveSTL");
     mLoadSTLAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "LoadSTL");
+    
     mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
     mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
     mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
@@ -281,7 +284,7 @@ void Sketcher3D::onLoadSTLTriggered()
         // load stl file
     //std::string fileName = "../cube.stl";
     //std::string fileName = "../solid-cube.stl";
-    std::string fileName = "../pyramid.stl";
+    std::string fileName = "../Shapes.stl";
     std::vector<float> vec = FileHandle::readSTL(fileName);
   
     if (!vec.empty())
@@ -293,6 +296,25 @@ void Sketcher3D::onLoadSTLTriggered()
     {
         QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
     }
+}
+
+void Sketcher3D::onSaveSTLTriggered()
+{
+    /*QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", ".skt");*/
+
+        // Save shapes to file
+    std::string fileName = "../Shapes.stl";
+    std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
+    if (FileHandle::writeSTL(fileName, shapesVec))
+    {
+        QMessageBox::information(this, "Saved", "Shapes saved and rendered in 3D viewer!");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Not Saved", "Shapes not saved!");
+    }
+
 }
 
 
