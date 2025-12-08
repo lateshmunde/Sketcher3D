@@ -174,7 +174,7 @@ void OpenGLWidget::resizeGL(int w, int h)
 
     //perspective projection - viewbox
     mProjection.setToIdentity();
-    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 500.0f);
+    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 1000.0f);
 }
 
 void OpenGLWidget::mousePressEvent(QMouseEvent* event)
@@ -200,12 +200,15 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent* event)
 
 void OpenGLWidget::wheelEvent(QWheelEvent* event)
 {
-    if (event->angleDelta().y() > 0)
-        mZoom -= 1.0f;
-    else
-        mZoom += 1.0f;
+    float zoomFactor = 1.1f;   // 10% zoom
 
-    if (mZoom < 5.0f)   mZoom = 5.0f;
+    if (event->angleDelta().y() > 0)
+        mZoom /= zoomFactor;   // zoom in (move camera closer)
+    else
+        mZoom *= zoomFactor;   // zoom out (move camera back)
+
+    // Clamp range so it never gets stuck
+    if (mZoom < 1.0f)   mZoom = 1.0f;
     if (mZoom > 200.0f) mZoom = 200.0f;
 
     update();

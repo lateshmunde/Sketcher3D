@@ -284,7 +284,7 @@ void Sketcher3D::onLoadSTLTriggered()
         // load stl file
     //std::string fileName = "../cube.stl";
     //std::string fileName = "../solid-cube.stl";
-    std::string fileName = "../Shapes.stl";
+    std::string fileName = "../pyramid.stl";
     std::vector<float> vec = FileHandle::readSTL(fileName);
   
     if (!vec.empty())
