@@ -73,6 +73,7 @@ private:
 
     // Shape Manager
     ShapeManager shapeManager;
+    Triangulation tri;
 
 private slots:
     void onCuboidToolClicked();

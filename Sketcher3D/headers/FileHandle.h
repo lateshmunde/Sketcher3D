@@ -1,6 +1,7 @@
 #pragma once
 #include "Shape.h"
 #include "ShapeCreator.h"
+#include "Triangulation.h"
 
 class FileHandle
 {
@@ -13,7 +14,7 @@ public:
 
 	//static std::vector<std::shared_ptr<Shape>> loadFromFile(const std::string& fileName);
 
-	static std::vector<float> readSTL(const std::string& fileName);
+	static void readSTL(const std::string& fileName, Triangulation& triangulation);
 
 	static bool writeSTL(const std::string& filename, const std::vector<std::shared_ptr<Shape>>& shapes);
 };

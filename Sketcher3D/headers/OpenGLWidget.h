@@ -19,7 +19,7 @@ public:
     explicit OpenGLWidget(QWidget* parent = nullptr);
     ~OpenGLWidget();
 
-    void drawShape(const std::vector<float>& vec);
+    void drawShape(const std::vector<float>& vec, const std::vector<float>& normal = {});
     void clearShape(); 
 
 protected:
@@ -33,9 +33,12 @@ protected:
 
 private:
     std::vector<float> mVertices;
+    std::vector<float> mNormals;
 
     QOpenGLVertexArrayObject mShapeVAO;
+    QOpenGLVertexArrayObject mNormalVAO;
     QOpenGLBuffer mShapeVBO;
+    QOpenGLBuffer mNormalVBO;
     QOpenGLShaderProgram mShader; // Shader program
 
     QMatrix4x4 mProjection;

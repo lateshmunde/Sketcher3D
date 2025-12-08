@@ -278,24 +278,25 @@ void Sketcher3D::onSaveGNUActionTriggered()
 
 void Sketcher3D::onLoadSTLTriggered()
 {
-    /**QString qFileName = QFileDialog::getSaveFileName(
-        this, "Save Shapes", "", ".stl");*/
+    QString qFileName = QFileDialog::getOpenFileName(
+        this, "Open STL", "", "*.STL");
+    
 
         // load stl file
     //std::string fileName = "../cube.stl";
     //std::string fileName = "../solid-cube.stl";
-    std::string fileName = "../pyramid.stl";
-    std::vector<float> vec = FileHandle::readSTL(fileName);
+    //std::string fileName = "../pyramid.stl";
+    FileHandle::readSTL(qFileName.toStdString(), tri);
   
-    if (!vec.empty())
+if (!tri.getDataForOpenGl().empty())
     {
-        glWidget->drawShape(vec);
+        glWidget->drawShape(tri.getDataForOpenGl(), tri.getNormalForOpenGl());
         QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
     }
     else
     {
         QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
-    }
+    }    
 }
 
 void Sketcher3D::onSaveSTLTriggered()
