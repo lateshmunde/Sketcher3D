@@ -8,18 +8,16 @@ private:
 	double mRadius;
 	double mHeight;
 
+protected:
+	void build() override;
+
 public:
 	Cylinder(const std::string& name, double radius, double height);
 	~Cylinder() override = default;
 
-
-	const std::vector<Point> getCoordinates() const override;
-	const std::vector<Point> coodinatesForGLTriangle() const override;
 	void save(std::ostream& out) const override;
 	void saveForGnu(std::ostream& out) const override;
 
 	double getRadius() const;
 	double getHeight() const;
-
-	Triangulation makeShape() const override;
 };

@@ -25,46 +25,13 @@ OpenGLWidget::~OpenGLWidget()
     doneCurrent();
 }
 
-void OpenGLWidget::drawShape(std::vector<Point>& vec)
+void OpenGLWidget::drawShape(const std::vector<float>& vec)
 {
-    // Convert input Points into flat float list (x,y,z)
-    mVertices.clear();
-    mVertices.reserve(vec.size() * 3);
 
-    for (const Point& p : vec)
-    {
-        mVertices.push_back(p.getX());
-        mVertices.push_back(p.getY());
-        mVertices.push_back(p.getZ());
-    }
-
+    mVertices = vec;
     update();  // Request paintGL() //tells qt to call paint
 }
 
-void OpenGLWidget::drawShapeCube(std::vector<Point>& pts, std::vector<Triangle>& tris)
-{
-    // Convert input Points into flat float list (x,y,z)
-    mVertices.clear();
-    //mVertices.reserve(pts.size() * 3);
-    mVertices.reserve(36 * 3);
-
-    for (const Triangle& t : tris)
-    {
-        mVertices.push_back(pts[t.m1].getX());
-        mVertices.push_back(pts[t.m1].getY());
-        mVertices.push_back(pts[t.m1].getZ());
-
-        mVertices.push_back(pts[t.m2].getX());
-        mVertices.push_back(pts[t.m2].getY());
-        mVertices.push_back(pts[t.m2].getZ());
-
-        mVertices.push_back(pts[t.m3].getX());
-        mVertices.push_back(pts[t.m3].getY());
-        mVertices.push_back(pts[t.m3].getZ());
-    }
-
-    update();  // Request paintGL() //tells qt to call paint 
-}
 
 
 void OpenGLWidget::clearShape()

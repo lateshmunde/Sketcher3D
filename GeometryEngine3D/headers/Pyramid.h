@@ -9,12 +9,13 @@ private:
 	double mBaseWidth;
 	double mHeight;
 
+protected:
+	void build() override;
+
 public:
 	Pyramid(const std::string& name, double baseLength, double baseWidth, double height);
 	~Pyramid() override = default;
 
-	const std::vector<Point> getCoordinates() const override;
-	const std::vector<Point> coodinatesForGLTriangle() const override;
 	void save(std::ostream& out) const override;
 	void saveForGnu(std::ostream& out) const override;
 
@@ -23,5 +24,4 @@ public:
 	double getHeight() const;
 	double getSlantHeight() const;
 
-	Triangulation makeShape() const override;
 };

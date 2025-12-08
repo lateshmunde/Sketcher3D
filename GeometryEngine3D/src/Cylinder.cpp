@@ -1,102 +1,13 @@
 #include "pch.h"
 #include "Cylinder.h"
 
+void Cylinder::build()
+{
+}
+
 Cylinder::Cylinder(const std::string& name, double radius, double height)
 	:Shape("Cylinder", name), mRadius(radius), mHeight(height) {
 }
-
-const std::vector<Point> Cylinder::getCoordinates() const
-{
-	std::vector<Point> pts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-
-	int number = 72;
-	double dTheta = 2* MathConstants::PI / number;
-
-	for (int i = 0; i <= number; i++) //base
-	{
-		double theta = i * dTheta;
-		double x_ = mRadius * cos(theta);
-		double y_ = mRadius * sin(theta) ;
-		pts.emplace_back(x + x_, y + y_, z );
-	}
-	for (int i = 0; i <= number; i++) // height
-	{
-		double theta = i * dTheta;
-		double x_ = mRadius * cos(theta);
-		double y_ = mRadius * sin(theta);
-		pts.emplace_back(x + x_, y + y_, z + mHeight);
-	}
-	for (int i = 0; i <= number; i++) //surface
-	{
-		double theta = i * dTheta;
-		double x_ = mRadius * cos(theta);
-		double y_ = mRadius * sin(theta);
-		for (int j = 0; j < number; j++)
-		{
-			double z_ = (double(j) / number) * mHeight;
-			pts.emplace_back(x + x_, y + y_, z + z_);
-		}
-	}
-	return pts;
-}
-
-const std::vector<Point> Cylinder::coodinatesForGLTriangle() const
-{
-	std::vector<Point> pts;
-	std::vector<Point> baseCirclePts;
-	std::vector<Point> UpCirclePts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-	Point origin(x, y, z);
-	Point hOrigin(x, y, z + mHeight);
-
-	int number = 72;
-	double dTheta = 2 * MathConstants::PI / number;
-
-	for (int i = 0; i <= number; i++) //base
-	{
-		double theta = i * dTheta;
-		double x_ = mRadius * cos(theta);
-		double y_ = mRadius * sin(theta);
-		baseCirclePts.emplace_back(x + x_, y + y_, z);
-	}
-	for (int i = 0; i <= number; i++) // height
-	{
-		double theta = i * dTheta;
-		double x_ = mRadius * cos(theta);
-		double y_ = mRadius * sin(theta);
-		UpCirclePts.emplace_back(x + x_, y + y_, z + mHeight);
-	}
-
-	for (int i = 0; i < number; i++)
-	{
-		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(UpCirclePts[i]);
-		pts.push_back(UpCirclePts[i]); pts.push_back(UpCirclePts[i + 1]); pts.push_back(baseCirclePts[i + 1]);
-	}
-	for (int i = 0; i < number; i++)
-	{
-		pts.push_back(baseCirclePts[i]); pts.push_back(baseCirclePts[i + 1]); pts.push_back(origin);
-	}
-	for (int i = 0; i < number; i++)
-	{
-		pts.push_back(UpCirclePts[i]); pts.push_back(UpCirclePts[i + 1]); pts.push_back(hOrigin);
-	}
-
-	return pts;
-}
-
-
-Triangulation Cylinder::makeShape() const
-{
-	Triangulation cylinder;
-	return cylinder;
-}
-
-
 
 void Cylinder::save(std::ostream& out) const
 {

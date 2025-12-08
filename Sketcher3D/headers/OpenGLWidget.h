@@ -19,8 +19,7 @@ public:
     explicit OpenGLWidget(QWidget* parent = nullptr);
     ~OpenGLWidget();
 
-    void drawShape(std::vector<Point>& vec);
-    void drawShapeCube(std::vector<Point>& pts, std::vector<Triangle>& tris); //for cube
+    void drawShape(const std::vector<float>& vec);
     void clearShape(); 
 
 protected:

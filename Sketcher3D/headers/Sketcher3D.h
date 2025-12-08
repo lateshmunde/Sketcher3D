@@ -85,13 +85,13 @@ private slots:
     //void onOpenActionTriggered();
     void onSaveActionTriggered();
     void onSaveGNUActionTriggered();
-    void onLoadSTLTriggered();
+    /*void onLoadSTLTriggered();*/
 
 
     // Transformation
-    void onTranslateActionTriggered();
+    /*void onTranslateActionTriggered();
     void onScaleActionTriggered();
     void onRotateXActionTriggered();
     void onRotateYActionTriggered();
-    void onRotateZActionTriggered();
+    void onRotateZActionTriggered();*/
 };

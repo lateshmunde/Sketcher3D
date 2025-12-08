@@ -2,69 +2,13 @@
 #include "Cuboid.h"
 
 
+void Cuboid::build()
+{
+}
+
 Cuboid::Cuboid(const std::string& name, double length, double width, double height)
 	: Shape("Cuboid", name), mLength(length), mWidth(width), mHeight(height){}
 
-
-const std::vector<Point> Cuboid::getCoordinates() const
-{
-	std::vector<Point> pts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-
-	//Point p1(x, y, z);
-	//pts.push_back(p1); // Takes an already constructed object
-	pts.emplace_back(x, y, z); // takes constructor arguments to create object
-	pts.emplace_back(x + mLength, y, z);
-	pts.emplace_back(x + mLength, y + mWidth, z);
-	pts.emplace_back(x , y + mWidth, z);
-
-	pts.emplace_back(x , y , z + mHeight);
-	pts.emplace_back(x + mLength, y , z + mHeight);
-	pts.emplace_back(x + mLength, y + mWidth, z + mHeight);
-	pts.emplace_back(x , y + mWidth, z + mHeight);
-
-	return pts;
-}
-
-const std::vector<Point> Cuboid::coodinatesForGLTriangle() const
-{
-	std::vector<Point> pts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-
-	Point p1(x, y, z);
-	Point p2(x + mLength, y, z);
-	Point p3(x + mLength, y + mWidth, z);
-	Point p4(x, y + mWidth, z);
-	Point p5(x, y, z + mHeight);
-	Point p6(x + mLength, y, z + mHeight);
-	Point p7(x + mLength, y + mWidth, z + mHeight);
-	Point p8(x, y + mWidth, z + mHeight);
-
-	pts.push_back(p1); pts.push_back(p2); pts.push_back(p3);
-	pts.push_back(p3); pts.push_back(p4); pts.push_back(p1);
-	pts.push_back(p1); pts.push_back(p5); pts.push_back(p8);
-	pts.push_back(p8); pts.push_back(p4); pts.push_back(p1);
-	pts.push_back(p1); pts.push_back(p5); pts.push_back(p6);
-	pts.push_back(p6); pts.push_back(p1); pts.push_back(p2);
-	pts.push_back(p2); pts.push_back(p6); pts.push_back(p7);
-	pts.push_back(p7); pts.push_back(p2); pts.push_back(p3);
-	pts.push_back(p3); pts.push_back(p7); pts.push_back(p4);
-	pts.push_back(p4); pts.push_back(p7); pts.push_back(p8);
-	pts.push_back(p8); pts.push_back(p7); pts.push_back(p6);
-	pts.push_back(p6); pts.push_back(p5); pts.push_back(p8);
-
-	return pts;
-}
-
-Triangulation Cuboid::makeShape() const
-{
-	Triangulation cuboid;
-	return cuboid;
-}
 
 void Cuboid::save(std::ostream& out) const
 {
