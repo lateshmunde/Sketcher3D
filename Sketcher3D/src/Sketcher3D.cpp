@@ -57,7 +57,7 @@ void Sketcher3D::setupUI()
     
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
-    /*connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);*/
+    connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
 }
 
 
@@ -273,32 +273,27 @@ void Sketcher3D::onSaveGNUActionTriggered()
 //}
 
 
-//void Sketcher3D::onLoadSTLTriggered()
-//{
-//    /**QString qFileName = QFileDialog::getSaveFileName(
-//        this, "Save Shapes", "", ".stl");*/
-//
-//        // load stl file
-//    //std::string fileName = "../cube.stl";
-//    //std::string fileName = "../solid-cube.stl";
-//    std::string fileName = "../pyramid.stl";
-//
-//    Triangulation t = FileHandle::readSTL(fileName);
-//    std::vector <Point> pts = t.getPoints();
-//    std::vector <Triangle> tris = t.getTriangles();
-//    
-//   
-//
-//    if (!pts.empty())
-//    {
-//        glWidget->drawShapeCube(pts, tris);
-//        QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
-//    }
-//    else
-//    {
-//        QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
-//    }
-//}
+void Sketcher3D::onLoadSTLTriggered()
+{
+    /**QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", ".stl");*/
+
+        // load stl file
+    //std::string fileName = "../cube.stl";
+    //std::string fileName = "../solid-cube.stl";
+    std::string fileName = "../pyramid.stl";
+    std::vector<float> vec = FileHandle::readSTL(fileName);
+  
+    if (!vec.empty())
+    {
+        glWidget->drawShape(vec);
+        QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
+    }
+}
 
 
 

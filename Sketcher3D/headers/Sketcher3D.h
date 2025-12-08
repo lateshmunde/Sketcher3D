@@ -85,7 +85,7 @@ private slots:
     //void onOpenActionTriggered();
     void onSaveActionTriggered();
     void onSaveGNUActionTriggered();
-    /*void onLoadSTLTriggered();*/
+    void onLoadSTLTriggered();
 
 
     // Transformation

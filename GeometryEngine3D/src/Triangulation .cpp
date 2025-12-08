@@ -4,6 +4,16 @@
 Triangulation::Triangulation(){}
 Triangulation::~Triangulation(){}
 
+std::vector<Point> Triangulation::getPoints() const
+{
+    return mPoints;
+}
+
+std::vector<Triangle> Triangulation::getTriangles() const
+{
+    return mTriangles;
+}
+
 int Triangulation::addPoint(const Point& p)
 {
     // Already exists? return existing index

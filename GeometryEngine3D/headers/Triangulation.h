@@ -16,6 +16,9 @@ public:
 	Triangulation();
 	~Triangulation();
 
+	std::vector <Point> getPoints() const;
+	std::vector <Triangle> getTriangles() const;
+
 	int addPoint(const Point& p); // for reading shapes from stl
 	void addTriangle(int a, int b, int c); // for reading shapes from stl
 

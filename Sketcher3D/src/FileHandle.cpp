@@ -114,51 +114,71 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 //}
 
 
-Triangulation FileHandle::readSTL(const std::string& fileName)
+std::vector<float> FileHandle::readSTL(const std::string& fileName)
 {
 	std::ifstream fin(fileName);
 	std::string line;
+	std::vector<float> vertices;
 
-	Triangulation T;
-	std::vector<Point> pts;
-
-	while (std::getline(fin, line)) //Reads every line from STL.(fileName)
+	while (std::getline(fin, line))
 	{
-		int start = line.find_first_not_of(" \t"); //returns index of first character that is not a space or a tab -> " \t"
+		// Skip all lines that do NOT contain the word "vertex"
+		if (line.find("vertex") == std::string::npos)
+			continue;
 
-		//find_first_not_of() returns npos when : line is empty,  line contains only tabs, spaces
-		if (start == std::string::npos) //no valid position found
-			continue; //if empty move to next line
+		// Make a stream from the line
+		std::stringstream ss(line);
 
-		std::string required = line.substr(start); // Returns a substring beginning from index "start" to the end of the string.
-
-		//rfind(substring, position) : Search for "substring" starting at position 0
-		if (required.rfind("vertex", 0) != 0) 
-			continue; //if vertex is not at positon 0, then skip line (facet, normal, etc)
-
-		std::stringstream ss(required); //treat a string as if it were a stream
-		std::string word;
+		std::string word; // will store "vertex"
 		float x;
 		float y;
 		float z;
-				
-		ss >> word >> x >> y >> z; //Automatically skips spaces, Converts text "1.0" -> float 1.0
+		
 
-		pts.emplace_back(x, y, z);
+		// Read: vertex x y z
+		ss >> word >> x >> y >> z;
 
-		// When 3 points are collected - make triangle
-		if (pts.size() == 3)
-		{
-			int i1 = T.addPoint(pts[0]); // checks duplicate, return index
-			int i2 = T.addPoint(pts[1]);
-			int i3 = T.addPoint(pts[2]);
+		// If conversion fails, skip
+		if (ss.fail())
+			continue;
 
-			T.addTriangle(i1, i2, i3);
-			pts.clear();
-		}
+		// Add coordinates to array
+		vertices.push_back(x);
+		vertices.push_back(y);
+		vertices.push_back(z);
 	}
 
-	return T;
+	return vertices;
 }
 
 
+bool FileHandle::writeSTL(const std::string& filename, const Triangulation& mesh)
+{
+    std::ofstream file(filename);
+    if (!file.is_open()) return false;
+
+    file << "Start Cube mesh\n";
+
+    const std::vector<Point>& points = mesh.getPoints();
+    const std::vector<Triangle>& triangles = mesh.getTriangles();
+
+    for (const Triangle& tri : triangles)
+    {
+        // Get the 3 points
+        const Point& p1 = points[tri.m1];
+        const Point& p2 = points[tri.m2];
+        const Point& p3 = points[tri.m3];
+
+        // Normal (dummy 0 0 0 for now)
+        file << "  facet normal 0.0 0.0 0.0\n";
+        file << "    outer loop\n";
+        file << "      vertex " << p1.getX() << " " << p1.getY() << " " << p1.getZ() << "\n";
+        file << "      vertex " << p2.getX() << " " << p2.getY() << " " << p2.getZ() << "\n";
+        file << "      vertex " << p3.getX() << " " << p3.getY() << " " << p3.getZ() << "\n";
+        file << "    endloop\n";
+        file << "  endfacet\n";
+    }
+
+    file << "End Cube mesh\n";
+    return true;
+}

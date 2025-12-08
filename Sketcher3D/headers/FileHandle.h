@@ -13,8 +13,9 @@ public:
 
 	//static std::vector<std::shared_ptr<Shape>> loadFromFile(const std::string& fileName);
 
-	//static std::vector <Point> readSTL(const std::string& fileName);
-	static Triangulation readSTL(const std::string& fileName);
+	static std::vector<float> readSTL(const std::string& fileName);
+
+	static bool writeSTL(const std::string& filename, const Triangulation& mesh);
 };
 
 
