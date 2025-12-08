@@ -134,15 +134,11 @@ std::vector<float> FileHandle::readSTL(const std::string& fileName)
 		float y;
 		float z;
 		
-
-		// Read: vertex x y z
 		ss >> word >> x >> y >> z;
 
-		// If conversion fails, skip
 		if (ss.fail())
 			continue;
 
-		// Add coordinates to array
 		vertices.push_back(x);
 		vertices.push_back(y);
 		vertices.push_back(z);
