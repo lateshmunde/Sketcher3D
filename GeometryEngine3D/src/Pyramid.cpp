@@ -1,12 +1,36 @@
 #include "pch.h"
 #include "Pyramid.h"
 
-void Pyramid::build()
-{
+Pyramid::Pyramid(const std::string& name, double baseLength, double baseWidth, double height)
+	:Shape("Pyramid", name), mBaseLength(baseLength), mBaseWidth(baseWidth), mHeight(height) {
+	build();
 }
 
-Pyramid::Pyramid(const std::string& name, double baseLength, double baseWidth, double height)
-	:Shape("Pyramid", name), mBaseLength(baseLength), mBaseWidth(baseWidth), mHeight(height){}
+void Pyramid::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	double halfL = mBaseLength / 2.0; // center as origin
+	double halfW = mBaseWidth / 2.0;
+
+	int p0Ind = mTriag.addPoint(Point(x + halfL, y + halfW, z)); //b1 base points
+	int p1Ind = mTriag.addPoint(Point(x + halfL, y - halfW, z)); //b2
+	int p2Ind = mTriag.addPoint(Point(x - halfL, y - halfW, z)); //b3
+
+	mTriag.addTriangle(p0Ind, p1Ind, p2Ind); //base
+
+	int p3Ind = mTriag.addPoint(Point(x - halfL, y + halfW, z)); //b4
+	mTriag.addTriangle(p2Ind, p3Ind, p0Ind); //base
+
+	int apexInd = mTriag.addPoint(Point(x, y, z + mHeight)); //Apex
+
+	mTriag.addTriangle(p0Ind, apexInd, p1Ind);
+	mTriag.addTriangle(p1Ind, apexInd, p2Ind);
+	mTriag.addTriangle(p2Ind, apexInd, p3Ind);
+	mTriag.addTriangle(p3Ind, apexInd, p0Ind);
+}
 
 void Pyramid::save(std::ostream& out) const
 {

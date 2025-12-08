@@ -29,27 +29,26 @@ void Cone::build()
 	Point origin(x, y, z);
 	Point apex(x, y, mHeight);
 
-	std::vector <int> ptsIndex;
-	ptsIndex.push_back(mTriag.addPoint(origin)); //index 0 of ptsIndex: origin
-	ptsIndex.push_back(mTriag.addPoint(apex)); // index 1 of ptsIndex: apex
+	std::vector<int> bPtsIndex;
+	int originInd = mTriag.addPoint(origin);
+	int apexInd = mTriag.addPoint(apex);
+
+	bPtsIndex.push_back(mTriag.addPoint(Point(x + mRadius * cos(0), y + mRadius * sin(0), z)));
 
 	int number = 72;
 	double dTheta = 2 * MathConstants::PI / number; // 0 to 180
 
-	for (int i = 0; i < number; i++) //base circle
+	for (int i = 1; i <= number; i++)
 	{
 		double theta = i * dTheta;
 		double x_ = mRadius * cos(theta);
 		double y_ = mRadius * sin(theta);
 
-		ptsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z))); // index 2 to 73 of ptsIndex: Circle surface points
-	}
-	ptsIndex.push_back(ptsIndex[2]); //74 index of ptsIndex: 2nd index of ptsIndex to complete circle loop.
+		bPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z)));
 
-	for (int i = 0; i < number; i++)
-	{
-		mTriag.addTriangle(ptsIndex[0], ptsIndex[i + 2], ptsIndex[i + 3]);
-		mTriag.addTriangle(ptsIndex[i + 3], ptsIndex[1], ptsIndex[i + 2]);
+		// each 5 degree section has 4 triangles.
+		mTriag.addTriangle(originInd, bPtsIndex[i - 1], bPtsIndex[i]);		// Base circle center, two points on it's circumference
+		mTriag.addTriangle(bPtsIndex[i], apexInd, bPtsIndex[i - 1]);		// Cone surface triangle: b1, apex, b0 
 	}
 }
 

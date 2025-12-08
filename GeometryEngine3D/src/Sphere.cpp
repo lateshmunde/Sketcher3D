@@ -1,12 +1,51 @@
 #include "pch.h"
 #include "Sphere.h"
 
-void Sphere::build()
-{
+Sphere::Sphere(const std::string& name, double radius)
+	:Shape("Sphere", name), mRadius(radius){
+	build();
 }
 
-Sphere::Sphere(const std::string& name, double radius)
-	:Shape("Sphere", name), mRadius(radius){}
+void Sphere::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+	Point center(x, y, z);
+
+	int stacks = 36;
+	int number = 72;
+
+	for (int i = 0; i < stacks; i++) {
+		double iLatitude1 = MathConstants::PI * (-0.5 + (double)i / stacks);
+		double iLatitude2 = MathConstants::PI * (-0.5 + (double)(i + 1) / stacks);
+
+		double z1 = mRadius * sin(iLatitude1);
+		double r1 = mRadius * cos(iLatitude1);
+
+		double z2 = mRadius * sin(iLatitude2);
+		double r2 = mRadius * cos(iLatitude2);
+
+		for (int j = 0; j < number; j++)
+		{
+			double jLatitude1 = 2 * MathConstants::PI * (double)j / number;
+			double jLatitude2 = 2 * MathConstants::PI * (double)(j + 1) / number;
+
+			// First ring
+			int idx1 = mTriag.addPoint(Point(r1 * cos(jLatitude1), r1 * sin(jLatitude1), z1));
+			int idx2 = mTriag.addPoint(Point(r1 * cos(jLatitude2), r1 * sin(jLatitude2), z1));
+
+			// Second ring
+			int idx3 = mTriag.addPoint(Point(r2 * cos(jLatitude1), r2 * sin(jLatitude1), z2));
+			int idx4 = mTriag.addPoint(Point(r2 * cos(jLatitude2), r2 * sin(jLatitude2), z2));
+
+			// Triangle 1
+			mTriag.addTriangle(idx1, idx3, idx2);
+			// Triangle 2
+			mTriag.addTriangle(idx2, idx3, idx4);
+		}
+	}
+}
 
 void Sphere::save(std::ostream& out) const
 {

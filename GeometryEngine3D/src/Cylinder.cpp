@@ -16,7 +16,7 @@ void Cylinder::build()
 	Point baseCenter(x, y, z);
 	Point topCenter(x, y, mHeight);
 
-	std::vector<int> bPtsIndex;
+	std::vector<int> bPtsIndex; 
 	std::vector<int> tPtsIndex;
 	int baseCenterInd = mTriag.addPoint(baseCenter);
 	int topCenterInd = mTriag.addPoint(topCenter);
@@ -36,7 +36,7 @@ void Cylinder::build()
 		bPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z)));
 		tPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z + mHeight)));
 
-		// each 0.5 degree section has 4 triangles.
+		// each 5 degree section has 4 triangles.
 		mTriag.addTriangle(baseCenterInd, bPtsIndex[i - 1], bPtsIndex[i]);		// Base circle center, two points on it's circumference
 		mTriag.addTriangle(bPtsIndex[i], tPtsIndex[i], bPtsIndex[i - 1]);		// Cylinder surface triangle: b1, t1, b0 
 		mTriag.addTriangle(bPtsIndex[i - 1], tPtsIndex[i], tPtsIndex[i - 1]);	// Cylinder surface triangle: b0, t1, t0

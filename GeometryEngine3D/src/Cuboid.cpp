@@ -2,13 +2,50 @@
 #include "Cuboid.h"
 
 
-void Cuboid::build()
-{
-}
+
 
 Cuboid::Cuboid(const std::string& name, double length, double width, double height)
-	: Shape("Cuboid", name), mLength(length), mWidth(width), mHeight(height){}
+	: Shape("Cuboid", name), mLength(length), mWidth(width), mHeight(height) {
+	build();
+}
 
+void Cuboid::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	int p0Ind = mTriag.addPoint(Point(x, y, z));
+	int p1Ind = mTriag.addPoint(Point(x + mLength, y, z));
+	int p2Ind = mTriag.addPoint(Point(x + mLength, y + mWidth, z));
+
+	mTriag.addTriangle(p0Ind, p1Ind, p2Ind); // front
+
+	int p3Ind = mTriag.addPoint(Point(x, y + mWidth, z));
+	mTriag.addTriangle(p0Ind, p3Ind, p2Ind); // front
+
+
+	int p4Ind = mTriag.addPoint(Point(x, y, z + mHeight));
+	int p5Ind = mTriag.addPoint(Point(x + mLength, y, z + mHeight));
+	int p6Ind = mTriag.addPoint(Point(x + mLength, y + mWidth, z + mHeight));
+
+	mTriag.addTriangle(p4Ind, p5Ind, p6Ind); // back
+
+	int p7Ind = mTriag.addPoint(Point(x, y + mWidth, z + mHeight));
+	mTriag.addTriangle(p4Ind, p7Ind, p6Ind); // back
+
+	mTriag.addTriangle(p2Ind, p6Ind, p7Ind); // top
+	mTriag.addTriangle(p7Ind, p3Ind, p2Ind); // top
+
+	mTriag.addTriangle(p0Ind, p1Ind, p5Ind); // bottom
+	mTriag.addTriangle(p5Ind, p4Ind, p0Ind); // bottom
+
+	mTriag.addTriangle(p2Ind, p1Ind, p5Ind); // right
+	mTriag.addTriangle(p5Ind, p6Ind, p2Ind); // right
+
+	mTriag.addTriangle(p0Ind, p4Ind, p7Ind); // left
+	mTriag.addTriangle(p7Ind, p3Ind, p0Ind); // left
+}
 
 void Cuboid::save(std::ostream& out) const
 {
