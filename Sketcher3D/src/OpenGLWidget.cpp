@@ -27,8 +27,10 @@ OpenGLWidget::~OpenGLWidget()
 
 void OpenGLWidget::drawShape(const std::vector<float>& vec)
 {
-
-    mVertices = vec;
+    for (auto it : vec)
+    {
+        mVertices.push_back(it);
+    }
     update();  // Request paintGL() //tells qt to call paint
 }
 
