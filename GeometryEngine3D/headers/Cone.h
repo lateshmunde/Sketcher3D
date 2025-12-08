@@ -8,13 +8,13 @@ private:
 	double mRadius;
 	double mHeight;
 
+protected:
+	void build() override;
+
 public:
 	Cone(const std::string& name, double radius, double height);
 	~Cone() override = default;
 
-
-	 const std::vector<Point> getCoordinates() const override;
-	 const std::vector<Point> coodinatesForGLTriangle() const override;
 	 void save(std::ostream& out) const override;
 	 void saveForGnu(std::ostream& out) const override;
 
@@ -22,6 +22,4 @@ public:
 	 double getHeight() const;
 	 double getSlantHeight() const;
 };
-
-
 

@@ -6,5 +6,9 @@
         <file>Resources/cylinder.png</file>
         <file>Resources/pyramid.png</file>
         <file>Resources/sphere.png</file>
+        <file>Resources/transformation.png</file>
+        <file>Resources/cube.stl</file>
+        <file>Resources/pyramid.stl</file>
+        <file>Resources/solid-cube.stl</file>
     </qresource>
 </RCC>

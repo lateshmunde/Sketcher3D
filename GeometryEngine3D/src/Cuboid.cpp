@@ -2,30 +2,49 @@
 #include "Cuboid.h"
 
 
+
+
 Cuboid::Cuboid(const std::string& name, double length, double width, double height)
-	: Shape("Cuboid", name), mLength(length), mWidth(width), mHeight(height){}
+	: Shape("Cuboid", name), mLength(length), mWidth(width), mHeight(height) {
+	build();
+}
 
-
-const std::vector<Point> Cuboid::getCoordinates() const
+void Cuboid::build()
 {
-	std::vector<Point> pts;
 	double x = 0;
 	double y = 0;
 	double z = 0;
 
-	//Point p1(x, y, z);
-	//pts.push_back(p1); // Takes an already constructed object
-	pts.emplace_back(x, y, z); // takes constructor arguments to create object
-	pts.emplace_back(x + mLength, y, z);
-	pts.emplace_back(x + mLength, y + mWidth, z);
-	pts.emplace_back(x , y + mWidth, z);
+	int p0Ind = mTriag.addPoint(Point(x, y, z));
+	int p1Ind = mTriag.addPoint(Point(x + mLength, y, z));
+	int p2Ind = mTriag.addPoint(Point(x + mLength, y + mWidth, z));
 
-	pts.emplace_back(x , y , z + mHeight);
-	pts.emplace_back(x + mLength, y , z + mHeight);
-	pts.emplace_back(x + mLength, y + mWidth, z + mHeight);
-	pts.emplace_back(x , y + mWidth, z + mHeight);
+	mTriag.addTriangle(p0Ind, p1Ind, p2Ind); // front
 
-	return pts;
+	int p3Ind = mTriag.addPoint(Point(x, y + mWidth, z));
+	mTriag.addTriangle(p0Ind, p3Ind, p2Ind); // front
+
+
+	int p4Ind = mTriag.addPoint(Point(x, y, z + mHeight));
+	int p5Ind = mTriag.addPoint(Point(x + mLength, y, z + mHeight));
+	int p6Ind = mTriag.addPoint(Point(x + mLength, y + mWidth, z + mHeight));
+
+	mTriag.addTriangle(p4Ind, p5Ind, p6Ind); // back
+
+	int p7Ind = mTriag.addPoint(Point(x, y + mWidth, z + mHeight));
+	mTriag.addTriangle(p4Ind, p7Ind, p6Ind); // back
+
+	mTriag.addTriangle(p2Ind, p6Ind, p7Ind); // top
+	mTriag.addTriangle(p7Ind, p3Ind, p2Ind); // top
+
+	mTriag.addTriangle(p0Ind, p1Ind, p5Ind); // bottom
+	mTriag.addTriangle(p5Ind, p4Ind, p0Ind); // bottom
+
+	mTriag.addTriangle(p2Ind, p1Ind, p5Ind); // right
+	mTriag.addTriangle(p5Ind, p6Ind, p2Ind); // right
+
+	mTriag.addTriangle(p0Ind, p4Ind, p7Ind); // left
+	mTriag.addTriangle(p7Ind, p3Ind, p0Ind); // left
 }
 
 const std::vector<Point> Cuboid::coodinatesForGLTriangle() const

@@ -6,8 +6,8 @@ std::unique_ptr<QDoubleSpinBox> ShapeSlots::dimensionField(QDialog& dlg,
 {
     // Dimension
     std::unique_ptr<QDoubleSpinBox> dimensionSpin = std::make_unique<QDoubleSpinBox>(&dlg);
-    dimensionSpin->setRange(0.0, 10000);
-    dimensionSpin->setValue(0.5);
+    dimensionSpin->setRange(0.1, 10000);
+    dimensionSpin->setValue(10.0);
     layout->addRow(name + " :", dimensionSpin.get());
     return dimensionSpin;
 }
@@ -132,9 +132,9 @@ Sphere ShapeSlots::sphereSlot(QWidget* parent)
 
     return Sphere(name.toStdString(), radius);
 
-}
+ }
 
-Cone ShapeSlots::coneSlot(QWidget* parent)
+ Cone ShapeSlots::coneSlot(QWidget* parent)
 {
     // Create dialog
     QDialog dlg(parent);
@@ -158,9 +158,9 @@ Cone ShapeSlots::coneSlot(QWidget* parent)
     const double height = heightSpin->value();
 
     return Cone(name.toStdString(), radius, height);
-}
+ }
 
-Cylinder ShapeSlots::cylinderSlot(QWidget* parent)
+ Cylinder ShapeSlots::cylinderSlot(QWidget* parent)
 {
     // Create dialog
     QDialog dlg(parent);
@@ -184,4 +184,6 @@ Cylinder ShapeSlots::cylinderSlot(QWidget* parent)
     const double height = heightSpin->value();
 
     return Cylinder(name.toStdString(), radius, height);
-}
+ }
+
+

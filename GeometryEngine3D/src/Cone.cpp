@@ -1,49 +1,11 @@
 #include "pch.h"
 #include "Cone.h"
 
-Cone::Cone(const std::string& name,double radius, double height)
-	:Shape("Cone", name), mRadius(radius), mHeight(height){}
-
-const std::vector<Point> Cone::getCoordinates() const
-{
-	std::vector<Point> pts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-
-	int number = 72;
-	double dTheta = 2 * MathConstants::PI / number; // 0 to 180
-
-	for (int i = 0; i <= number; i++) //base
-	{
-		double theta = i * dTheta;
-		double x_ = mRadius * cos(theta);
-		double y_ = mRadius * sin(theta);
-		pts.emplace_back(x + x_, y + y_, z);
-	}
 
 
-	for (int i = 0; i <= number; i++)
-	{
-		double theta = i * dTheta;
-		double baseX = mRadius * cos(theta);
-		double baseY = mRadius * sin(theta);
-
-		for (int j = 0; j <= number; j++)
-		{
-			double t = double(j) / number;    // interpolation factor (0 to 1)
-
-			// linear from base circle to apex (0,0,height)
-			double x_ = (1 - t) * baseX;
-			double y_ = (1 - t) * baseY;
-			double z_ = t * mHeight;
-
-			pts.emplace_back(x + x_, y + y_, z + z_);
-		}
-	}
-	pts.emplace_back(x, y, z + mHeight);
-
-	return pts;
+Cone::Cone(const std::string& name, double radius, double height)
+	:Shape("Cone", name), mRadius(radius), mHeight(height) {
+	build();
 }
 
 const std::vector<Point> Cone::coodinatesForGLTriangle() const
@@ -92,6 +54,36 @@ double Cone::getSlantHeight() const
 	return std::sqrt((mRadius * mRadius) + (mHeight * mHeight));
 }
 
+void Cone::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+	Point origin(x, y, z);
+	Point apex(x, y, mHeight);
+
+	std::vector<int> bPtsIndex;
+	int originInd = mTriag.addPoint(origin);
+	int apexInd = mTriag.addPoint(apex);
+
+	bPtsIndex.push_back(mTriag.addPoint(Point(x + mRadius * cos(0), y + mRadius * sin(0), z)));
+
+	int number = 72;
+	double dTheta = 2 * MathConstants::PI / number; // 0 to 180
+
+	for (int i = 1; i <= number; i++)
+	{
+		double theta = i * dTheta;
+		double x_ = mRadius * cos(theta);
+		double y_ = mRadius * sin(theta);
+
+		bPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z)));
+
+		// each 5 degree section has 4 triangles.
+		mTriag.addTriangle(originInd, bPtsIndex[i - 1], bPtsIndex[i]);		// Base circle center, two points on it's circumference
+		mTriag.addTriangle(bPtsIndex[i], apexInd, bPtsIndex[i - 1]);		// Cone surface triangle: b1, apex, b0 
+	}
+}
 
 void Cone::saveForGnu(std::ostream& out) const
 {

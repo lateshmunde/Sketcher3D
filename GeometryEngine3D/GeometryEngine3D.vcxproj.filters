@@ -54,10 +54,16 @@
     <ClInclude Include="headers\Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Matrix4D.h">
+    <ClInclude Include="headers\Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Transformation.h">
+    <ClInclude Include="headers\Transformations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Triangulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,10 +101,16 @@
     <ClCompile Include="src\Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Matrix4D.cpp">
+    <ClCompile Include="src\Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Transformation.cpp">
+    <ClCompile Include="src\Transformations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Triangulation .cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,29 +3,8 @@
 
 
 Cube::Cube(const std::string& name, double side)
-	: Shape("Cube", name), mSide(side) {}
-
-
-const std::vector<Point> Cube::getCoordinates() const
-{
-	std::vector<Point> pts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-
-	//Point p1(x, y, z);
-	//pts.push_back(p1); // Takes an already constructed object
-	pts.emplace_back(x, y, z); // takes constructor arguments to create object
-	pts.emplace_back(x + mSide, y, z);
-	pts.emplace_back(x + mSide, y + mSide, z);
-	pts.emplace_back(x, y + mSide, z);
-
-	pts.emplace_back(x, y, z + mSide);
-	pts.emplace_back(x + mSide, y, z + mSide);
-	pts.emplace_back(x + mSide, y + mSide, z + mSide);
-	pts.emplace_back(x, y + mSide, z + mSide);
-
-	return pts;
+	: Shape("Cube", name), mSide(side) {
+	build();
 }
 
 const std::vector<Point> Cube::coodinatesForGLTriangle() const
@@ -67,6 +46,44 @@ void Cube::save(std::ostream& out) const
 
 double Cube::getSide() const { return mSide; }
 
+void Cube::build()
+{
+	double x = 0;
+	double y = 0;
+	double z = 0;
+
+	int p0Ind = mTriag.addPoint(Point(x, y, z));
+	int p1Ind = mTriag.addPoint(Point(x + mSide, y, z));
+	int p2Ind = mTriag.addPoint(Point(x + mSide, y + mSide, z));
+
+	mTriag.addTriangle(p0Ind, p1Ind, p2Ind); // front
+
+	int p3Ind = mTriag.addPoint(Point(x, y + mSide, z));
+	mTriag.addTriangle(p0Ind, p3Ind, p2Ind); // front
+
+
+	int p4Ind = mTriag.addPoint(Point(x, y, z + mSide));
+	int p5Ind = mTriag.addPoint(Point(x + mSide, y, z + mSide));
+	int p6Ind = mTriag.addPoint(Point(x + mSide, y + mSide, z + mSide));
+	
+	mTriag.addTriangle(p4Ind, p5Ind, p6Ind); // back
+	
+	int p7Ind = mTriag.addPoint(Point(x, y + mSide, z + mSide));
+	mTriag.addTriangle(p4Ind, p7Ind, p6Ind); // back
+
+	mTriag.addTriangle(p2Ind, p6Ind, p7Ind); // top
+	mTriag.addTriangle(p7Ind, p3Ind, p2Ind); // top
+
+	mTriag.addTriangle(p0Ind, p1Ind, p5Ind); // bottom
+	mTriag.addTriangle(p5Ind, p4Ind, p0Ind); // bottom
+
+	mTriag.addTriangle(p2Ind, p1Ind, p5Ind); // right
+	mTriag.addTriangle(p5Ind, p6Ind, p2Ind); // right
+
+	mTriag.addTriangle(p0Ind, p4Ind, p7Ind); // left
+	mTriag.addTriangle(p7Ind, p3Ind, p0Ind); // left
+
+}
 
 void Cube::saveForGnu(std::ostream& out) const
 {

@@ -68,8 +68,8 @@
       <AdditionalIncludeDirectories>$(ProjectDir)headers;$(SolutionDir)\GeometryEngine3D\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GeometryEngine3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug;$(QTDIR)include;$(QTDIR)include\QtCore;$(QTDIR)include\QtWidgets;$(QTDIR)include\QtGui;$(QTDIR)include\QtOpenGL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GeometryEngine3D.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FileHandle.cpp" />
+    <ClCompile Include="src\OpenGLWidget.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\OpenGLWidget.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
@@ -126,18 +127,24 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\STLReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="headers\Sketcher3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\FileHandle.h" />
+    <ClInclude Include="headers\STLReader.h" />
     <QtMoc Include="headers\OpenGLWidget.h" />
-    <ClInclude Include="headers\Renderer.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
     <ClInclude Include="headers\ShapeManager.h" />
     <ClInclude Include="headers\ShapeSlots.h" />
     <ClInclude Include="headers\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cube.stl" />
+    <None Include="Resources\pyramid.stl" />
+    <None Include="Resources\solid-cube.stl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

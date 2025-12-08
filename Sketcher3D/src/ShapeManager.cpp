@@ -7,7 +7,7 @@ void ShapeManager::addShape(std::shared_ptr<Shape> shapes)
 	mShapes.push_back(shapes);
 }
 
-const std::vector<std::shared_ptr<Shape>>& ShapeManager::getShapesVec()
+const std::vector<std::shared_ptr<Shape>>& ShapeManager::getShapesVec() const
 {
 	return mShapes;
 }
@@ -23,4 +23,10 @@ void ShapeManager::deleteShape(const int index)
 	}
 	else
 		std::cout << "Shape at index " << index << " is not deleted.\n";
+}
+
+std::shared_ptr<Shape> ShapeManager::getLastShape()
+{
+	if (mShapes.empty()) return nullptr;
+	return mShapes.back();
 }
