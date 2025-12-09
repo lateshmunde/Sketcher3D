@@ -7,38 +7,6 @@ Cube::Cube(const std::string& name, double side)
 	build();
 }
 
-const std::vector<Point> Cube::coodinatesForGLTriangle() const
-{
-	std::vector<Point> pts;
-	double x = 0;
-	double y = 0;
-	double z = 0;
-
-	Point p1(x, y, z);
-	Point p2(x + mSide, y, z);
-	Point p3(x + mSide, y + mSide, z);
-	Point p4(x, y + mSide, z);
-	Point p5(x, y, z + mSide);
-	Point p6(x + mSide, y, z + mSide);
-	Point p7(x + mSide, y + mSide, z + mSide);
-	Point p8(x, y + mSide, z + mSide);
-
-	pts.push_back(p1); pts.push_back(p2); pts.push_back(p3);
-	pts.push_back(p3); pts.push_back(p4); pts.push_back(p1);
-	pts.push_back(p1); pts.push_back(p5); pts.push_back(p8);
-	pts.push_back(p8); pts.push_back(p4); pts.push_back(p1);
-	pts.push_back(p1); pts.push_back(p5); pts.push_back(p6);
-	pts.push_back(p6); pts.push_back(p1); pts.push_back(p2);
-	pts.push_back(p2); pts.push_back(p6); pts.push_back(p7);
-	pts.push_back(p7); pts.push_back(p2); pts.push_back(p3);
-	pts.push_back(p3); pts.push_back(p7); pts.push_back(p4);
-	pts.push_back(p4); pts.push_back(p7); pts.push_back(p8);
-	pts.push_back(p8); pts.push_back(p7); pts.push_back(p6);
-	pts.push_back(p6); pts.push_back(p5); pts.push_back(p8);
-
-	return pts;
-}
-
 void Cube::save(std::ostream& out) const
 {
 	out << getType() << " " << getName() << " " << "S " << mSide << "\n";
