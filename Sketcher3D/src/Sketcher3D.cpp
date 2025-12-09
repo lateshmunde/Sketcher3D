@@ -137,8 +137,6 @@ void Sketcher3D::menuBarElements()
     
 }
 
-
-
 void Sketcher3D::onCuboidToolClicked()
 {
     // Create cuboid 
@@ -155,85 +153,85 @@ void Sketcher3D::onCuboidToolClicked()
     }
 }
 
-void Sketcher3D::onTranslateActionTriggered()
-{
-    // Create Cube object
-    try {
-        std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
-        shapeManager.addShape(c);
-        std::vector<float> vec = c->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
-        mStatusBar->showMessage("Cube created");
-    }
-    catch (const std::runtime_error& e)
-    {
-        QMessageBox::information(nullptr, "Info", e.what());
-    }
-}
-
-void Sketcher3D::onPyramidClicked()
-{
-    // Create Pyramid
-    try {
-        std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
-        shapeManager.addShape(py);
-        std::vector<float> vec = py->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
-        mStatusBar->showMessage("Pyramid created");
-    }
-    catch (const std::runtime_error& e)
-    {
-        QMessageBox::information(nullptr, "Info", e.what());
-    }
-}
-
-void Sketcher3D::onCylinderToolClicked()
-{
-    // Create Cylinder object
-    try {
-        std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
-        shapeManager.addShape(cyl);
-        std::vector<float> vec = cyl->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
-        mStatusBar->showMessage("Cylinder created");
-    }
-    catch (const std::runtime_error& e)
-    {
-        QMessageBox::information(nullptr, "Info", e.what());
-    }
-}
-
-void Sketcher3D::onRotateXActionTriggered()
-{
-    // Create Cone object
-    try {
-        std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
-        shapeManager.addShape(cone);
-        std::vector<float> vec = cone->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
-        mStatusBar->showMessage("Cone created");
-    }
-    catch (const std::runtime_error& e)
-    {
-        QMessageBox::information(nullptr, "Info", e.what());
-    }
-}
-
-void Sketcher3D::onRotateYActionTriggered()
-{
-    // Create Sphere object
-    try {
-        std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
-        shapeManager.addShape(sp);
-        std::vector<float> vec = sp->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
-        mStatusBar->showMessage("Sphere created");
-    }
-    catch (const std::runtime_error& e)
-    { 
-        QMessageBox::information(nullptr, "Info", e.what());
-    }
-}
+//void Sketcher3D::onTranslateActionTriggered()
+//{
+//    // Create Cube object
+//    try {
+//        std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
+//        shapeManager.addShape(c);
+//        std::vector<float> vec = c->getTriangulation().getDataForOpenGl();
+//        glWidget->drawShape(vec);
+//        mStatusBar->showMessage("Cube created");
+//    }
+//    catch (const std::runtime_error& e)
+//    {
+//        QMessageBox::information(nullptr, "Info", e.what());
+//    }
+//}
+//
+//void Sketcher3D::onPyramidClicked()
+//{
+//    // Create Pyramid
+//    try {
+//        std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
+//        shapeManager.addShape(py);
+//        std::vector<float> vec = py->getTriangulation().getDataForOpenGl();
+//        glWidget->drawShape(vec);
+//        mStatusBar->showMessage("Pyramid created");
+//    }
+//    catch (const std::runtime_error& e)
+//    {
+//        QMessageBox::information(nullptr, "Info", e.what());
+//    }
+//}
+//
+//void Sketcher3D::onCylinderToolClicked()
+//{
+//    // Create Cylinder object
+//    try {
+//        std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
+//        shapeManager.addShape(cyl);
+//        std::vector<float> vec = cyl->getTriangulation().getDataForOpenGl();
+//        glWidget->drawShape(vec);
+//        mStatusBar->showMessage("Cylinder created");
+//    }
+//    catch (const std::runtime_error& e)
+//    {
+//        QMessageBox::information(nullptr, "Info", e.what());
+//    }
+//}
+//
+//void Sketcher3D::onRotateXActionTriggered()
+//{
+//    // Create Cone object
+//    try {
+//        std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
+//        shapeManager.addShape(cone);
+//        std::vector<float> vec = cone->getTriangulation().getDataForOpenGl();
+//        glWidget->drawShape(vec);
+//        mStatusBar->showMessage("Cone created");
+//    }
+//    catch (const std::runtime_error& e)
+//    {
+//        QMessageBox::information(nullptr, "Info", e.what());
+//    }
+//}
+//
+//void Sketcher3D::onRotateYActionTriggered()
+//{
+//    // Create Sphere object
+//    try {
+//        std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
+//        shapeManager.addShape(sp);
+//        std::vector<float> vec = sp->getTriangulation().getDataForOpenGl();
+//        glWidget->drawShape(vec);
+//        mStatusBar->showMessage("Sphere created");
+//    }
+//    catch (const std::runtime_error& e)
+//    { 
+//        QMessageBox::information(nullptr, "Info", e.what());
+//    }
+//}
 
 void Sketcher3D::onSaveGNUActionTriggered()
 {
