@@ -23,5 +23,4 @@ public:
 	double getWidth() const;
 	double getHeight() const;
 	double getSlantHeight() const;
-
 };

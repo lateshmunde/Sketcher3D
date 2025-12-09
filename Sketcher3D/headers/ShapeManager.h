@@ -12,6 +12,7 @@ public:
 	void addShape(std::shared_ptr<Shape> shapes);
 	const std::vector<std::shared_ptr<Shape>>& getShapesVec() const ;
 	void deleteShape(const int index);
+	void clearShape();
 
 	std::shared_ptr<Shape> getLastShape();   // or selected shape
 

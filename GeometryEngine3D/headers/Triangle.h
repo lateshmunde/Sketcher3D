@@ -9,9 +9,8 @@ public:
 	int m1; // index of points
 	int m2;
 	int m3;
-	Point mNormal;
 
 public:
-	Triangle(int m1, int m2, int m3, Point normal = Point());
+	Triangle(int m1, int m2, int m3);
 	~Triangle();
 };

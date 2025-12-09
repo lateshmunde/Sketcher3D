@@ -6,6 +6,10 @@ class GEOMETRYENGINE3D_API Cube : public Shape
 {
 private:
 	double mSide;
+
+protected:
+	void build() override;
+
 public:
 	Cube(const std::string& name, double side);
 	~Cube() override = default;
@@ -14,7 +18,4 @@ public:
 	void saveForGnu(std::ostream& fout) const override;
 
 	double getSide() const;
-
-protected:
-	void build() override;
 };

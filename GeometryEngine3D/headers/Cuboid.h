@@ -24,5 +24,3 @@ public:
 	double getHeight() const;
 };
 
-//GEOMETRY3D_API std::ostream& operator<<(std::ostream& out, const Cuboid& c);
-

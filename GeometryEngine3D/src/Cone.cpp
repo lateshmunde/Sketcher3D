@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Cone.h"
 
-
-
 Cone::Cone(const std::string& name, double radius, double height)
 	:Shape("Cone", name), mRadius(radius), mHeight(height) {
 	build();

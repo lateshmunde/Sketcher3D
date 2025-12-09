@@ -20,8 +20,7 @@ public:
 	std::vector <Triangle> getTriangles() const;
 
 	int addPoint(const Point& p); // for reading shapes from stl
-	void addTriangle(int a, int b, int c, Point normal = Point()); // for reading shapes from stl
+	void addTriangle(int a, int b, int c); // for reading shapes from stl
 
-	std::vector<float> getNormalForOpenGl() const;
 	std::vector<float> getDataForOpenGl() const;
 };
