@@ -41,5 +41,5 @@ bool Point::operator<(const Point& p2) const
 
 Point Point::operator-(const Point& p2) const
 {
-	return Point((mX - p2.mX), (mY - p2.mY), (mY - p2.mY));
+	return Point((mX - p2.mX), (mY - p2.mY), (mZ - p2.mZ));
 }

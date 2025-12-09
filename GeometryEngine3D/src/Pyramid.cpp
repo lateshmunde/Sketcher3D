@@ -26,10 +26,10 @@ void Pyramid::build()
 
 	int apexInd = mTriag.addPoint(Point(x, y, z + mHeight)); //Apex
 
-	mTriag.addTriangle(p0Ind, apexInd, p1Ind);
-	mTriag.addTriangle(p1Ind, apexInd, p2Ind);
-	mTriag.addTriangle(p2Ind, apexInd, p3Ind);
-	mTriag.addTriangle(p3Ind, apexInd, p0Ind);
+	mTriag.addTriangle(p0Ind, p1Ind, apexInd);
+	mTriag.addTriangle(p2Ind, apexInd, p1Ind);
+	mTriag.addTriangle(p3Ind, apexInd, p2Ind);
+	mTriag.addTriangle(p0Ind, apexInd, p3Ind);
 }
 
 void Pyramid::save(std::ostream& out) const

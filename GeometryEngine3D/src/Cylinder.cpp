@@ -35,10 +35,10 @@ void Cylinder::build()
 		tPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z + mHeight)));
 
 		// each 5 degree section has 4 triangles.
-		mTriag.addTriangle(baseCenterInd, bPtsIndex[i - 1], bPtsIndex[i]);		// Base circle center, two points on it's circumference
-		mTriag.addTriangle(bPtsIndex[i], tPtsIndex[i], bPtsIndex[i - 1]);		// Cylinder surface triangle: b1, t1, b0 
+		mTriag.addTriangle(bPtsIndex[i], bPtsIndex[i - 1], baseCenterInd);		// Base circle center, two points on it's circumference
+		mTriag.addTriangle(bPtsIndex[i - 1], bPtsIndex[i], tPtsIndex[i]);		// Cylinder surface triangle: b1, t1, b0 
 		mTriag.addTriangle(bPtsIndex[i - 1], tPtsIndex[i], tPtsIndex[i - 1]);	// Cylinder surface triangle: b0, t1, t0
-		mTriag.addTriangle(tPtsIndex[i - 1], tPtsIndex[i], topCenterInd);		// Top circle center, two points on it's circumference
+		mTriag.addTriangle(topCenterInd, tPtsIndex[i - 1], tPtsIndex[i]);		// Top circle center, two points on it's circumference
 	}
 }
 

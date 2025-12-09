@@ -146,13 +146,13 @@ void Sketcher3D::onCuboidToolClicked()
         shapeManager.addShape(cb);
         std::vector<float> vec = cb->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = cb->getTriangulation().getNormalForOpenGl();
-        glWidget->drawShape(vec, nVec);
+        glWidget->drawShape(vec, nVec); 
         mStatusBar->showMessage("Cuboid created");
     }
     catch (const std::runtime_error& e)
     {
         QMessageBox::information(nullptr, "Info", e.what());
-    }
+            }
 }
 
 void Sketcher3D::onCubeToolClicked()
@@ -196,7 +196,8 @@ void Sketcher3D::onCylinderToolClicked()
         std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
         shapeManager.addShape(cyl);
         std::vector<float> vec = cyl->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
+        std::vector<float> nVec = cyl->getTriangulation().getNormalForOpenGl();
+        glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cylinder created");
     }
     catch (const std::runtime_error& e)
@@ -212,7 +213,8 @@ void Sketcher3D::onConeToolClicked()
         std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
         shapeManager.addShape(cone);
         std::vector<float> vec = cone->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
+        std::vector<float> nVec = cone->getTriangulation().getNormalForOpenGl();
+        glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cone created");
     }
     catch (const std::runtime_error& e)
@@ -228,7 +230,8 @@ void Sketcher3D::onSphereToolClicked()
         std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
         shapeManager.addShape(sp);
         std::vector<float> vec = sp->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
+        std::vector<float> nVec = sp->getTriangulation().getNormalForOpenGl();
+        glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Sphere created");
     }
     catch (const std::runtime_error& e)

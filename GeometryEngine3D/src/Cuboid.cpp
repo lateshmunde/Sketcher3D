@@ -16,10 +16,10 @@ void Cuboid::build()
 	int p1Ind = mTriag.addPoint(Point(x + mLength, y, z));
 	int p2Ind = mTriag.addPoint(Point(x + mLength, y + mWidth, z));
 
-	mTriag.addTriangle(p0Ind, p1Ind, p2Ind); // front
+	mTriag.addTriangle(p0Ind, p2Ind, p1Ind); // front
 
 	int p3Ind = mTriag.addPoint(Point(x, y + mWidth, z));
-	mTriag.addTriangle(p0Ind, p2Ind, p3Ind); // front
+	mTriag.addTriangle(p0Ind, p3Ind, p2Ind); // front
 
 	int p4Ind = mTriag.addPoint(Point(x, y, z + mHeight));
 	int p5Ind = mTriag.addPoint(Point(x + mLength, y, z + mHeight));
@@ -33,14 +33,14 @@ void Cuboid::build()
 	mTriag.addTriangle(p7Ind, p6Ind, p2Ind); // top
 	mTriag.addTriangle(p7Ind, p2Ind, p3Ind); // top
 
-	mTriag.addTriangle(p0Ind, p5Ind, p1Ind); // bottom
-	mTriag.addTriangle(p0Ind, p4Ind, p5Ind); // bottom
+	mTriag.addTriangle(p0Ind, p1Ind, p5Ind); // bottom
+	mTriag.addTriangle(p0Ind, p5Ind, p4Ind); // bottom
 
 	mTriag.addTriangle(p5Ind, p1Ind, p2Ind); // right
 	mTriag.addTriangle(p5Ind, p2Ind, p6Ind); // right
 
 	mTriag.addTriangle(p0Ind, p4Ind, p7Ind); // left
-	mTriag.addTriangle(p0Ind, p3Ind, p7Ind); // left
+	mTriag.addTriangle(p0Ind, p7Ind, p3Ind); // left
 }
 
 void Cuboid::save(std::ostream& out) const
