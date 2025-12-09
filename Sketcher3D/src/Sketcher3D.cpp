@@ -49,16 +49,17 @@ void Sketcher3D::setupUI()
     connect(mPyramidTool.get(), &QToolButton::clicked, this, &Sketcher3D::onPyramidClicked);
     connect(mSphereTool.get(), &QToolButton::clicked, this, &Sketcher3D::onSphereToolClicked);
 
-    /*connect(mTranslate, &QAction::triggered, this, &Sketcher3D::onTranslateActionTriggered);
+    connect(mTranslate, &QAction::triggered, this, &Sketcher3D::onTranslateActionTriggered);
     connect(mScale, &QAction::triggered, this, &Sketcher3D::onScaleActionTriggered);
     connect(mRotateX, &QAction::triggered, this, &Sketcher3D::onRotateXActionTriggered);
     connect(mRotateY, &QAction::triggered, this, &Sketcher3D::onRotateYActionTriggered);
-    connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);*/
+    connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);
 
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
     connect(mSaveSTLAction, &QAction::triggered, this, &Sketcher3D::onSaveSTLTriggered);
+    connect(mClearAction, &QAction::triggered, this, &Sketcher3D::onClearTriggered);
 }
 
 
@@ -118,8 +119,8 @@ void Sketcher3D::menuBarElements()
 
     // Edit Menu
     QMenu* editMenu = mMenuBar.get()->addMenu("Edit");
-    QAction* cleanAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_TrashIcon), "Clean");
-    cleanAction->setShortcut(Qt::CTRL | Qt::Key_X); // Ctrl+X
+    mClearAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_TrashIcon), "Clear");
+    mClearAction->setShortcut(Qt::CTRL | Qt::Key_X); // Ctrl+X
     QAction* undoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowBack), "Undo");
     undoAction->setShortcut(QKeySequence::Undo); // Ctrl+Z
     QAction* redoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowForward), "Redo");
@@ -252,43 +253,16 @@ void Sketcher3D::onSaveGNUActionTriggered()
     }
 }
 
-
-//void Sketcher3D::onLoadSTLTriggered()
-//{
-//   /**QString qFileName = QFileDialog::getSaveFileName(
-//       this, "Save Shapes", "", ".stl");*/
-//
-//       // load stl file
-//    std::string fileName = "../cube.stl";
-//    std::vector <Point> pts = FileHandle::readSTL(fileName);
-//
-//    if (!pts.empty())
-//    {
-//        glWidget->drawShape(pts);
-//        QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
-//    }
-//    else
-//    {
-//        QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
-//    }
-//}
-
-
 void Sketcher3D::onLoadSTLTriggered()
 {
     QString qFileName = QFileDialog::getOpenFileName(
         this, "Open STL", "", "*.STL");
 
-
-    // load stl file
-//std::string fileName = "../cube.stl";
-//std::string fileName = "../solid-cube.stl";
-//std::string fileName = "../pyramid.stl";
     FileHandle::readSTL(qFileName.toStdString(), tri);
 
     if (!tri.getDataForOpenGl().empty())
     {
-        glWidget->drawShape(tri.getDataForOpenGl(), tri.getNormalForOpenGl());
+        glWidget->drawShape(tri.getDataForOpenGl());
         QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
     }
     else
@@ -316,6 +290,11 @@ void Sketcher3D::onSaveSTLTriggered()
 
 }
 
+void Sketcher3D::onClearTriggered()
+{
+    shapeManager.clearShape();
+}
+
 
 
 void Sketcher3D::onSaveActionTriggered()
@@ -339,258 +318,256 @@ void Sketcher3D::onSaveActionTriggered()
 
 
 
-//void Sketcher3D::onTranslateActionTriggered()
-//{
-//    QDialog dialog(this);
-//    dialog.setWindowTitle("Translate Object");
-//
-//    QLabel* xLabel = new QLabel("Translate X");
-//    QLabel* yLabel = new QLabel("Translate Y");
-//    QLabel* zLabel = new QLabel("Translate Z");
-//
-//    QDoubleSpinBox* xSpin = new QDoubleSpinBox();
-//    QDoubleSpinBox* ySpin = new QDoubleSpinBox();
-//    QDoubleSpinBox* zSpin = new QDoubleSpinBox();
-//
-//    xSpin->setRange(-10000, 10000);
-//    ySpin->setRange(-10000, 10000);
-//    zSpin->setRange(-10000, 10000);
-//
-//    xSpin->setDecimals(2);
-//    ySpin->setDecimals(2);
-//    zSpin->setDecimals(2);
-//
-//    xSpin->setValue(0.0);
-//    ySpin->setValue(0.0);
-//    zSpin->setValue(0.0);
-//
-//    QPushButton* okButton = new QPushButton("Apply");
-//    QPushButton* cancelButton = new QPushButton("Cancel");
-//
-//    QHBoxLayout* buttonLayout = new QHBoxLayout();
-//    buttonLayout->addWidget(okButton);
-//    buttonLayout->addWidget(cancelButton);
-//
-//    QGridLayout* layout = new QGridLayout();
-//
-//    layout->addWidget(xLabel, 0, 0);
-//    layout->addWidget(xSpin, 0, 1);
-//
-//    layout->addWidget(yLabel, 1, 0);
-//    layout->addWidget(ySpin, 1, 1);
-//
-//    layout->addWidget(zLabel, 2, 0);
-//    layout->addWidget(zSpin, 2, 1);
-//
-//    layout->addLayout(buttonLayout, 3, 0, 1, 2);
-//
-//    dialog.setLayout(layout);
-//
-//    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-//    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-//
-//    if (dialog.exec() != QDialog::Accepted)
-//        return;
-//
-//    double tx = xSpin->value();
-//    double ty = ySpin->value();
-//    double tz = zSpin->value();
-//
-//
-//
-//    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-//    //shapeManager.addShape(shape);
-//    std::vector<Point> vec = shape->coodinatesForGLTriangle();
-//
-//    std::vector<Point> transformed = Transformations::translate(vec, tx, ty, tz);
-//
-//    glWidget->drawShape(transformed);
-//    //mGLWidget->setVertices(currentVertices);
-//}
-//
-//void Sketcher3D::onScaleActionTriggered()
-//{
-//    QDialog dialog(this);
-//    dialog.setWindowTitle("Scale Object");
-//
-//    QLabel* xLabel = new QLabel("Scale X");
-//    QLabel* yLabel = new QLabel("Scale Y");
-//    QLabel* zLabel = new QLabel("Scale Z");
-//
-//    QDoubleSpinBox* xSpin = new QDoubleSpinBox();
-//    QDoubleSpinBox* ySpin = new QDoubleSpinBox();
-//    QDoubleSpinBox* zSpin = new QDoubleSpinBox();
-//
-//    xSpin->setRange(0.01, 1000);
-//    ySpin->setRange(0.01, 1000);
-//    zSpin->setRange(0.01, 1000);
-//
-//    xSpin->setValue(1.0);
-//    ySpin->setValue(1.0);
-//    zSpin->setValue(1.0);
-//
-//    QPushButton* okButton = new QPushButton("Apply");
-//    QPushButton* cancelButton = new QPushButton("Cancel");
-//
-//    QHBoxLayout* buttonLayout = new QHBoxLayout();
-//    buttonLayout->addWidget(okButton);
-//    buttonLayout->addWidget(cancelButton);
-//
-//    QGridLayout* layout = new QGridLayout();
-//
-//    layout->addWidget(xLabel, 0, 0);
-//    layout->addWidget(xSpin, 0, 1);
-//
-//    layout->addWidget(yLabel, 1, 0);
-//    layout->addWidget(ySpin, 1, 1);
-//
-//    layout->addWidget(zLabel, 2, 0);
-//    layout->addWidget(zSpin, 2, 1);
-//
-//    layout->addLayout(buttonLayout, 3, 0, 1, 2);
-//
-//    dialog.setLayout(layout);
-//
-//    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-//    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-//
-//    if (dialog.exec() != QDialog::Accepted)
-//        return;
-//
-//    double sx = xSpin->value();
-//    double sy = ySpin->value();
-//    double sz = zSpin->value();
-//
-//    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-//    std::vector<Point> vec = shape->coodinatesForGLTriangle();
-//
-//    std::vector<Point> transformed = Transformations::scale(vec, sx, sy, sz);
-//
-//    glWidget->drawShape(transformed);
-//}
-//
-//void Sketcher3D::onRotateXActionTriggered()
-//{
-//    QDialog dialog(this);
-//    dialog.setWindowTitle("Rotate X");
-//
-//    QLabel* angleLabel = new QLabel("Angle (degrees)");
-//
-//    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
-//    angleSpin->setRange(-360, 360);
-//    angleSpin->setValue(0.0);
-//    angleSpin->setDecimals(2);
-//
-//    QPushButton* okButton = new QPushButton("Apply");
-//    QPushButton* cancelButton = new QPushButton("Cancel");
-//
-//    QHBoxLayout* buttonLayout = new QHBoxLayout();
-//    buttonLayout->addWidget(okButton);
-//    buttonLayout->addWidget(cancelButton);
-//
-//    QVBoxLayout* layout = new QVBoxLayout();
-//    layout->addWidget(angleLabel);
-//    layout->addWidget(angleSpin);
-//    layout->addLayout(buttonLayout);
-//
-//    dialog.setLayout(layout);
-//
-//    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-//    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-//
-//    if (dialog.exec() != QDialog::Accepted)
-//        return;
-//
-//    double angleX = ((MathConstants::PI * angleSpin->value()) / 180);
-//
-//    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-//    std::vector<Point> vec = shape->coodinatesForGLTriangle();
-//
-//    std::vector<Point> transformed = Transformations::rotationX(vec, angleX);
-//
-//    glWidget->drawShape(transformed);
-//}
-//
-//void Sketcher3D::onRotateYActionTriggered()
-//{
-//    QDialog dialog(this);
-//    dialog.setWindowTitle("Rotate Y");
-//
-//    QLabel* angleLabel = new QLabel("Angle (degrees)");
-//
-//    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
-//    angleSpin->setRange(-360, 360);
-//    angleSpin->setValue(0.0);
-//    angleSpin->setDecimals(2);
-//
-//    QPushButton* okButton = new QPushButton("Apply");
-//    QPushButton* cancelButton = new QPushButton("Cancel");
-//
-//    QHBoxLayout* buttonLayout = new QHBoxLayout();
-//    buttonLayout->addWidget(okButton);
-//    buttonLayout->addWidget(cancelButton);
-//
-//    QVBoxLayout* layout = new QVBoxLayout();
-//    layout->addWidget(angleLabel);
-//    layout->addWidget(angleSpin);
-//    layout->addLayout(buttonLayout);
-//
-//    dialog.setLayout(layout);
-//
-//    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-//    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-//
-//    if (dialog.exec() != QDialog::Accepted)
-//        return;
-//
-//    double angleY = ((MathConstants::PI * angleSpin->value()) / 180);
-//
-//    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-//    std::vector<Point> vec = shape->coodinatesForGLTriangle();
-//
-//    std::vector<Point> transformed = Transformations::rotationY(vec, angleY);
-//
-//    glWidget->drawShape(transformed);
-//}
-//
-//void Sketcher3D::onRotateZActionTriggered()
-//{
-//    QDialog dialog(this);
-//    dialog.setWindowTitle("Rotate Z");
-//
-//    QLabel* angleLabel = new QLabel("Angle (degrees)");
-//
-//    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
-//    angleSpin->setRange(-360, 360);
-//    angleSpin->setValue(0.0);
-//    angleSpin->setDecimals(2);
-//
-//    QPushButton* okButton = new QPushButton("Apply");
-//    QPushButton* cancelButton = new QPushButton("Cancel");
-//
-//    QHBoxLayout* buttonLayout = new QHBoxLayout();
-//    buttonLayout->addWidget(okButton);
-//    buttonLayout->addWidget(cancelButton);
-//
-//    QVBoxLayout* layout = new QVBoxLayout();
-//    layout->addWidget(angleLabel);
-//    layout->addWidget(angleSpin);
-//    layout->addLayout(buttonLayout);
-//
-//    dialog.setLayout(layout);
-//
-//    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-//    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
-//
-//    if (dialog.exec() != QDialog::Accepted)
-//        return;
-//
-//    double angleZ = ((MathConstants::PI * angleSpin->value()) / 180);
-//
-//    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-//    std::vector<Point> vec = shape->coodinatesForGLTriangle();
-//
-//    std::vector<Point> transformed = Transformations::rotationZ(vec, angleZ);
-//
-//    glWidget->drawShape(transformed);
-//}
+void Sketcher3D::onTranslateActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Translate Object");
+
+    QLabel* xLabel = new QLabel("Translate X");
+    QLabel* yLabel = new QLabel("Translate Y");
+    QLabel* zLabel = new QLabel("Translate Z");
+
+    QDoubleSpinBox* xSpin = new QDoubleSpinBox();
+    QDoubleSpinBox* ySpin = new QDoubleSpinBox();
+    QDoubleSpinBox* zSpin = new QDoubleSpinBox();
+
+    xSpin->setRange(-10000, 10000);
+    ySpin->setRange(-10000, 10000);
+    zSpin->setRange(-10000, 10000);
+
+    xSpin->setDecimals(2);
+    ySpin->setDecimals(2);
+    zSpin->setDecimals(2);
+
+    xSpin->setValue(0.0);
+    ySpin->setValue(0.0);
+    zSpin->setValue(0.0);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QGridLayout* layout = new QGridLayout();
+
+    layout->addWidget(xLabel, 0, 0);
+    layout->addWidget(xSpin, 0, 1);
+
+    layout->addWidget(yLabel, 1, 0);
+    layout->addWidget(ySpin, 1, 1);
+
+    layout->addWidget(zLabel, 2, 0);
+    layout->addWidget(zSpin, 2, 1);
+
+    layout->addLayout(buttonLayout, 3, 0, 1, 2);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double tx = xSpin->value();
+    double ty = ySpin->value();
+    double tz = zSpin->value();
+
+    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    //shapeManager.addShape(shape);
+
+    std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+
+    std::vector<float> transformed = Transformations::translate(vec, tx, ty, tz);
+
+    glWidget->drawShape(transformed);
+}
+
+void Sketcher3D::onScaleActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Scale Object");
+
+    QLabel* xLabel = new QLabel("Scale X");
+    QLabel* yLabel = new QLabel("Scale Y");
+    QLabel* zLabel = new QLabel("Scale Z");
+
+    QDoubleSpinBox* xSpin = new QDoubleSpinBox();
+    QDoubleSpinBox* ySpin = new QDoubleSpinBox();
+    QDoubleSpinBox* zSpin = new QDoubleSpinBox();
+
+    xSpin->setRange(0.01, 1000);
+    ySpin->setRange(0.01, 1000);
+    zSpin->setRange(0.01, 1000);
+
+    xSpin->setValue(1.0);
+    ySpin->setValue(1.0);
+    zSpin->setValue(1.0);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QGridLayout* layout = new QGridLayout();
+
+    layout->addWidget(xLabel, 0, 0);
+    layout->addWidget(xSpin, 0, 1);
+
+    layout->addWidget(yLabel, 1, 0);
+    layout->addWidget(ySpin, 1, 1);
+
+    layout->addWidget(zLabel, 2, 0);
+    layout->addWidget(zSpin, 2, 1);
+
+    layout->addLayout(buttonLayout, 3, 0, 1, 2);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double sx = xSpin->value();
+    double sy = ySpin->value();
+    double sz = zSpin->value();
+
+    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+
+    std::vector<float> transformed = Transformations::scale(vec, sx, sy, sz);
+
+    glWidget->drawShape(transformed);
+}
+
+void Sketcher3D::onRotateXActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Rotate X");
+
+    QLabel* angleLabel = new QLabel("Angle (degrees)");
+
+    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
+    angleSpin->setRange(-360, 360);
+    angleSpin->setValue(0.0);
+    angleSpin->setDecimals(2);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(angleLabel);
+    layout->addWidget(angleSpin);
+    layout->addLayout(buttonLayout);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double angleX = ((MathConstants::PI * angleSpin->value()) / 180);
+
+    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+
+    std::vector<float> transformed = Transformations::rotationX(vec, angleX);
+
+    glWidget->drawShape(transformed);
+}
+
+void Sketcher3D::onRotateYActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Rotate Y");
+
+    QLabel* angleLabel = new QLabel("Angle (degrees)");
+
+    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
+    angleSpin->setRange(-360, 360);
+    angleSpin->setValue(0.0);
+    angleSpin->setDecimals(2);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(angleLabel);
+    layout->addWidget(angleSpin);
+    layout->addLayout(buttonLayout);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double angleY = ((MathConstants::PI * angleSpin->value()) / 180);
+
+    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+
+    std::vector<float> transformed = Transformations::rotationY(vec, angleY);
+
+    glWidget->drawShape(transformed);
+}
+
+void Sketcher3D::onRotateZActionTriggered()
+{
+    QDialog dialog(this);
+    dialog.setWindowTitle("Rotate Z");
+
+    QLabel* angleLabel = new QLabel("Angle (degrees)");
+
+    QDoubleSpinBox* angleSpin = new QDoubleSpinBox();
+    angleSpin->setRange(-360, 360);
+    angleSpin->setValue(0.0);
+    angleSpin->setDecimals(2);
+
+    QPushButton* okButton = new QPushButton("Apply");
+    QPushButton* cancelButton = new QPushButton("Cancel");
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(angleLabel);
+    layout->addWidget(angleSpin);
+    layout->addLayout(buttonLayout);
+
+    dialog.setLayout(layout);
+
+    connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
+
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    double angleZ = ((MathConstants::PI * angleSpin->value()) / 180);
+
+    std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+
+    std::vector<float> transformed = Transformations::rotationZ(vec, angleZ);
+
+    glWidget->drawShape(transformed);
+}
