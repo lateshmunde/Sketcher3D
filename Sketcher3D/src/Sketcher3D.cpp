@@ -145,7 +145,8 @@ void Sketcher3D::onCuboidToolClicked()
         std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
         shapeManager.addShape(cb);
         std::vector<float> vec = cb->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
+        std::vector<float> nVec = cb->getTriangulation().getNormalForOpenGl();
+        glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cuboid created");
     }
     catch (const std::runtime_error& e)
@@ -178,7 +179,8 @@ void Sketcher3D::onPyramidClicked()
         std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
         shapeManager.addShape(py);
         std::vector<float> vec = py->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
+        std::vector<float> nVec = py->getTriangulation().getNormalForOpenGl();
+        glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Pyramid created");
     }
     catch (const std::runtime_error& e)

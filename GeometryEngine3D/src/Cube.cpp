@@ -32,7 +32,7 @@ void Cube::build()
 	mTriag.addTriangle(p0Ind, p1Ind, p2Ind, n1); // front
 
 	int p3Ind = mTriag.addPoint(Point(x, y + mSide, z));
-	mTriag.addTriangle(p0Ind, p3Ind, p2Ind, n1); // front
+	mTriag.addTriangle(p0Ind, p2Ind, p3Ind, n1); // front
 
 
 	int p4Ind = mTriag.addPoint(Point(x, y, z + mSide));
@@ -42,19 +42,19 @@ void Cube::build()
 	mTriag.addTriangle(p4Ind, p5Ind, p6Ind, n2); // back
 	
 	int p7Ind = mTriag.addPoint(Point(x, y + mSide, z + mSide));
-	mTriag.addTriangle(p4Ind, p7Ind, p6Ind, n2); // back
+	mTriag.addTriangle(p4Ind, p6Ind, p7Ind, n2); // back
 
-	mTriag.addTriangle(p2Ind, p6Ind, p7Ind, n3); // top
-	mTriag.addTriangle(p7Ind, p3Ind, p2Ind, n3); // top
+	mTriag.addTriangle(p7Ind, p6Ind, p2Ind, n3); // top
+	mTriag.addTriangle(p7Ind, p2Ind, p3Ind, n3); // top
 
-	mTriag.addTriangle(p0Ind, p1Ind, p5Ind, n4); // bottom
-	mTriag.addTriangle(p5Ind, p4Ind, p0Ind, n4); // bottom
+	mTriag.addTriangle(p0Ind, p5Ind, p1Ind, n4); // bottom
+	mTriag.addTriangle(p0Ind, p4Ind, p5Ind, n4); // bottom
 
-	mTriag.addTriangle(p2Ind, p1Ind, p5Ind, n5); // right
-	mTriag.addTriangle(p5Ind, p6Ind, p2Ind, n5); // right
+	mTriag.addTriangle(p5Ind, p1Ind, p2Ind, n5); // right
+	mTriag.addTriangle(p5Ind, p2Ind, p6Ind, n5); // right
 
 	mTriag.addTriangle(p0Ind, p4Ind, p7Ind, n6); // left
-	mTriag.addTriangle(p7Ind, p3Ind, p0Ind, n6); // left
+	mTriag.addTriangle(p0Ind, p3Ind, p7Ind, n6); // left
 
 }
 

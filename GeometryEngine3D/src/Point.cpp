@@ -38,3 +38,8 @@ bool Point::operator<(const Point& p2) const
 { 
 	return std::tie(mX, mY, mZ) < std::tie(p2.mX, p2.mY, p2.mZ);
 }
+
+Point Point::operator-(const Point& p2) const
+{
+	return Point((mX - p2.mX), (mY - p2.mY), (mY - p2.mY));
+}

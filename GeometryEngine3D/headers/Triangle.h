@@ -14,4 +14,5 @@ public:
 public:
 	Triangle(int m1, int m2, int m3, Point normal = Point());
 	~Triangle();
+
 };
