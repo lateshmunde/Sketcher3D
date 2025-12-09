@@ -161,7 +161,8 @@ void Sketcher3D::onCubeToolClicked()
         std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
         shapeManager.addShape(c);
         std::vector<float> vec = c->getTriangulation().getDataForOpenGl();
-        glWidget->drawShape(vec);
+        std::vector<float> nVec = c->getTriangulation().getNormalForOpenGl();
+        glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cube created");
     }
     catch (const std::runtime_error& e)
