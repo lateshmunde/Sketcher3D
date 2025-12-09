@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Cube.h"
 
-
 Cube::Cube(const std::string& name, double side)
 	: Shape("Cube", name), mSide(side) {
 	build();

@@ -10,7 +10,6 @@ private:
 protected:
 	void build() override;
 
-
 public:
 	Sphere(const std::string& name, double radius);
 	~Sphere() override = default;
@@ -19,6 +18,4 @@ public:
 	void saveForGnu(std::ostream& out) const override;
 
 	double getRadius() const;
-
-
 };
