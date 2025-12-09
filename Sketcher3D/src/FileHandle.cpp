@@ -78,43 +78,8 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 	return true;
 
 }
- 
-//std::vector <Point>  FileHandle::readSTL(const std::string& fileName) { //for now, cube only
-//	std::ifstream fin(fileName);
-//
-//	std::string line;
-//	std::vector <Point> pts;
-//
-//	while (std::getline(fin, line)) 
-//	{
-//		// Remove leading spaces
-//		int start = line.find_first_not_of(" \t");
-//		if (start == std::string::npos)
-//			continue;   // skip empty or only-space lines
-//
-//		std::string trimmed = line.substr(start);
-//
-//		// Check if line starts with "vertex"
-//		if (required.rfind("vertex", 0) != 0)
-//			continue;   // skip non-vertex lines
-//
-//		// Parse: vertex x y z
-//		std::string word;
-//		float x;
-//		float y;
-//		float z;
-//
-//		std::stringstream ss(required);
-//		ss >> word >> x >> y >> z;   // word = "vertex"
-//
-//		pts.emplace_back(x, y, z);
-//	}
-//
-//	return pts;
-//}
 
-
-std::vector<float> FileHandle::readSTL(const std::string& fileName)
+void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulation)
 {
 	std::ifstream fin(fileName);
 	std::string line;
@@ -143,8 +108,13 @@ std::vector<float> FileHandle::readSTL(const std::string& fileName)
 				if (ss.fail())
 					continue;
 
-		// Make a stream from the line
-		std::stringstream ss(line);
+				normal.setX(x);
+				normal.setY(y);
+				normal.setZ(z);
+			}
+			if (vertexIdx != std::string::npos) {
+
+				std::stringstream ss(line);
 
 				std::string word; // will store "vertex"
 				double x;
