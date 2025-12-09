@@ -20,8 +20,10 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
 OpenGLWidget::~OpenGLWidget()
 {
     makeCurrent();
-    mShapeVAO.destroy();
-    mShapeVBO.destroy();
+    mNormalVAO.destroy();
+    mNormalVBO.destroy();
+    mNormalVAO.destroy();
+    mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
 }
