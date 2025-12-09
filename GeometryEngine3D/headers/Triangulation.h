@@ -8,8 +8,8 @@
 class GEOMETRYENGINE3D_API Triangulation
 {
 private:
-	std::vector <Point> mPoints; // for reading shapes from stl
-	std::vector <Triangle> mTriangles; // for reading shapes from stl
+	std::vector <Point> mPoints;
+	std::vector <Triangle> mTriangles; 
 	std::map<Point, int> pointIndex;   // map: point - index in mPoints
 
 public:
@@ -19,8 +19,9 @@ public:
 	std::vector <Point> getPoints() const;
 	std::vector <Triangle> getTriangles() const;
 
-	int addPoint(const Point& p); // for reading shapes from stl
-	void addTriangle(int a, int b, int c); // for reading shapes from stl
+	int addPoint(const Point& p); 
+	void addTriangle(int a, int b, int c, Point nomrmal = Point());
 
 	std::vector<float> getDataForOpenGl() const;
+	std::vector<float> getNormalForOpenGl() const;
 };

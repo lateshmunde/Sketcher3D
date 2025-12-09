@@ -263,7 +263,7 @@ void Sketcher3D::onLoadSTLTriggered()
 
     if (!tri.getDataForOpenGl().empty())
     {
-        glWidget->drawShape(tri.getDataForOpenGl());
+        glWidget->drawShape(tri.getDataForOpenGl(), tri.getNormalForOpenGl());
         QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
     }
     else

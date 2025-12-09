@@ -83,10 +83,12 @@ void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulati
 {
 	std::ifstream fin(fileName);
 	std::string line;
+
 	std::vector<float> vertices;
-	Point normal;
 	std::vector<Point> points;
 
+	Point normal;
+	
 	while (std::getline(fin, line))
 	{
 		size_t normalIdx = line.find("facet normal");
@@ -130,15 +132,12 @@ void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulati
 					int p1 = triangulation.addPoint(points[0]);
 					int p2 = triangulation.addPoint(points[1]);
 					int p3 = triangulation.addPoint(points[2]);
-					triangulation.addTriangle(p1, p2, p3);
+					triangulation.addTriangle(p1, p2, p3, normal);
 					points.clear();
-
 				}
 			}
 		}
 	}
-
-	return;
 }
 
 bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::shared_ptr<Shape>>& shapes)
