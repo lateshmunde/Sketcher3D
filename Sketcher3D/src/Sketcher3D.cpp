@@ -155,7 +155,7 @@ void Sketcher3D::onCuboidToolClicked()
     }
 }
 
-void Sketcher3D::onTranslateActionTriggered()
+void Sketcher3D::onCubeToolClicked()
 {
     // Create Cube object
     try {
@@ -203,7 +203,7 @@ void Sketcher3D::onCylinderToolClicked()
     }
 }
 
-void Sketcher3D::onRotateXActionTriggered()
+void Sketcher3D::onConeToolClicked()
 {
     // Create Cone object
     try {
@@ -219,7 +219,7 @@ void Sketcher3D::onRotateXActionTriggered()
     }
 }
 
-void Sketcher3D::onRotateYActionTriggered()
+void Sketcher3D::onSphereToolClicked()
 {
     // Create Sphere object
     try {
@@ -296,7 +296,7 @@ void Sketcher3D::onLoadSTLTriggered()
     else
     {
         QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
-    }    
+    }
 }
 
 void Sketcher3D::onSaveSTLTriggered()
