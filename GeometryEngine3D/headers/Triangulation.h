@@ -20,8 +20,7 @@ public:
 	std::vector <Triangle> getTriangles() const;
 
 	int addPoint(const Point& p); 
-	void addTriangle(int a, int b, int c, Point nomrmal);
-	void addTriangle(int a, int b, int c);
+	void addTriangle(int a, int b, int c, Point nomrmal = Point());
 
 	std::vector<float> getDataForOpenGl() const;
 	std::vector<float> getNormalForOpenGl() const;

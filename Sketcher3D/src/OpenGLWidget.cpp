@@ -65,6 +65,7 @@ void OpenGLWidget::initializeGL()
         #version 330 core
 
         layout(location = 0) in vec3 aPos;
+        layout(location = 1) in vec3 aNorm;'
 
         uniform mat4 uModel; //uniform - same value for all vertices.
         uniform mat4 uView; //Moves the camera
@@ -81,7 +82,7 @@ void OpenGLWidget::initializeGL()
             gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
            // Compute normal from vertex
-            vec3 normal = normalize(aPos);
+            vec3 normal = normalize(aNorm);
 
             // Lighting = max(dot(N,L), 0) //diffuse lighting.
             float diff = max(dot(normal, normalize(uLightDir)), 0.0);

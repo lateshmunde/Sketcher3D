@@ -34,10 +34,7 @@ void Triangulation::addTriangle(int a, int b, int c, Point normal)
     mTriangles.emplace_back(a, b, c, normal);
 }
 
-void Triangulation::addTriangle(int a, int b, int c)
-{
-    mTriangles.emplace_back(a, b, c);
-}
+
 
 std::vector<float> Triangulation::getDataForOpenGl() const
 {
