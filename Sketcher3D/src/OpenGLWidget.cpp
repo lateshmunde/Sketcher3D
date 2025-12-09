@@ -7,7 +7,7 @@
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
     , mShapeVBO(QOpenGLBuffer::VertexBuffer)
-    , mNormalVBO(QOpenGLBuffer::VertexBuffer)
+    //, mNormalVBO(QOpenGLBuffer::VertexBuffer)
     , mRotationX(0.0f) // initial rotation around X
     , mRotationY(0.0f) // initial rotation around Y
     , mRotationZ(0.0f) // initial rotation around Y
@@ -22,6 +22,8 @@ OpenGLWidget::~OpenGLWidget()
     makeCurrent();
     mShapeVAO.destroy();
     mShapeVBO.destroy();
+    //mNormalVAO.destroy();
+    //mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
 }
@@ -32,6 +34,7 @@ void OpenGLWidget::drawShape(const std::vector<float>& vec, const std::vector<fl
     {
         mVertices.push_back(it);
     }
+
     for (int i = 0; i < normal.size(); i += 3)
     {
         for (int j = 0; j < 3; j++)
@@ -62,7 +65,6 @@ void OpenGLWidget::initializeGL()
         #version 330 core
 
         layout(location = 0) in vec3 aPos;
-        layout(location = 1) in vec3 aNorm;
 
         uniform mat4 uModel; //uniform - same value for all vertices.
         uniform mat4 uView; //Moves the camera
@@ -79,7 +81,7 @@ void OpenGLWidget::initializeGL()
             gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
            // Compute normal from vertex
-            vec3 normal = normalize(aNorm);
+            vec3 normal = normalize(aPos);
 
             // Lighting = max(dot(N,L), 0) //diffuse lighting.
             float diff = max(dot(normal, normalize(uLightDir)), 0.0);
@@ -111,30 +113,14 @@ void OpenGLWidget::initializeGL()
     mShapeVAO.create(); //VAO stores vertex attribute configuration
     mShapeVAO.bind();
 
-    mNormalVAO.create(); //VAO stores normal attribute configuration
-    mNormalVAO.bind();
-
     mShapeVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
     mShapeVBO.bind();
     mShapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
-    mNormalVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
-    mNormalVBO.bind();
-    mNormalVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
-
     mShader.bind();
     glEnableVertexAttribArray(0); // enable layout(location=0)
-    glEnableVertexAttribArray(1);
     glVertexAttribPointer(
         0,  // index , matches layout(location = 0)
-        3,  // vec3
-        GL_FLOAT,
-        GL_FALSE,
-        3 * sizeof(float),
-        nullptr
-    );
-    glVertexAttribPointer(
-        1,  // index , matches layout(location = 0)
         3,  // vec3
         GL_FLOAT,
         GL_FALSE,
@@ -145,8 +131,6 @@ void OpenGLWidget::initializeGL()
 
     mShapeVBO.release();
     mShapeVAO.release();
-    mNormalVBO.release();
-    mNormalVAO.release();
 }
 
 
@@ -183,9 +167,6 @@ void OpenGLWidget::paintGL()
     mShapeVAO.bind();
     mShapeVBO.bind();
     mShapeVBO.allocate(mVertices.data(), mVertices.size() * sizeof(float));
-    mNormalVAO.bind();
-    mNormalVBO.bind();
-    mNormalVBO.allocate(mNormals.data(), mNormals.size() * sizeof(float));
 
     // Draw shape as triangles
     int vertexCount = mVertices.size() / 3;
@@ -193,8 +174,6 @@ void OpenGLWidget::paintGL()
 
     mShapeVBO.release();
     mShapeVAO.release();
-    mNormalVAO.release();
-    mNormalVBO.release();
     mShader.release();
 }
 

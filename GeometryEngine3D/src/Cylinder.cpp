@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Cylinder.h"
 
-
-
 Cylinder::Cylinder(const std::string& name, double radius, double height)
 	:Shape("Cylinder", name), mRadius(radius), mHeight(height) {
 	build();

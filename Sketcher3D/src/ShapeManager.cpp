@@ -25,6 +25,11 @@ void ShapeManager::deleteShape(const int index)
 		std::cout << "Shape at index " << index << " is not deleted.\n";
 }
 
+void ShapeManager::clearShape()
+{
+	mShapes.clear();
+}
+
 std::shared_ptr<Shape> ShapeManager::getLastShape()
 {
 	if (mShapes.empty()) return nullptr;

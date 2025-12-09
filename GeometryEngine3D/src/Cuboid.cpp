@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Cuboid.h"
 
-
-
-
 Cuboid::Cuboid(const std::string& name, double length, double width, double height)
 	: Shape("Cuboid", name), mLength(length), mWidth(width), mHeight(height) {
 	build();

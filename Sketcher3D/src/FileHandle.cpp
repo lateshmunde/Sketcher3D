@@ -130,7 +130,7 @@ void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulati
 					int p1 = triangulation.addPoint(points[0]);
 					int p2 = triangulation.addPoint(points[1]);
 					int p3 = triangulation.addPoint(points[2]);
-					triangulation.addTriangle(p1, p2, p3, normal);
+					triangulation.addTriangle(p1, p2, p3);
 					points.clear();
 
 				}

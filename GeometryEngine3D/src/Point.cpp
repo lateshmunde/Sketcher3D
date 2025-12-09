@@ -34,7 +34,7 @@ bool Point::operator==(const Point& p2) const
 	return std::tie(mX, mY, mZ) == std::tie(p2.mX, p2.mY, p2.mZ);
 }
 
-bool Point::operator<(const Point& other) const 
+bool Point::operator<(const Point& p2) const 
 { 
-	if (mX != other.mX) return mX < other.mX; if (mY != other.mY) return mY < other.mY; return mZ < other.mZ; 
+	return std::tie(mX, mY, mZ) < std::tie(p2.mX, p2.mY, p2.mZ);
 }

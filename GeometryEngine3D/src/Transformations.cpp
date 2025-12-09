@@ -56,16 +56,37 @@ std::vector<Point> Transformations::applyTransform(std::vector<Point>& vertices,
     return transformedPts;
 }
 
-std::vector<Point> Transformations::translate(std::vector<Point>& vertices, double transX, double transY, double transZ)
+std::vector<float> Transformations::translate(std::vector<float>& vec, double transX, double transY, double transZ)
 {
+    std::vector<Point> vertices;
+
+    for (int i = 0; i < vec.size(); i += 3)
+    {
+        vertices.emplace_back(vec[i], vec[i + 1], vec[i + 2]);
+    }
 
     Matrix transMat = Matrix::getTranslationMatrix(transX, transY, transZ);
     std::vector<Point> transformedPts = applyTransform(vertices, transMat);
-    return transformedPts;
+
+    for (int i = 0; i < transformedPts.size(); i++)
+    {
+        vec.push_back(float(transformedPts[i].getX()));
+        vec.push_back(float(transformedPts[i].getY()));
+        vec.push_back(float(transformedPts[i].getZ()));
+    }
+
+    return vec;
 }
 
-std::vector<Point> Transformations::scale(std::vector<Point>& vertices, double scaleX, double scaleY, double scaleZ)
+std::vector<float> Transformations::scale(std::vector<float>& vec, double scaleX, double scaleY, double scaleZ)
 {
+    std::vector<Point> vertices;
+
+    for (int i = 0; i < vec.size(); i += 3)
+    {
+        vertices.emplace_back(vec[i], vec[i + 1], vec[i + 2]);
+    }
+
     Point pivot = calculatePivot(vertices); //Centroid
 
     Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
@@ -75,10 +96,25 @@ std::vector<Point> Transformations::scale(std::vector<Point>& vertices, double s
     Matrix transformed = translate2 * scaleMat * translate1;
     std::vector<Point> transformedPts = applyTransform(vertices, transformed);
 
-    return transformedPts;
+    for (int i = 0; i < transformedPts.size(); i++)
+    {
+        vec.push_back(float(transformedPts[i].getX()));
+        vec.push_back(float(transformedPts[i].getY()));
+        vec.push_back(float(transformedPts[i].getZ()));
+    }
+
+    return vec;
 }
 
-std::vector<Point> Transformations::rotationX(std::vector<Point>& vertices, double degreeX)  {
+std::vector<float> Transformations::rotationX(std::vector<float>& vec, double degreeX)
+{
+    std::vector<Point> vertices;
+
+    for (int i = 0; i < vec.size(); i += 3)
+    {
+        vertices.emplace_back(vec[i], vec[i + 1], vec[i + 2]);
+    }
+
     Point pivot = calculatePivot(vertices); //Centroid
 
     Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
@@ -88,10 +124,25 @@ std::vector<Point> Transformations::rotationX(std::vector<Point>& vertices, doub
     Matrix transformed = translate2 * rotateXMat * translate1;
     std::vector<Point> transformedPts = applyTransform(vertices, transformed);
 
-    return transformedPts;
+    for (int i = 0; i < transformedPts.size(); i++)
+    {
+        vec.push_back(float(transformedPts[i].getX()));
+        vec.push_back(float(transformedPts[i].getY()));
+        vec.push_back(float(transformedPts[i].getZ()));
+    }
+
+    return vec;
 }
 
-std::vector<Point> Transformations::rotationY(std::vector<Point>& vertices, double degreeY) {
+std::vector<float> Transformations::rotationY(std::vector<float>& vec, double degreeY)
+{
+    std::vector<Point> vertices;
+
+    for (int i = 0; i < vec.size(); i += 3)
+    {
+        vertices.emplace_back(vec[i], vec[i + 1], vec[i + 2]);
+    }
+
     Point pivot = calculatePivot(vertices); //Centroid
 
     Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
@@ -101,10 +152,25 @@ std::vector<Point> Transformations::rotationY(std::vector<Point>& vertices, doub
     Matrix transformed = translate2 * rotateYMat * translate1;
     std::vector<Point> transformedPts = applyTransform(vertices, transformed);
 
-    return transformedPts;
+    for (int i = 0; i < transformedPts.size(); i++)
+    {
+        vec.push_back(float(transformedPts[i].getX()));
+        vec.push_back(float(transformedPts[i].getY()));
+        vec.push_back(float(transformedPts[i].getZ()));
+    }
+
+    return vec;
 }
 
-std::vector<Point> Transformations::rotationZ(std::vector<Point>& vertices, double degreeZ) {
+std::vector<float> Transformations::rotationZ(std::vector<float>& vec, double degreeZ)
+{
+    std::vector<Point> vertices;
+
+    for (int i = 0; i < vec.size(); i += 3)
+    {
+        vertices.emplace_back(vec[i], vec[i + 1], vec[i + 2]);
+    }
+
     Point pivot = calculatePivot(vertices); //Centroid
 
     Matrix translate1 = Matrix::getTranslationMatrix(-pivot.getX(), -pivot.getY(), -pivot.getY());
@@ -113,5 +179,13 @@ std::vector<Point> Transformations::rotationZ(std::vector<Point>& vertices, doub
 
     Matrix transformed = translate2 * rotateZMat * translate1;
     std::vector<Point> transformedPts = applyTransform(vertices, transformed);
-    return transformedPts;
+
+    for (int i = 0; i < transformedPts.size(); i++)
+    {
+        vec.push_back(float(transformedPts[i].getX()));
+        vec.push_back(float(transformedPts[i].getY()));
+        vec.push_back(float(transformedPts[i].getZ()));
+    }
+
+    return vec;
 }

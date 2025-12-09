@@ -62,6 +62,7 @@ private:
 
     QAction* mNewAction;
     QAction* mOpenAction;
+    QAction* mClearAction;
 
     QMenu* mTransformationMenu;
     QAction* mTranslate;
@@ -89,12 +90,13 @@ private slots:
     void onSaveGNUActionTriggered();
     void onLoadSTLTriggered();
     void onSaveSTLTriggered();
+    void onClearTriggered();
 
 
     // Transformation
-    /*void onTranslateActionTriggered();
+    void onTranslateActionTriggered();
     void onScaleActionTriggered();
     void onRotateXActionTriggered();
     void onRotateYActionTriggered();
-    void onRotateZActionTriggered();*/
+    void onRotateZActionTriggered();
 };
