@@ -5,7 +5,7 @@
 #include <string>
 
 bool FileHandle::saveToFile(const std::string& fileName,
-	 const std::vector<std::shared_ptr<Shape>>& shapes)
+	const std::vector<std::shared_ptr<Shape>>& shapes)
 {
 	std::ofstream fout(fileName);
 	if (!fout.is_open())
@@ -67,7 +67,7 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 		std::cerr << "Error: Cannot open file or writing: " << fileName << "\n";
 		return false;
 	}
-	
+
 	for (const auto& s : shapes)
 	{
 		fout << "#" << s->getType() << "\n";
@@ -78,81 +78,75 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 	return true;
 
 }
- 
-//std::vector <Point>  FileHandle::readSTL(const std::string& fileName) { //for now, cube only
-//	std::ifstream fin(fileName);
-//
-//	std::string line;
-//	std::vector <Point> pts;
-//
-//	while (std::getline(fin, line)) 
-//	{
-//		// Remove leading spaces
-//		int start = line.find_first_not_of(" \t");
-//		if (start == std::string::npos)
-//			continue;   // skip empty or only-space lines
-//
-//		std::string trimmed = line.substr(start);
-//
-//		// Check if line starts with "vertex"
-//		if (required.rfind("vertex", 0) != 0)
-//			continue;   // skip non-vertex lines
-//
-//		// Parse: vertex x y z
-//		std::string word;
-//		float x;
-//		float y;
-//		float z;
-//
-//		std::stringstream ss(required);
-//		ss >> word >> x >> y >> z;   // word = "vertex"
-//
-//		pts.emplace_back(x, y, z);
-//	}
-//
-//	return pts;
-//}
 
-
-std::vector<float> FileHandle::readSTL(const std::string& fileName)
+void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulation)
 {
 	std::ifstream fin(fileName);
 	std::string line;
 	std::vector<float> vertices;
+	Point normal;
+	std::vector<Point> points;
 
 	while (std::getline(fin, line))
 	{
+		size_t normalIdx = line.find("facet normal");
+		size_t vertexIdx = line.find("vertex");
 		// Skip all lines that do NOT contain the word "vertex"
-		if (line.find("vertex") == std::string::npos)
-			continue;
+		if (normalIdx != std::string::npos || vertexIdx != std::string::npos)
+		{
+			if (normalIdx != std::string::npos) {
+				std::stringstream ss(line);
 
-		// Make a stream from the line
-		std::stringstream ss(line);
+				std::string facetStr; // will store "vertex"
+				std::string normalStr;
+				double x;
+				double y;
+				double z;
 
-		std::string word; // will store "vertex"
-		float x;
-		float y;
-		float z;
-		
-		ss >> word >> x >> y >> z;
+				ss >> facetStr >> normalStr >> x >> y >> z;
 
-		if (ss.fail())
-			continue;
+				if (ss.fail())
+					continue;
 
-		vertices.push_back(x);
-		vertices.push_back(y);
-		vertices.push_back(z);
+				normal.setX(x);
+				normal.setY(y);
+				normal.setZ(z);
+			}
+			if (vertexIdx != std::string::npos) {
+
+				std::stringstream ss(line);
+
+				std::string word; // will store "vertex"
+				double x;
+				double y;
+				double z;
+
+				ss >> word >> x >> y >> z;
+
+				if (ss.fail())
+					continue;
+				points.emplace_back(x, y, z);
+				if (points.size() == 3) {
+					int p1 = triangulation.addPoint(points[0]);
+					int p2 = triangulation.addPoint(points[1]);
+					int p3 = triangulation.addPoint(points[2]);
+					triangulation.addTriangle(p1, p2, p3, normal);
+					points.clear();
+
+				}
+			}
+		}
 	}
 
-	return vertices;
+	return;
 }
 
 bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::shared_ptr<Shape>>& shapes)
 {
-    std::ofstream file(filename);
-    if (!file.is_open()) return false;
+	std::ofstream file(filename);
+	if (!file.is_open()) return false;
 
-	for (const std::shared_ptr<Shape> &it : shapes)
+	for (const std::shared_ptr<Shape>& it : shapes)
 	{
 		file << "Start " << it->getType() << " mesh\n";
 
@@ -178,6 +172,6 @@ bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::sh
 
 		file << "End " << it->getType() << " mesh\n\n";
 	}
-    
-    return true;
+
+	return true;
 }

@@ -8,6 +8,7 @@ Cone::Cone(const std::string& name, double radius, double height)
 	build();
 }
 
+
 void Cone::save(std::ostream& out) const
 {
 	out <<getType() << " " << getName() << " " 

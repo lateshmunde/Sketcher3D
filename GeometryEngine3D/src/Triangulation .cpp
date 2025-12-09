@@ -29,9 +29,9 @@ int Triangulation::addPoint(const Point& p)
     return index;
 }
 
-void Triangulation::addTriangle(int a, int b, int c)
+void Triangulation::addTriangle(int a, int b, int c, Point normal)
 {
-    mTriangles.emplace_back(a, b, c);
+    mTriangles.emplace_back(a, b, c, normal);
 }
 
 std::vector<float> Triangulation::getDataForOpenGl() const
@@ -53,5 +53,18 @@ std::vector<float> Triangulation::getDataForOpenGl() const
         oglData.push_back(float(mPoints[t.m3].getZ()));
     }
 
+    return oglData;
+}
+
+std::vector<float> Triangulation::getNormalForOpenGl() const
+{
+    std::vector<float> oglData;
+
+    for (Triangle t : mTriangles)
+    {
+        oglData.push_back(float(t.mNormal.getX()));
+        oglData.push_back(float(t.mNormal.getY()));
+        oglData.push_back(float(t.mNormal.getZ()));
+    }
     return oglData;
 }

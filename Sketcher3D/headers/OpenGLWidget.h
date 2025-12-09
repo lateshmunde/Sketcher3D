@@ -5,7 +5,7 @@
 #include <QOpenGLShaderProgram> // Shader program wrapper
 #include <QOpenGLBuffer> // VBO
 #include <QOpenGLVertexArrayObject> // VAO
-#include <QMatrix4x4> // 4×4 matrices
+#include <QMatrix4x4> // 4ï¿½4 matrices
 #include <QPoint> // For mouse position
 #include <vector>
 
@@ -19,7 +19,7 @@ public:
     explicit OpenGLWidget(QWidget* parent = nullptr);
     ~OpenGLWidget();
 
-    void drawShape(const std::vector<float>& vec);
+    void drawShape(const std::vector<float>& vec, const std::vector<float>& normal = {});
     void clearShape(); 
 
 protected:
@@ -33,9 +33,12 @@ protected:
 
 private:
     std::vector<float> mVertices;
+    std::vector<float> mNormals;
 
     QOpenGLVertexArrayObject mShapeVAO;
+    QOpenGLVertexArrayObject mNormalVAO;
     QOpenGLBuffer mShapeVBO;
+    QOpenGLBuffer mNormalVBO;
     QOpenGLShaderProgram mShader; // Shader program
 
     QMatrix4x4 mProjection;

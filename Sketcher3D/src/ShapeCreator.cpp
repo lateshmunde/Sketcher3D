@@ -36,7 +36,7 @@ Cuboid ShapeCreator::createCuboid(const std::string& name, double length, double
 }
 
 
-Cube ShapeCreator::createCube(const std::string& name, double side )
+Cube ShapeCreator::createCube(const std::string& name, double side)
 {
 	if (side <= 0)
 		std::cout << "Invalid input for Cube";
@@ -47,7 +47,7 @@ Cube ShapeCreator::createCube(const std::string& name, double side )
 
 Sphere ShapeCreator::createSphere(const std::string& name, double radius)
 {
-	if (radius <= 0 )
+	if (radius <= 0)
 		std::cout << "Invalid input for Sphere";
 
 	return Sphere(name, radius);
@@ -55,7 +55,7 @@ Sphere ShapeCreator::createSphere(const std::string& name, double radius)
 
 Cylinder ShapeCreator::createCylinder(const std::string& name, double radius, double height)
 {
-	if (radius = 0 || height <= 0 )
+	if (radius = 0 || height <= 0)
 		std::cout << "Invalid input for Cylinder";
 
 	return Cylinder(name, radius, height);
