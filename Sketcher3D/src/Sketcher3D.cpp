@@ -293,6 +293,7 @@ void Sketcher3D::onSaveSTLTriggered()
 void Sketcher3D::onClearTriggered()
 {
     shapeManager.clearShape();
+    glWidget->clearShape();
 }
 
 
