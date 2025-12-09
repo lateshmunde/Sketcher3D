@@ -155,7 +155,7 @@ void Sketcher3D::onCuboidToolClicked()
     }
 }
 
-void Sketcher3D::onCubeToolClicked()
+void Sketcher3D::onTranslateActionTriggered()
 {
     // Create Cube object
     try {
