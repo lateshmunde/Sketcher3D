@@ -15,10 +15,6 @@ private:
     std::string mType;
     std::string mName;
 
-public:
-    std::vector <Point> mPoints;
-    std::vector <Triangle> mTriangles;
-
 protected:
     Triangulation mTriag;
 

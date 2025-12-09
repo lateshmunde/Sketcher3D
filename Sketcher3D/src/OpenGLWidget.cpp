@@ -12,7 +12,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
     , mRotationY(0.0f) // initial rotation around Y
     , mRotationZ(0.0f) // initial rotation around Y
     , mZoom(500.0f) // camera distance
-    , mLightDir(0.0f, 0.0f, 1.0f) // light  from +Z toward screen
+    , mLightDir(0.0f, 0.0f, -1.0f) // light  from +Z toward screen
     , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
 {
 }
@@ -106,13 +106,17 @@ void OpenGLWidget::initializeGL()
     mShader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs);
     mShader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs);
 
+    if (!mShader.link()) {
+        qWarning() << "Shader link failed:" << mShader.log();
+    }
+
 
     // Create VAO + VBO for shape
     mShapeVAO.create(); //VAO stores vertex attribute configuration
     mShapeVAO.bind();
 
-    mNormalVAO.create(); //VAO stores normal attribute configuration
-    mNormalVAO.bind();
+    //mNormalVAO.create(); //VAO stores normal attribute configuration
+    //mNormalVAO.bind();
 
     mShapeVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
     mShapeVBO.bind();
@@ -123,6 +127,7 @@ void OpenGLWidget::initializeGL()
     mNormalVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
     mShader.bind();
+    mShapeVBO.bind();
     glEnableVertexAttribArray(0); // enable layout(location=0)
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(
@@ -133,6 +138,7 @@ void OpenGLWidget::initializeGL()
         3 * sizeof(float),
         nullptr
     );
+    mNormalVBO.bind();
     glVertexAttribPointer(
         1,  // index , matches layout(location = 0)
         3,  // vec3
@@ -146,7 +152,7 @@ void OpenGLWidget::initializeGL()
     mShapeVBO.release();
     mShapeVAO.release();
     mNormalVBO.release();
-    mNormalVAO.release();
+   // mNormalVAO.release();
 }
 
 
@@ -183,7 +189,7 @@ void OpenGLWidget::paintGL()
     mShapeVAO.bind();
     mShapeVBO.bind();
     mShapeVBO.allocate(mVertices.data(), mVertices.size() * sizeof(float));
-    mNormalVAO.bind();
+    //mNormalVAO.bind();
     mNormalVBO.bind();
     mNormalVBO.allocate(mNormals.data(), mNormals.size() * sizeof(float));
 
@@ -193,7 +199,7 @@ void OpenGLWidget::paintGL()
 
     mShapeVBO.release();
     mShapeVAO.release();
-    mNormalVAO.release();
+    //mNormalVAO.release();
     mNormalVBO.release();
     mShader.release();
 }

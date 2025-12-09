@@ -36,7 +36,7 @@ private:
     std::vector<float> mNormals;
 
     QOpenGLVertexArrayObject mShapeVAO;
-    QOpenGLVertexArrayObject mNormalVAO;
+    //QOpenGLVertexArrayObject mNormalVAO;
     QOpenGLBuffer mShapeVBO;
     QOpenGLBuffer mNormalVBO;
     QOpenGLShaderProgram mShader; // Shader program
