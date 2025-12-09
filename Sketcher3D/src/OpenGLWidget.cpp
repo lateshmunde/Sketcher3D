@@ -22,6 +22,8 @@ OpenGLWidget::~OpenGLWidget()
     makeCurrent();
     mShapeVAO.destroy();
     mShapeVBO.destroy();
+    mNormalVAO.destroy();
+    mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
 }
