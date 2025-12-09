@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClCompile Include="src\FileHandle.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\OpenGLWidget.cpp" />
     <ClCompile Include="src\ShapeCreator.cpp" />
     <ClCompile Include="src\ShapeManager.cpp" />
     <ClCompile Include="src\ShapeSlots.cpp" />
