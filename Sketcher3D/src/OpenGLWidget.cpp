@@ -7,7 +7,7 @@
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
     , mShapeVBO(QOpenGLBuffer::VertexBuffer)
-    //, mNormalVBO(QOpenGLBuffer::VertexBuffer)
+    , mNormalVBO(QOpenGLBuffer::VertexBuffer)
     , mRotationX(0.0f) // initial rotation around X
     , mRotationY(0.0f) // initial rotation around Y
     , mRotationZ(0.0f) // initial rotation around Y
@@ -23,7 +23,7 @@ OpenGLWidget::~OpenGLWidget()
     mShapeVAO.destroy();
     mShapeVBO.destroy();
     //mNormalVAO.destroy();
-    //mNormalVBO.destroy();
+    mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
 }
