@@ -46,8 +46,8 @@ void Cone::build()
 		bPtsIndex.push_back(mTriag.addPoint(Point(x + x_, y + y_, z)));
 
 		// each 5 degree section has 4 triangles.
-		mTriag.addTriangle(originInd, bPtsIndex[i - 1], bPtsIndex[i]);		// Base circle center, two points on it's circumference
-		mTriag.addTriangle(bPtsIndex[i], apexInd, bPtsIndex[i - 1]);		// Cone surface triangle: b1, apex, b0 
+		mTriag.addTriangle(bPtsIndex[i - 1], originInd, bPtsIndex[i]);		// Base circle center, two points on it's circumference
+		mTriag.addTriangle(bPtsIndex[i - 1], bPtsIndex[i], apexInd);		// Cone surface triangle: b1, apex, b0 
 	}
 }
 

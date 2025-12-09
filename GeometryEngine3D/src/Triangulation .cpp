@@ -57,15 +57,32 @@ std::vector<float> Triangulation::getDataForOpenGl() const
     return oglData;
 }
 
+Point Triangulation::calculateNormal(const Triangle& tri) const
+{
+    Point u = mPoints[tri.m2] - mPoints[tri.m1];
+    Point v = mPoints[tri.m3] - mPoints[tri.m1];
+
+    double nx = u.getY() * v.getZ() - u.getZ() * v.getY();
+    double ny = u.getZ() * v.getX() - u.getX() * v.getZ();
+    double nz = u.getX() * v.getY() - u.getY() * v.getX();
+
+    double len = sqrt(nx * nx + ny * ny + nz * nz);
+
+    return Point(nx / len, ny / len, nz / len);
+}
+
 std::vector<float> Triangulation::getNormalForOpenGl() const
 {
     std::vector<float> oglData;
 
-    for (Triangle t : mTriangles)
+
+    for (const Triangle& tri : mTriangles)
     {
-        oglData.push_back(float(t.mNormal.getX()));
-        oglData.push_back(float(t.mNormal.getY()));
-        oglData.push_back(float(t.mNormal.getZ()));
+        Point pt = calculateNormal(tri);
+      
+        oglData.push_back(float(pt.getX()));
+        oglData.push_back(float(pt.getY()));
+        oglData.push_back(float(pt.getZ()));
     }
     return oglData;
 }

@@ -26,4 +26,5 @@ public:
 	void writeXYZ(std::ostream& out) const;
 	bool operator==(const Point&) const;
 	bool operator<(const Point& other) const;
+	Point operator-(const Point& other) const;
 };

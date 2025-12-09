@@ -9,6 +9,7 @@ class GEOMETRYENGINE3D_API Triangulation
 {
 private:
 	std::vector <Point> mPoints;
+	std::vector <Point> mNormals;
 	std::vector <Triangle> mTriangles; 
 	std::map<Point, int> pointIndex;   // map: point - index in mPoints
 
@@ -21,6 +22,7 @@ public:
 
 	int addPoint(const Point& p); 
 	void addTriangle(int a, int b, int c, Point nomrmal = Point());
+	Point calculateNormal(const Triangle& tri) const ;
 
 	std::vector<float> getDataForOpenGl() const;
 	std::vector<float> getNormalForOpenGl() const;

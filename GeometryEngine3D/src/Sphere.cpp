@@ -40,9 +40,9 @@ void Sphere::build()
 			int idx4 = mTriag.addPoint(Point(r2 * cos(jLatitude2), r2 * sin(jLatitude2), z2));
 
 			// Triangle 1
-			mTriag.addTriangle(idx1, idx3, idx2);
+			mTriag.addTriangle(idx1, idx2, idx3);
 			// Triangle 2
-			mTriag.addTriangle(idx2, idx3, idx4);
+			mTriag.addTriangle(idx2, idx4, idx3);
 		}
 	}
 }
