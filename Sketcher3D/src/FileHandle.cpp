@@ -5,7 +5,7 @@
 #include <string>
 
 bool FileHandle::saveToFile(const std::string& fileName,
-	 const std::vector<std::shared_ptr<Shape>>& shapes)
+	const std::vector<std::shared_ptr<Shape>>& shapes)
 {
 	std::ofstream fout(fileName);
 	if (!fout.is_open())
@@ -67,7 +67,7 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 		std::cerr << "Error: Cannot open file or writing: " << fileName << "\n";
 		return false;
 	}
-	
+
 	for (const auto& s : shapes)
 	{
 		fout << "#" << s->getType() << "\n";
@@ -78,7 +78,7 @@ bool FileHandle::saveToFileGNUPlot(const std::string& fileName,
 	return true;
 
 }
- 
+
 void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulation)
 {
 	std::ifstream fin(fileName);
@@ -113,7 +113,7 @@ void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulati
 				normal.setZ(z);
 			}
 			if (vertexIdx != std::string::npos) {
-				
+
 				std::stringstream ss(line);
 
 				std::string word; // will store "vertex"
@@ -143,10 +143,10 @@ void FileHandle::readSTL(const std::string& fileName, Triangulation& triangulati
 
 bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::shared_ptr<Shape>>& shapes)
 {
-    std::ofstream file(filename);
-    if (!file.is_open()) return false;
+	std::ofstream file(filename);
+	if (!file.is_open()) return false;
 
-	for (const std::shared_ptr<Shape> &it : shapes)
+	for (const std::shared_ptr<Shape>& it : shapes)
 	{
 		file << "Start " << it->getType() << " mesh\n";
 
@@ -172,6 +172,6 @@ bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::sh
 
 		file << "End " << it->getType() << " mesh\n\n";
 	}
-    
-    return true;
+
+	return true;
 }

@@ -54,7 +54,7 @@ void Sketcher3D::setupUI()
     connect(mRotateX, &QAction::triggered, this, &Sketcher3D::onRotateXActionTriggered);
     connect(mRotateY, &QAction::triggered, this, &Sketcher3D::onRotateYActionTriggered);
     connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);*/
-    
+
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
@@ -89,7 +89,7 @@ void Sketcher3D::toolBarElements()
     mCylinderTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cylinder.png", "Cylinder");
     mConeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cone.png", "Cone");
     mPyramidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/pyramid.png", "Pyramid");
-    
+
 
     //mTransformationTool->setPopupMode(QToolButton::MenuButtonPopup);   // IMPORTANT
 
@@ -110,7 +110,7 @@ void Sketcher3D::menuBarElements()
     mSaveGNUAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveGNU");
     mSaveSTLAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveSTL");
     mLoadSTLAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "LoadSTL");
-    
+
     mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
     mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
     mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
@@ -134,7 +134,7 @@ void Sketcher3D::menuBarElements()
     mRotateX = mRotate->addAction("Rotate w.r.t x - Axis");
     mRotateY = mRotate->addAction("Rotate w.r.t y - Axis");
     mRotateZ = mRotate->addAction("Rotate w.r.t z - Axis");
-    
+
 }
 
 
@@ -155,7 +155,7 @@ void Sketcher3D::onCuboidToolClicked()
     }
 }
 
-void Sketcher3D::onTranslateActionTriggered()
+void Sketcher3D::onCubeToolClicked()
 {
     // Create Cube object
     try {
@@ -203,7 +203,7 @@ void Sketcher3D::onCylinderToolClicked()
     }
 }
 
-void Sketcher3D::onRotateXActionTriggered()
+void Sketcher3D::onConeToolClicked()
 {
     // Create Cone object
     try {
@@ -219,7 +219,7 @@ void Sketcher3D::onRotateXActionTriggered()
     }
 }
 
-void Sketcher3D::onRotateYActionTriggered()
+void Sketcher3D::onSphereToolClicked()
 {
     // Create Sphere object
     try {
@@ -230,7 +230,7 @@ void Sketcher3D::onRotateYActionTriggered()
         mStatusBar->showMessage("Sphere created");
     }
     catch (const std::runtime_error& e)
-    { 
+    {
         QMessageBox::information(nullptr, "Info", e.what());
     }
 }
@@ -240,7 +240,7 @@ void Sketcher3D::onSaveGNUActionTriggered()
     /*QString qFileName = QFileDialog::getSaveFileName(
        this, "Save Shapes", "", ".dat");*/
 
-    // Save shapes to file (GNU Plot)
+       // Save shapes to file (GNU Plot)
     std::string fileName = "../ShapesGNU.dat";
 
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
@@ -280,15 +280,15 @@ void Sketcher3D::onLoadSTLTriggered()
 {
     QString qFileName = QFileDialog::getOpenFileName(
         this, "Open STL", "", "*.STL");
-    
 
-        // load stl file
-    //std::string fileName = "../cube.stl";
-    //std::string fileName = "../solid-cube.stl";
-    //std::string fileName = "../pyramid.stl";
+
+    // load stl file
+//std::string fileName = "../cube.stl";
+//std::string fileName = "../solid-cube.stl";
+//std::string fileName = "../pyramid.stl";
     FileHandle::readSTL(qFileName.toStdString(), tri);
-  
-if (!tri.getDataForOpenGl().empty())
+
+    if (!tri.getDataForOpenGl().empty())
     {
         glWidget->drawShape(tri.getDataForOpenGl(), tri.getNormalForOpenGl());
         QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
@@ -296,7 +296,7 @@ if (!tri.getDataForOpenGl().empty())
     else
     {
         QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
-    }    
+    }
 }
 
 void Sketcher3D::onSaveSTLTriggered()
@@ -325,7 +325,7 @@ void Sketcher3D::onSaveActionTriggered()
     /*QString qFileName = QFileDialog::getSaveFileName(
         this, "Save Shapes", "", ".skt");*/
 
-    // Save shapes to file
+        // Save shapes to file
     std::string fileName = "../Shapes.skt";
 
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
