@@ -54,7 +54,7 @@ void Sketcher3D::setupUI()
     connect(mRotateX, &QAction::triggered, this, &Sketcher3D::onRotateXActionTriggered);
     connect(mRotateY, &QAction::triggered, this, &Sketcher3D::onRotateYActionTriggered);
     connect(mRotateZ, &QAction::triggered, this, &Sketcher3D::onRotateZActionTriggered);*/
-    
+
     connect(mSaveGNUAction, &QAction::triggered, this, &Sketcher3D::onSaveGNUActionTriggered);
     connect(mSaveAction, &QAction::triggered, this, &Sketcher3D::onSaveActionTriggered);
     connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
@@ -89,7 +89,7 @@ void Sketcher3D::toolBarElements()
     mCylinderTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cylinder.png", "Cylinder");
     mConeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cone.png", "Cone");
     mPyramidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/pyramid.png", "Pyramid");
-    
+
 
     //mTransformationTool->setPopupMode(QToolButton::MenuButtonPopup);   // IMPORTANT
 
@@ -110,7 +110,7 @@ void Sketcher3D::menuBarElements()
     mSaveGNUAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveGNU");
     mSaveSTLAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveSTL");
     mLoadSTLAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "LoadSTL");
-    
+
     mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
     mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
     mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
@@ -134,7 +134,7 @@ void Sketcher3D::menuBarElements()
     mRotateX = mRotate->addAction("Rotate w.r.t x - Axis");
     mRotateY = mRotate->addAction("Rotate w.r.t y - Axis");
     mRotateZ = mRotate->addAction("Rotate w.r.t z - Axis");
-    
+
 }
 
 void Sketcher3D::onCuboidToolClicked()
@@ -153,92 +153,92 @@ void Sketcher3D::onCuboidToolClicked()
     }
 }
 
-//void Sketcher3D::onTranslateActionTriggered()
-//{
-//    // Create Cube object
-//    try {
-//        std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
-//        shapeManager.addShape(c);
-//        std::vector<float> vec = c->getTriangulation().getDataForOpenGl();
-//        glWidget->drawShape(vec);
-//        mStatusBar->showMessage("Cube created");
-//    }
-//    catch (const std::runtime_error& e)
-//    {
-//        QMessageBox::information(nullptr, "Info", e.what());
-//    }
-//}
-//
-//void Sketcher3D::onPyramidClicked()
-//{
-//    // Create Pyramid
-//    try {
-//        std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
-//        shapeManager.addShape(py);
-//        std::vector<float> vec = py->getTriangulation().getDataForOpenGl();
-//        glWidget->drawShape(vec);
-//        mStatusBar->showMessage("Pyramid created");
-//    }
-//    catch (const std::runtime_error& e)
-//    {
-//        QMessageBox::information(nullptr, "Info", e.what());
-//    }
-//}
-//
-//void Sketcher3D::onCylinderToolClicked()
-//{
-//    // Create Cylinder object
-//    try {
-//        std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
-//        shapeManager.addShape(cyl);
-//        std::vector<float> vec = cyl->getTriangulation().getDataForOpenGl();
-//        glWidget->drawShape(vec);
-//        mStatusBar->showMessage("Cylinder created");
-//    }
-//    catch (const std::runtime_error& e)
-//    {
-//        QMessageBox::information(nullptr, "Info", e.what());
-//    }
-//}
-//
-//void Sketcher3D::onRotateXActionTriggered()
-//{
-//    // Create Cone object
-//    try {
-//        std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
-//        shapeManager.addShape(cone);
-//        std::vector<float> vec = cone->getTriangulation().getDataForOpenGl();
-//        glWidget->drawShape(vec);
-//        mStatusBar->showMessage("Cone created");
-//    }
-//    catch (const std::runtime_error& e)
-//    {
-//        QMessageBox::information(nullptr, "Info", e.what());
-//    }
-//}
-//
-//void Sketcher3D::onRotateYActionTriggered()
-//{
-//    // Create Sphere object
-//    try {
-//        std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
-//        shapeManager.addShape(sp);
-//        std::vector<float> vec = sp->getTriangulation().getDataForOpenGl();
-//        glWidget->drawShape(vec);
-//        mStatusBar->showMessage("Sphere created");
-//    }
-//    catch (const std::runtime_error& e)
-//    { 
-//        QMessageBox::information(nullptr, "Info", e.what());
-//    }
-//}
+void Sketcher3D::onCubeToolClicked()
+{
+    // Create Cube object
+    try {
+        std::shared_ptr<Shape> c = std::make_shared<Cube>(ShapeSlots::cubeSlot(this));
+        shapeManager.addShape(c);
+        std::vector<float> vec = c->getTriangulation().getDataForOpenGl();
+        glWidget->drawShape(vec);
+        mStatusBar->showMessage("Cube created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
+}
+
+void Sketcher3D::onPyramidClicked()
+{
+    // Create Pyramid
+    try {
+        std::shared_ptr<Shape> py = std::make_shared<Pyramid>(ShapeSlots::pyramidSlot(this));
+        shapeManager.addShape(py);
+        std::vector<float> vec = py->getTriangulation().getDataForOpenGl();
+        glWidget->drawShape(vec);
+        mStatusBar->showMessage("Pyramid created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
+}
+
+void Sketcher3D::onCylinderToolClicked()
+{
+    // Create Cylinder object
+    try {
+        std::shared_ptr<Shape> cyl = std::make_shared<Cylinder>(ShapeSlots::cylinderSlot(this));
+        shapeManager.addShape(cyl);
+        std::vector<float> vec = cyl->getTriangulation().getDataForOpenGl();
+        glWidget->drawShape(vec);
+        mStatusBar->showMessage("Cylinder created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
+}
+
+void Sketcher3D::onConeToolClicked()
+{
+    // Create Cone object
+    try {
+        std::shared_ptr<Shape> cone = std::make_shared<Cone>(ShapeSlots::coneSlot(this));
+        shapeManager.addShape(cone);
+        std::vector<float> vec = cone->getTriangulation().getDataForOpenGl();
+        glWidget->drawShape(vec);
+        mStatusBar->showMessage("Cone created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
+}
+
+void Sketcher3D::onSphereToolClicked()
+{
+    // Create Sphere object
+    try {
+        std::shared_ptr<Shape> sp = std::make_shared<Sphere>(ShapeSlots::sphereSlot(this));
+        shapeManager.addShape(sp);
+        std::vector<float> vec = sp->getTriangulation().getDataForOpenGl();
+        glWidget->drawShape(vec);
+        mStatusBar->showMessage("Sphere created");
+    }
+    catch (const std::runtime_error& e)
+    {
+        QMessageBox::information(nullptr, "Info", e.what());
+    }
+}
 
 void Sketcher3D::onSaveGNUActionTriggered()
 {
     /*QString qFileName = QFileDialog::getSaveFileName(
        this, "Save Shapes", "", ".dat");*/
 
-    // Save shapes to file (GNU Plot)
+       // Save shapes to file (GNU Plot)
     std::string fileName = "../ShapesGNU.dat";
 
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
@@ -278,15 +278,15 @@ void Sketcher3D::onLoadSTLTriggered()
 {
     QString qFileName = QFileDialog::getOpenFileName(
         this, "Open STL", "", "*.STL");
-    
 
-        // load stl file
-    //std::string fileName = "../cube.stl";
-    //std::string fileName = "../solid-cube.stl";
-    //std::string fileName = "../pyramid.stl";
+
+    // load stl file
+//std::string fileName = "../cube.stl";
+//std::string fileName = "../solid-cube.stl";
+//std::string fileName = "../pyramid.stl";
     FileHandle::readSTL(qFileName.toStdString(), tri);
-  
-if (!tri.getDataForOpenGl().empty())
+
+    if (!tri.getDataForOpenGl().empty())
     {
         glWidget->drawShape(tri.getDataForOpenGl(), tri.getNormalForOpenGl());
         QMessageBox::information(this, "load", "Shapes loaded and rendered in 3D viewer!");
@@ -294,7 +294,7 @@ if (!tri.getDataForOpenGl().empty())
     else
     {
         QMessageBox::warning(this, "Not loaded", "Shapes not loaded!");
-    }    
+    }
 }
 
 void Sketcher3D::onSaveSTLTriggered()
@@ -323,7 +323,7 @@ void Sketcher3D::onSaveActionTriggered()
     /*QString qFileName = QFileDialog::getSaveFileName(
         this, "Save Shapes", "", ".skt");*/
 
-    // Save shapes to file
+        // Save shapes to file
     std::string fileName = "../Shapes.skt";
 
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();

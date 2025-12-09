@@ -132,9 +132,9 @@ Sphere ShapeSlots::sphereSlot(QWidget* parent)
 
     return Sphere(name.toStdString(), radius);
 
- }
+}
 
- Cone ShapeSlots::coneSlot(QWidget* parent)
+Cone ShapeSlots::coneSlot(QWidget* parent)
 {
     // Create dialog
     QDialog dlg(parent);
@@ -158,9 +158,9 @@ Sphere ShapeSlots::sphereSlot(QWidget* parent)
     const double height = heightSpin->value();
 
     return Cone(name.toStdString(), radius, height);
- }
+}
 
- Cylinder ShapeSlots::cylinderSlot(QWidget* parent)
+Cylinder ShapeSlots::cylinderSlot(QWidget* parent)
 {
     // Create dialog
     QDialog dlg(parent);
@@ -184,6 +184,6 @@ Sphere ShapeSlots::sphereSlot(QWidget* parent)
     const double height = heightSpin->value();
 
     return Cylinder(name.toStdString(), radius, height);
- }
+}
 
 

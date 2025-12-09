@@ -19,11 +19,9 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
 
 OpenGLWidget::~OpenGLWidget()
 {
-    makeCurrent(); 
+    makeCurrent();
     mShapeVAO.destroy();
     mShapeVBO.destroy();
-    mNormalVAO.destroy();
-    mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
 }
@@ -34,7 +32,7 @@ void OpenGLWidget::drawShape(const std::vector<float>& vec, const std::vector<fl
     {
         mVertices.push_back(it);
     }
-    for (int i = 0; i<normal.size(); i+=3)
+    for (int i = 0; i < normal.size(); i += 3)
     {
         for (int j = 0; j < 3; j++)
         {
@@ -55,7 +53,7 @@ void OpenGLWidget::clearShape()
 
 void OpenGLWidget::initializeGL()
 {
-    initializeOpenGLFunctions();  
+    initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST); // 3D depth handling
     glClearColor(0.1f, 0.1f, 0.1f, 0.1f); // dark background
 
@@ -104,10 +102,10 @@ void OpenGLWidget::initializeGL()
         }
     )";
 
-    
+
     mShader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs);
     mShader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs);
- 
+
 
     // Create VAO + VBO for shape
     mShapeVAO.create(); //VAO stores vertex attribute configuration
@@ -157,7 +155,7 @@ void OpenGLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (mVertices.empty())
-        return;    
+        return;
 
     // Build Model Matrix (rotate shape)
     QMatrix4x4 model;
