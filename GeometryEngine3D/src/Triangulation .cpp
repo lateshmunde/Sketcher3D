@@ -35,7 +35,6 @@ void Triangulation::addTriangle(int a, int b, int c, Point normal)
 }
 
 
-
 std::vector<float> Triangulation::getDataForOpenGl() const
 {
     std::vector<float> oglData;
