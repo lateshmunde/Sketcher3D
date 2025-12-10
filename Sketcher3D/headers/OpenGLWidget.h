@@ -38,6 +38,7 @@ private:
     //Buffers
     QOpenGLVertexArrayObject mShapeVAO;
     QOpenGLBuffer mShapeVBO;
+    //QOpenGLVertexArrayObject mNormalVAO;
     QOpenGLBuffer mNormalVBO;
 
     //Shader program
