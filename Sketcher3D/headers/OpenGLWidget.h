@@ -35,13 +35,13 @@ private:
     std::vector<float> mVertices;
     std::vector<float> mNormals;
 
+    //Buffers
     QOpenGLVertexArrayObject mShapeVAO;
-    //QOpenGLVertexArrayObject mNormalVAO;
     QOpenGLBuffer mShapeVBO;
     QOpenGLBuffer mNormalVBO;
-    QOpenGLShaderProgram mShader; // Shader program
 
-    QMatrix4x4 mProjection;
+    //Shader program
+    QOpenGLShaderProgram mShader;
 
     // Mouse + rotation controls
     QPoint mLastMousePos;
@@ -50,7 +50,11 @@ private:
     float mRotationZ;
     float mZoom;
 
+    QMatrix4x4 mProjection;
+
     // Light + object color
     QVector3D mLightDir;
+    QVector3D mLightColor;
     QVector3D mObjectColor;
+    QVector3D mCameraPos;
 };

@@ -378,6 +378,7 @@ void Sketcher3D::onTranslateActionTriggered()
     double tz = zSpin->value();
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    //shapeManager.deleteShape();
     //shapeManager.addShape(shape);
 
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
