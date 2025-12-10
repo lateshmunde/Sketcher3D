@@ -12,7 +12,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
     , mRotationY(0.0f) // initial rotation around Y
     , mRotationZ(0.0f) // initial rotation around Y
     , mZoom(500.0f) // camera distance
-    , mLightDir(0.0f, 0.0f, -1.0f) // light  from +Z toward screen
+    , mLightDir(0.0f, -1.0f, 0.0f) // light  from +Z toward screen
     , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
 {
 }

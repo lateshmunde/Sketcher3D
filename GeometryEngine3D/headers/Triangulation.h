@@ -22,8 +22,12 @@ public:
 
 	int addPoint(const Point& p); 
 	void addTriangle(int a, int b, int c, Point nomrmal = Point());
-	Point calculateNormal(const Triangle& tri) const ;
-
+	
+	std::vector<Point> getNormals() const;
+	
 	std::vector<float> getDataForOpenGl() const;
 	std::vector<float> getNormalForOpenGl() const;
+
+private:
+	Point calculateNormal(const Triangle& tri) const;
 };

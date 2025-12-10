@@ -18,18 +18,17 @@ void Pyramid::build()
 	int p0Ind = mTriag.addPoint(Point(x + halfL, y + halfW, z)); //b1 base points
 	int p1Ind = mTriag.addPoint(Point(x + halfL, y - halfW, z)); //b2
 	int p2Ind = mTriag.addPoint(Point(x - halfL, y - halfW, z)); //b3
-
-	mTriag.addTriangle(p0Ind, p1Ind, p2Ind); //base
-
 	int p3Ind = mTriag.addPoint(Point(x - halfL, y + halfW, z)); //b4
-	mTriag.addTriangle(p2Ind, p3Ind, p0Ind); //base
+
+	mTriag.addTriangle(p0Ind, p2Ind, p3Ind);//base
+	mTriag.addTriangle(p2Ind, p0Ind, p1Ind);//base
 
 	int apexInd = mTriag.addPoint(Point(x, y, z + mHeight)); //Apex
 
-	mTriag.addTriangle(p0Ind, p1Ind, apexInd);
-	mTriag.addTriangle(p2Ind, apexInd, p1Ind);
-	mTriag.addTriangle(p3Ind, apexInd, p2Ind);
-	mTriag.addTriangle(p0Ind, apexInd, p3Ind);
+	mTriag.addTriangle(p1Ind, p0Ind, apexInd);
+	mTriag.addTriangle(p2Ind, p1Ind, apexInd);
+	mTriag.addTriangle(p3Ind, p2Ind, apexInd);
+	mTriag.addTriangle(p0Ind, p3Ind, apexInd);
 }
 
 void Pyramid::save(std::ostream& out) const

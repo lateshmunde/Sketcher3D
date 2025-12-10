@@ -14,6 +14,12 @@ std::vector<Triangle> Triangulation::getTriangles() const
     return mTriangles;
 }
 
+
+std::vector<Point> Triangulation::getNormals() const
+{
+    return mNormals;
+}
+
 int Triangulation::addPoint(const Point& p)
 {
     // Already exists? return existing index
@@ -31,7 +37,9 @@ int Triangulation::addPoint(const Point& p)
 
 void Triangulation::addTriangle(int a, int b, int c, Point normal)
 {
-    mTriangles.emplace_back(a, b, c, normal);
+    Triangle t(a, b, c, normal);
+    mTriangles.push_back(t);
+    mNormals.push_back(calculateNormal(t));
 }
 
 
@@ -74,7 +82,6 @@ Point Triangulation::calculateNormal(const Triangle& tri) const
 std::vector<float> Triangulation::getNormalForOpenGl() const
 {
     std::vector<float> oglData;
-
 
     for (const Triangle& tri : mTriangles)
     {

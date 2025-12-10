@@ -242,16 +242,16 @@ void Sketcher3D::onSphereToolClicked()
 
 void Sketcher3D::onSaveGNUActionTriggered()
 {
-    /*QString qFileName = QFileDialog::getSaveFileName(
-       this, "Save Shapes", "", ".dat");*/
+    QString qFileName = QFileDialog::getSaveFileName(
+       this, "Save Shapes", "", "*.dat");
 
        // Save shapes to file (GNU Plot)
-    std::string fileName = "../ShapesGNU.dat";
+    //std::string fileName = "../ShapesGNU.dat";
 
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
-    if (FileHandle::saveToFileGNUPlot(fileName, shapesVec))
+    if (FileHandle::saveToFileGNUPlot(qFileName.toStdString(), shapesVec))
     {
-        QMessageBox::information(this, "Saved", "Shapes saved and rendered in 3D viewer!");
+        QMessageBox::information(this, "Save for GNU", "Shapes saved for GNU.");
     }
     else
     {
@@ -279,50 +279,45 @@ void Sketcher3D::onLoadSTLTriggered()
 
 void Sketcher3D::onSaveSTLTriggered()
 {
-    /*QString qFileName = QFileDialog::getSaveFileName(
-        this, "Save Shapes", "", ".skt");*/
+    QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", "*.STL");
 
         // Save shapes to file
-    std::string fileName = "../Shapes.stl";
+    //std::string fileName = "../Shapes.stl";
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
-    if (FileHandle::writeSTL(fileName, shapesVec))
+    if (FileHandle::writeSTL(qFileName.toStdString(), shapesVec))
     {
-        QMessageBox::information(this, "Saved", "Shapes saved and rendered in 3D viewer!");
+        QMessageBox::information(this, "Save for STL", "Shapes saved in STL.");
     }
     else
     {
         QMessageBox::warning(this, "Not Saved", "Shapes not saved!");
     }
-
 }
 
+void Sketcher3D::onSaveActionTriggered()
+{
+    QString qFileName = QFileDialog::getSaveFileName(
+        this, "Save Shapes", "", "*.skt");
+
+        // Save shapes to file
+    //std::string fileName = "../Shapes.skt";
+
+    std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
+    if (FileHandle::saveToFile(qFileName.toStdString(), shapesVec))
+    {
+        QMessageBox::information(this, "Save in .skt", "Shapes saved in .skt format.");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Not Saved", "Shapes not saved!");
+    }
+}
 void Sketcher3D::onClearTriggered()
 {
     shapeManager.clearShape();
     glWidget->clearShape();
 }
-
-
-
-void Sketcher3D::onSaveActionTriggered()
-{
-    /*QString qFileName = QFileDialog::getSaveFileName(
-        this, "Save Shapes", "", ".skt");*/
-
-        // Save shapes to file
-    std::string fileName = "../Shapes.skt";
-
-    std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
-    if (FileHandle::saveToFile(fileName, shapesVec))
-    {
-        QMessageBox::information(this, "Saved", "Shapes saved and rendered in 3D viewer!");
-    }
-    else
-    {
-        QMessageBox::warning(this, "Not Saved", "Shapes not saved!");
-    }
-}
-
 
 
 void Sketcher3D::onTranslateActionTriggered()
@@ -386,8 +381,9 @@ void Sketcher3D::onTranslateActionTriggered()
     //shapeManager.addShape(shape);
 
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
-
+    //std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
     std::vector<float> transformed = Transformations::translate(vec, tx, ty, tz);
+    //std::vector<float> transformedN = Transformations::translate(nVec, tx, ty, tz);
 
     glWidget->drawShape(transformed);
 }
