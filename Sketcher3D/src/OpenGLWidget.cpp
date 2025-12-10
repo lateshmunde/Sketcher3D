@@ -51,6 +51,7 @@ void OpenGLWidget::drawShape(const std::vector<float>& vec, const std::vector<fl
 void OpenGLWidget::clearShape()
 {
     mVertices.clear();
+    mNormals.clear();
     update();
 }
 
@@ -251,7 +252,7 @@ void OpenGLWidget::wheelEvent(QWheelEvent* event)
 
     // Clamp range so it never gets stuck
     if (mZoom < 1.0f)   mZoom = 1.0f;
-    if (mZoom > 200.0f) mZoom = 200.0f;
+    if (mZoom > 2000.0f) mZoom = 2000.0f;
 
     update();
 }
