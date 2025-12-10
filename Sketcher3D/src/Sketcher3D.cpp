@@ -4,6 +4,8 @@
 #include <vector>
 #include "ShapeSlots.h"
 #include "Transformations.h"
+#include "AiShapeGenerator.h"
+
 
 Sketcher3D::Sketcher3D(QWidget* parent)
     : QMainWindow(parent)
@@ -60,6 +62,9 @@ void Sketcher3D::setupUI()
     connect(mLoadSTLAction, &QAction::triggered, this, &Sketcher3D::onLoadSTLTriggered);
     connect(mSaveSTLAction, &QAction::triggered, this, &Sketcher3D::onSaveSTLTriggered);
     connect(mClearAction, &QAction::triggered, this, &Sketcher3D::onClearTriggered);
+
+    connect(mAiShapeAction, &QAction::triggered, this, &Sketcher3D::onAiShapeTriggered);
+
 }
 
 
@@ -135,6 +140,10 @@ void Sketcher3D::menuBarElements()
     mRotateX = mRotate->addAction("Rotate w.r.t x - Axis");
     mRotateY = mRotate->addAction("Rotate w.r.t y - Axis");
     mRotateZ = mRotate->addAction("Rotate w.r.t z - Axis");
+
+    //AI Menu
+    mAiShapeAction = mMenuBar->addAction("AI Shape Generator");
+
 
 }
 
@@ -573,4 +582,40 @@ void Sketcher3D::onRotateZActionTriggered()
     std::vector<float> transformed = Transformations::rotationZ(vec, angleZ);
 
     glWidget->drawShape(transformed);
+}
+
+void Sketcher3D::onAiShapeTriggered()
+{
+    bool ok;
+    QString prompt = QInputDialog::getText(
+        this,
+        "AI Shape Generator",
+        "How can I help you?",
+        QLineEdit::Normal,
+        "",
+        &ok
+    );
+
+    if (!ok || prompt.isEmpty())
+        return;
+
+    // Generate shape using our AI tool
+    std::shared_ptr<Shape> aiShape =
+        AiShapeGenerator::generateShapeFromPrompt(prompt.toStdString());
+
+    if (!aiShape)
+    {
+        QMessageBox::warning(this, "AI", "unable to understand prompt.");
+        return;
+    }
+
+    // Add to shape manager
+    shapeManager.addShape(aiShape);
+
+    // Send to OpenGL
+    auto vec = aiShape->getTriangulation().getDataForOpenGl();
+    auto norm = aiShape->getTriangulation().getNormalForOpenGl();
+    glWidget->drawShape(vec, norm);
+
+    mStatusBar->showMessage("AI generated shape from prompt");
 }

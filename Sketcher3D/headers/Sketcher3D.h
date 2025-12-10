@@ -72,6 +72,8 @@ private:
     QAction* mRotateY;
     QAction* mRotateZ;
 
+    QAction* mAiShapeAction;
+
     // Shape Manager
     ShapeManager shapeManager;
     Triangulation tri;
@@ -99,4 +101,7 @@ private slots:
     void onRotateXActionTriggered();
     void onRotateYActionTriggered();
     void onRotateZActionTriggered();
+
+    //AI
+    void onAiShapeTriggered();
 };

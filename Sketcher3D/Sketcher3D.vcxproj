@@ -115,6 +115,7 @@
     <QtUic Include="Sketcher3D.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AiShapeGenerator.cpp" />
     <ClCompile Include="src\FileHandle.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\OpenGLWidget.cpp" />
@@ -131,6 +132,7 @@
     <QtMoc Include="headers\Sketcher3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\AiShapeGenerator.h" />
     <ClInclude Include="headers\FileHandle.h" />
     <QtMoc Include="headers\OpenGLWidget.h" />
     <ClInclude Include="headers\ShapeCreator.h" />
