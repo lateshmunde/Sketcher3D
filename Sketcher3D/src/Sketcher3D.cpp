@@ -90,11 +90,6 @@ void Sketcher3D::toolBarElements()
     mCylinderTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cylinder.png", "Cylinder");
     mConeTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/cone.png", "Cone");
     mPyramidTool = createToolButton(mToolBar.get(), ":/Sketcher3D/Resources/pyramid.png", "Pyramid");
-
-
-    //mTransformationTool->setPopupMode(QToolButton::MenuButtonPopup);   // IMPORTANT
-
-    //mToolBar->addWidget(mTransformationTool.get());
 }
 
 void Sketcher3D::menuBarElements()
@@ -112,20 +107,10 @@ void Sketcher3D::menuBarElements()
     mSaveSTLAction = mSaveMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "SaveSTL");
     mLoadSTLAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DialogSaveButton), "LoadSTL");
 
-    mNewAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_FileIcon), "New");
-    mNewAction->setShortcut(QKeySequence::New); // Ctrl+N
-    mOpenAction = mFileMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_DirOpenIcon), "Open");
-    mOpenAction->setShortcut(QKeySequence::Open); // Ctrl+O
-
     // Edit Menu
     QMenu* editMenu = mMenuBar.get()->addMenu("Edit");
     mClearAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_TrashIcon), "Clear");
     mClearAction->setShortcut(Qt::CTRL | Qt::Key_X); // Ctrl+X
-    QAction* undoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowBack), "Undo");
-    undoAction->setShortcut(QKeySequence::Undo); // Ctrl+Z
-    QAction* redoAction = editMenu->addAction(mMenuBar->style()->standardIcon(QStyle::SP_ArrowForward), "Redo");
-    redoAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Z); // Ctrl+Shift+Z
-
 
     // Transformation Menu
     mTransformationMenu = mMenuBar.get()->addMenu("Transformations");
@@ -378,6 +363,7 @@ void Sketcher3D::onTranslateActionTriggered()
     double tz = zSpin->value();
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
+    //shapeManager.deleteShape();
     //shapeManager.addShape(shape);
 
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();

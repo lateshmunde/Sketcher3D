@@ -10,12 +10,13 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
     , mNormalVBO(QOpenGLBuffer::VertexBuffer)
     , mRotationX(0.0f) // initial rotation around X
     , mRotationY(0.0f) // initial rotation around Y
-    , mRotationZ(0.0f) // initial rotation around Y
+    , mRotationZ(0.0f) // initial rotation around z
     , mZoom(500.0f) // camera distance
-    , mLightDir(0.0f, -1.0f, 0.0f) // light  from +Z toward screen
+    , mLightDir(0.0f, 0.0f, -1.0f) // light  from +Z toward screen
+    , mLightColor(1.0f, 1.0f, 1.0f) // white light
     , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
-{
-}
+    , mCameraPos(0.0f, 0.0f, mZoom) 
+{}
 
 OpenGLWidget::~OpenGLWidget()
 {
@@ -23,7 +24,7 @@ OpenGLWidget::~OpenGLWidget()
     mShapeVAO.destroy();
     mShapeVBO.destroy();
     //mNormalVAO.destroy();
-     mNormalVBO.destroy();
+    mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
 }
@@ -39,9 +40,9 @@ void OpenGLWidget::drawShape(const std::vector<float>& vec, const std::vector<fl
     {
         for (int j = 0; j < 3; j++)
         {
-            mNormals.push_back(-normal[i]);
-            mNormals.push_back(-normal[i + 1]);
-            mNormals.push_back(-normal[i + 2]);
+            mNormals.push_back(normal[i]);
+            mNormals.push_back(normal[i + 1]);
+            mNormals.push_back(normal[i + 2]);
         }
 
     }
@@ -61,54 +62,84 @@ void OpenGLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST); // 3D depth handling
     glClearColor(0.1f, 0.1f, 0.1f, 0.1f); // dark background
 
-    //Vertex Shade
+    //Vertex Shader
     const char* vs = R"(
-        #version 330 core
+               #version 460 core
 
-        layout(location = 0) in vec3 aPos;
-        layout(location = 1) in vec3 aNorm;
+        layout(location = 0) in vec3 aPos; //vertex position coming from VBO
+        layout(location = 1) in vec3 aNorm; //aNorm = vertex normal for lighting
 
-        uniform mat4 uModel; //uniform - same value for all vertices.
-        uniform mat4 uView; //Moves the camera
-        uniform mat4 uProj; //Projection matrix - Perspective
+        uniform mat4 uModel; //transforms object (translate / rotate)
+        uniform mat4 uView; //camera matrix
+        uniform mat4 uProj; //projection (perspective)
 
-        uniform vec3 uLightDir;  // Direction light
-        uniform vec3 uColor;  // Base object color
-
-        out vec3 vColor;  // output color to fragment shader
+        //Outputs sent to fragment shader
+        out vec3 vFragPos;
+        out vec3 vNormal;
 
         void main()
         {
-            // Transform vertex position to clip space //Converts local coordinates
+            //computes the final position of the vertex on screen // final clip-space position 
             gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
-           // Compute normal from vertex
-            vec3 normal = normalize(aNorm);
-
-            // Lighting = max(dot(N,L), 0) //diffuse lighting.
-            float diff = max(dot(normal, normalize(uLightDir)), 0.0);
-
-            // Combine base color with diffuse lighting
-            vColor = uColor * (0.2 + diff);  // add little ambient light
+            //Convert the vertex position from object space -> world space // world-space fragment position
+            vFragPos = vec3(uModel * vec4(aPos, 1.0));
+            
+            //If model includes scaling or rotation, normals must transform differently
+            //normal matrix -> inverse-transpose of the 3×3 of the model matrix
+            //Ensures normals stay perpendicular to surfaces.
+            // world-space normal (must normalize later)
+            vNormal = mat3(transpose(inverse(uModel))) * aNorm;
         }
+
     )";
 
     //Fragment Shader 
     const char* fs = R"(
-        #version 330 core
+                    #version 460 core
 
-        in vec3 vColor; // Color from vertex shader
-        out vec4 FragColor;
+            in vec3 vFragPos;
+            in vec3 vNormal;
 
-        void main()
-        {
-            FragColor = vec4(vColor, 1.0);  // Output final color //1 (opaque)
-        }
+            out vec4 FragColor; //final color of the pixel
+
+            uniform vec3 uLightDir;   // directional light
+            uniform vec3 uLightColor; // color of the light
+            uniform vec3 uColor;      // base object color
+            uniform vec3 uViewPos;    // camera position
+
+            void main()
+            {
+                //Normals may have become non-unit due to interpolation -> normalize again.
+                // Normalize interpolated normal
+                vec3 N = normalize(vNormal);
+
+                // Light direction (directional light -> use opposite)
+                vec3 L = normalize(-uLightDir);
+
+                // Diffuse shading
+                float diff = max(dot(N, L), 0.0); //Dot product //negative values removed using max
+
+                // Specular shading
+                vec3 V = normalize(uViewPos - vFragPos);  // view direction //Vector from surface to camera
+                vec3 R = reflect(-L, N); // reflection direction //Reflection of light direction around the normal
+                float spec = pow(max(dot(V, R), 0.0), 32.0); // shininess = 32, controls highlight sharpness
+
+                // Combine (ambient + diffuse + specular)
+                vec3 ambient  = 0.2 * uLightColor; //Constant soft lighting, no dark objects
+                vec3 diffuse  = diff * uLightColor; //angle between light and surface
+                vec3 specular = spec * uLightColor * 0.5;  // strength = 0.5
+
+                vec3 finalColor = (ambient + diffuse + specular) * uColor; //Multiply lighting by object color
+
+                FragColor = vec4(finalColor, 1.0); //Output pixel color
+            }
     )";
 
 
     mShader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs);
     mShader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs);
+    mShader.link();
 
     if (!mShader.link()) {
         qWarning() << "Shader link failed:" << mShader.log();
@@ -119,21 +150,23 @@ void OpenGLWidget::initializeGL()
     mShapeVAO.create(); //VAO stores vertex attribute configuration
     mShapeVAO.bind();
 
-    //mNormalVAO.create(); //VAO stores normal attribute configuration
-    //mNormalVAO.bind();
 
     mShapeVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
     mShapeVBO.bind();
     mShapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+
+    //mNormalVAO.create();
+    //mNormalVAO.bind();
 
     mNormalVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
     mNormalVBO.bind();
     mNormalVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
     mShader.bind();
+
+    // Position attribute
     mShapeVBO.bind();
     glEnableVertexAttribArray(0); // enable layout(location=0)
-    glEnableVertexAttribArray(1); // enable layout(location=1)
     glVertexAttribPointer(
         0,  // index , matches layout(location = 0)
         3,  // vec3
@@ -142,7 +175,10 @@ void OpenGLWidget::initializeGL()
         3 * sizeof(float),
         nullptr
     );
+
+    // Normal attribute
     mNormalVBO.bind();
+    glEnableVertexAttribArray(1); // enable layout(location=1)
     glVertexAttribPointer(
         1,  // index , matches layout(location = 0)
         3,  // vec3
@@ -151,14 +187,24 @@ void OpenGLWidget::initializeGL()
         3 * sizeof(float),
         nullptr
     );
-    mShader.release();
 
+    mShader.release();
     mShapeVBO.release();
     mShapeVAO.release();
     mNormalVBO.release();
-   // mNormalVAO.release();
+    //mNormalVAO.release();
 }
 
+//Reference from QT example
+void OpenGLWidget::resizeGL(int w, int h)
+{
+    if (h == 0) h = 1;
+    glViewport(0, 0, w, h);
+
+    //perspective projection - viewbox
+    mProjection.setToIdentity();
+    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 2000.0f); //vertical angle, aspect ratio, near plane ,far plane
+}
 
 void OpenGLWidget::paintGL()
 {
@@ -174,25 +220,31 @@ void OpenGLWidget::paintGL()
     model.rotate(mRotationY, 0, 1, 0);
     model.rotate(mRotationZ, 0, 0, 1);
 
-    //  View Matrix (fixed camera)
+    //  View Matrix (camera)
     QMatrix4x4 view;
     view.setToIdentity();
     view.translate(0, 0, -mZoom);   // move backward on Z
 
+    mCameraPos = QVector3D(0, 0, mZoom);
+
     // Bind shader
     mShader.bind();
-
     // Send minimal uniforms
     mShader.setUniformValue("uModel", model);
     mShader.setUniformValue("uView", view);
     mShader.setUniformValue("uProj", mProjection);
+
     mShader.setUniformValue("uLightDir", mLightDir);
+    mShader.setUniformValue("uLightColor", mLightColor);
     mShader.setUniformValue("uColor", mObjectColor);
+    mShader.setUniformValue("uViewPos", mCameraPos);
+
 
     // Bind VAO + upload vertex data
     mShapeVAO.bind();
     mShapeVBO.bind();
     mShapeVBO.allocate(mVertices.data(), mVertices.size() * sizeof(float));
+
     //mNormalVAO.bind();
     mNormalVBO.bind();
     mNormalVBO.allocate(mNormals.data(), mNormals.size() * sizeof(float));
@@ -203,23 +255,13 @@ void OpenGLWidget::paintGL()
 
     mShapeVBO.release();
     mShapeVAO.release();
-    //mNormalVAO.release();
     mNormalVBO.release();
+    //mNormalVAO.release();
     mShader.release();
 }
 
 
 //Reference from QT example
-void OpenGLWidget::resizeGL(int w, int h)
-{
-    if (h == 0) h = 1;
-    glViewport(0, 0, w, h);
-
-    //perspective projection - viewbox
-    mProjection.setToIdentity();
-    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 1000.0f);
-}
-
 void OpenGLWidget::mousePressEvent(QMouseEvent* event)
 {
     mLastMousePos = event->pos();

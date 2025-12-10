@@ -25,6 +25,12 @@ void ShapeManager::deleteShape(const int index)
 		std::cout << "Shape at index " << index << " is not deleted.\n";
 }
 
+void ShapeManager::deleteShape()
+{
+	size_t index = mShapes.size() - 1;
+	mShapes.erase(mShapes.begin()+ index);
+}
+
 void ShapeManager::clearShape()
 {
 	mShapes.clear();
