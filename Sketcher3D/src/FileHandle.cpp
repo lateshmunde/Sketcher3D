@@ -147,26 +147,33 @@ bool FileHandle::writeSTL(const std::string& filename, const std::vector<std::sh
 
 	for (const std::shared_ptr<Shape>& it : shapes)
 	{
+		int iNormIdx = 0;
+
 		file << "Start " << it->getType() << " mesh\n";
 
 		const std::vector<Point>& points = it->getTriangulation().getPoints();
 		const std::vector<Triangle>& triangles = it->getTriangulation().getTriangles();
+		const std::vector<Point>& normals = it->getTriangulation().getNormals();
 
 		for (const Triangle& tri : triangles)
 		{
-			// Get the 3 points
+			// Get the normal and 3 points for triangle
+
+			const Point& nP = normals[iNormIdx];
+
 			const Point& p1 = points[tri.m1];
 			const Point& p2 = points[tri.m2];
 			const Point& p3 = points[tri.m3];
-
-			// Normal (dummy 0 0 0 for now)
-			file << "  facet normal 0.0 0.0 0.0\n";
+			
+			file << "  facet normal " << nP.getX() << " " << nP.getY() << " " << nP.getZ() << "\n";
 			file << "    outer loop\n";
 			file << "      vertex " << p1.getX() << " " << p1.getY() << " " << p1.getZ() << "\n";
 			file << "      vertex " << p2.getX() << " " << p2.getY() << " " << p2.getZ() << "\n";
 			file << "      vertex " << p3.getX() << " " << p3.getY() << " " << p3.getZ() << "\n";
 			file << "    endloop\n";
 			file << "  endfacet\n";
+
+			iNormIdx++;
 		}
 
 		file << "End " << it->getType() << " mesh\n\n";

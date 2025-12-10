@@ -12,7 +12,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
     , mRotationY(0.0f) // initial rotation around Y
     , mRotationZ(0.0f) // initial rotation around Y
     , mZoom(500.0f) // camera distance
-    , mLightDir(0.0f, 0.0f, -1.0f) // light  from +Z toward screen
+    , mLightDir(0.0f, -1.0f, 0.0f) // light  from +Z toward screen
     , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
 {
 }
@@ -51,6 +51,7 @@ void OpenGLWidget::drawShape(const std::vector<float>& vec, const std::vector<fl
 void OpenGLWidget::clearShape()
 {
     mVertices.clear();
+    mNormals.clear();
     update();
 }
 
@@ -251,7 +252,7 @@ void OpenGLWidget::wheelEvent(QWheelEvent* event)
 
     // Clamp range so it never gets stuck
     if (mZoom < 1.0f)   mZoom = 1.0f;
-    if (mZoom > 200.0f) mZoom = 200.0f;
+    if (mZoom > 2000.0f) mZoom = 2000.0f;
 
     update();
 }
