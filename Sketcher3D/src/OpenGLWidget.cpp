@@ -63,7 +63,7 @@ void OpenGLWidget::initializeGL()
 
     //Vertex Shade
     const char* vs = R"(
-        #version 330 core
+        #version 460 core
 
         layout(location = 0) in vec3 aPos;
         layout(location = 1) in vec3 aNorm;
@@ -95,7 +95,7 @@ void OpenGLWidget::initializeGL()
 
     //Fragment Shader 
     const char* fs = R"(
-        #version 330 core
+        #version 460 core
 
         in vec3 vColor; // Color from vertex shader
         out vec4 FragColor;

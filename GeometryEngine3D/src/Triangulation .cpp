@@ -14,7 +14,6 @@ std::vector<Triangle> Triangulation::getTriangles() const
     return mTriangles;
 }
 
-
 std::vector<Point> Triangulation::getNormals() const
 {
     return mNormals;
@@ -41,7 +40,6 @@ void Triangulation::addTriangle(int a, int b, int c, Point normal)
     mTriangles.push_back(t);
     mNormals.push_back(calculateNormal(t));
 }
-
 
 std::vector<float> Triangulation::getDataForOpenGl() const
 {
