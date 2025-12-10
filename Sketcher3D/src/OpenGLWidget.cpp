@@ -15,7 +15,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent)
     , mLightDir(0.0f, 0.0f, -1.0f) // light  from +Z toward screen
     , mLightColor(1.0f, 1.0f, 1.0f) // white light
     , mObjectColor(0.0f, 0.7f, 1.0f) // blue-cyan color
-    , mCameraPos(0.0f, 0.0f, mZoom) // camera distance
+    , mCameraPos(0.0f, 0.0f, mZoom) 
 {}
 
 OpenGLWidget::~OpenGLWidget()
@@ -65,24 +65,28 @@ void OpenGLWidget::initializeGL()
     const char* vs = R"(
                #version 460 core
 
-        layout(location = 0) in vec3 aPos;
-        layout(location = 1) in vec3 aNorm;
+        layout(location = 0) in vec3 aPos; //vertex position coming from VBO
+        layout(location = 1) in vec3 aNorm; //aNorm = vertex normal for lighting
 
-        uniform mat4 uModel;
-        uniform mat4 uView;
-        uniform mat4 uProj;
+        uniform mat4 uModel; //transforms object (translate / rotate)
+        uniform mat4 uView; //camera matrix
+        uniform mat4 uProj; //projection (perspective)
 
+        //Outputs sent to fragment shader
         out vec3 vFragPos;
         out vec3 vNormal;
 
         void main()
         {
-            // final clip-space position
+            //computes the final position of the vertex on screen // final clip-space position 
             gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 
-            // world-space fragment position
+            //Convert the vertex position from object space -> world space // world-space fragment position
             vFragPos = vec3(uModel * vec4(aPos, 1.0));
-
+            
+            //If model includes scaling or rotation, normals must transform differently
+            //normal matrix -> inverse-transpose of the 3×3 of the model matrix
+            //Ensures normals stay perpendicular to surfaces.
             // world-space normal (must normalize later)
             vNormal = mat3(transpose(inverse(uModel))) * aNorm;
         }
@@ -96,7 +100,7 @@ void OpenGLWidget::initializeGL()
             in vec3 vFragPos;
             in vec3 vNormal;
 
-            out vec4 FragColor;
+            out vec4 FragColor; //final color of the pixel
 
             uniform vec3 uLightDir;   // directional light
             uniform vec3 uLightColor; // color of the light
@@ -105,6 +109,7 @@ void OpenGLWidget::initializeGL()
 
             void main()
             {
+                //Normals may have become non-unit due to interpolation -> normalize again.
                 // Normalize interpolated normal
                 vec3 N = normalize(vNormal);
 
@@ -112,21 +117,21 @@ void OpenGLWidget::initializeGL()
                 vec3 L = normalize(-uLightDir);
 
                 // Diffuse shading
-                float diff = max(dot(N, L), 0.0);
+                float diff = max(dot(N, L), 0.0); //Dot product //negative values removed using max
 
                 // Specular shading
-                vec3 V = normalize(uViewPos - vFragPos);  // view direction
-                vec3 R = reflect(-L, N);                  // reflection direction
-                float spec = pow(max(dot(V, R), 0.0), 32.0); // shininess = 32
+                vec3 V = normalize(uViewPos - vFragPos);  // view direction //Vector from surface to camera
+                vec3 R = reflect(-L, N); // reflection direction //Reflection of light direction around the normal
+                float spec = pow(max(dot(V, R), 0.0), 32.0); // shininess = 32, controls highlight sharpness
 
                 // Combine (ambient + diffuse + specular)
-                vec3 ambient  = 0.2 * uLightColor;
-                vec3 diffuse  = diff * uLightColor;
+                vec3 ambient  = 0.2 * uLightColor; //Constant soft lighting, no dark objects
+                vec3 diffuse  = diff * uLightColor; //angle between light and surface
                 vec3 specular = spec * uLightColor * 0.5;  // strength = 0.5
 
-                vec3 finalColor = (ambient + diffuse + specular) * uColor;
+                vec3 finalColor = (ambient + diffuse + specular) * uColor; //Multiply lighting by object color
 
-                FragColor = vec4(finalColor, 1.0);
+                FragColor = vec4(finalColor, 1.0); //Output pixel color
             }
     )";
 
@@ -193,7 +198,7 @@ void OpenGLWidget::resizeGL(int w, int h)
 
     //perspective projection - viewbox
     mProjection.setToIdentity();
-    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 2000.0f);
+    mProjection.perspective(45.0f, float(w) / float(h), 0.1f, 2000.0f); //vertical angle, aspect ratio, near plane ,far plane
 }
 
 void OpenGLWidget::paintGL()
