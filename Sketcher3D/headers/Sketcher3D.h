@@ -84,8 +84,6 @@ private slots:
     void onPyramidClicked();
     void onSphereToolClicked();
 
-    //void onNewActionTriggered();
-    //void onOpenActionTriggered();
     void onSaveActionTriggered();
     void onSaveGNUActionTriggered();
     void onLoadSTLTriggered();

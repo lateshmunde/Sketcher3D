@@ -9,7 +9,6 @@ private:
     int rows;
     int cols;
     std::vector<std::vector<double>> data;
-    //static Matrix identity;
 
 public:
     Matrix(int row = 4, int col = 4);

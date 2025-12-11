@@ -38,7 +38,6 @@ void Sketcher3D::setupUI()
 
     mStatusBar = std::make_unique<QStatusBar>(this);
     setStatusBar(mStatusBar.get());
-    //mStatusBar->showMessage("Application Started - 3D Viewer Ready");
     mStatusBar->showMessage("X-axis (Red), Y-axis (Green),  Z-axis (Blue)");
 
     // Connections
@@ -230,9 +229,6 @@ void Sketcher3D::onSaveGNUActionTriggered()
     QString qFileName = QFileDialog::getSaveFileName(
        this, "Save Shapes", "", "*.dat");
 
-       // Save shapes to file (GNU Plot)
-    //std::string fileName = "../ShapesGNU.dat";
-
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
     if (FileHandle::saveToFileGNUPlot(qFileName.toStdString(), shapesVec))
     {
@@ -267,8 +263,6 @@ void Sketcher3D::onSaveSTLTriggered()
     QString qFileName = QFileDialog::getSaveFileName(
         this, "Save Shapes", "", "*.STL");
 
-        // Save shapes to file
-    //std::string fileName = "../Shapes.stl";
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
     if (FileHandle::writeSTL(qFileName.toStdString(), shapesVec))
     {
@@ -284,9 +278,6 @@ void Sketcher3D::onSaveActionTriggered()
 {
     QString qFileName = QFileDialog::getSaveFileName(
         this, "Save Shapes", "", "*.skt");
-
-        // Save shapes to file
-    //std::string fileName = "../Shapes.skt";
 
     std::vector<std::shared_ptr<Shape>> shapesVec = shapeManager.getShapesVec();
     if (FileHandle::saveToFile(qFileName.toStdString(), shapesVec))
@@ -363,13 +354,9 @@ void Sketcher3D::onTranslateActionTriggered()
     double tz = zSpin->value();
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
-    //shapeManager.deleteShape();
-    //shapeManager.addShape(shape);
 
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
-    //std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
     std::vector<float> transformed = Transformations::translate(vec, tx, ty, tz);
-    //std::vector<float> transformedN = Transformations::translate(nVec, tx, ty, tz);
 
     glWidget->drawShape(transformed);
 }

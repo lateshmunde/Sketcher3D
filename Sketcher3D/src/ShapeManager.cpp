@@ -2,8 +2,6 @@
 
 void ShapeManager::addShape(std::shared_ptr<Shape> shapes)
 {
-	//std::shared_ptr<Shape> s1 = std::make_shared<Cuboid>(c1);
-
 	mShapes.push_back(shapes);
 }
 

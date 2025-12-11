@@ -23,7 +23,6 @@ OpenGLWidget::~OpenGLWidget()
     makeCurrent();
     mShapeVAO.destroy();
     mShapeVBO.destroy();
-    //mNormalVAO.destroy();
     mNormalVBO.destroy();
     mShader.removeAllShaders();
     doneCurrent();
@@ -155,9 +154,6 @@ void OpenGLWidget::initializeGL()
     mShapeVBO.bind();
     mShapeVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 
-    //mNormalVAO.create();
-    //mNormalVAO.bind();
-
     mNormalVBO.create(); //Creates a Vertex Buffer Object(storage for vertices)
     mNormalVBO.bind();
     mNormalVBO.setUsagePattern(QOpenGLBuffer::DynamicDraw);
@@ -192,7 +188,6 @@ void OpenGLWidget::initializeGL()
     mShapeVBO.release();
     mShapeVAO.release();
     mNormalVBO.release();
-    //mNormalVAO.release();
 }
 
 //Reference from QT example
@@ -245,7 +240,6 @@ void OpenGLWidget::paintGL()
     mShapeVBO.bind();
     mShapeVBO.allocate(mVertices.data(), mVertices.size() * sizeof(float));
 
-    //mNormalVAO.bind();
     mNormalVBO.bind();
     mNormalVBO.allocate(mNormals.data(), mNormals.size() * sizeof(float));
 
@@ -256,7 +250,6 @@ void OpenGLWidget::paintGL()
     mShapeVBO.release();
     mShapeVAO.release();
     mNormalVBO.release();
-    //mNormalVAO.release();
     mShader.release();
 }
 

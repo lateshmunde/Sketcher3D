@@ -24,7 +24,6 @@ public:
 
 private:
 	// Helper to parse tokens
-	//static std::vector<std::string> reader(const std::string& line);
 	
 	// Helper to check numeric conversion
 	static bool toDouble(const std::string& s, double& out);
