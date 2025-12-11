@@ -131,6 +131,7 @@ void Sketcher3D::onCuboidToolClicked()
         shapeManager.addShape(cb);
         std::vector<float> vec = cb->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = cb->getTriangulation().getNormalForOpenGl();
+        glWidget->setPreDetails();
         glWidget->drawShape(vec, nVec); 
         mStatusBar->showMessage("Cuboid created");
     }
@@ -148,6 +149,7 @@ void Sketcher3D::onCubeToolClicked()
         shapeManager.addShape(c);
         std::vector<float> vec = c->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = c->getTriangulation().getNormalForOpenGl();
+        glWidget->setPreDetails();
         glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cube created");
     }
@@ -165,6 +167,7 @@ void Sketcher3D::onPyramidClicked()
         shapeManager.addShape(py);
         std::vector<float> vec = py->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = py->getTriangulation().getNormalForOpenGl();
+        glWidget->setPreDetails();
         glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Pyramid created");
     }
@@ -182,6 +185,7 @@ void Sketcher3D::onCylinderToolClicked()
         shapeManager.addShape(cyl);
         std::vector<float> vec = cyl->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = cyl->getTriangulation().getNormalForOpenGl();
+        glWidget->setPreDetails();
         glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cylinder created");
     }
@@ -199,6 +203,7 @@ void Sketcher3D::onConeToolClicked()
         shapeManager.addShape(cone);
         std::vector<float> vec = cone->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = cone->getTriangulation().getNormalForOpenGl();
+        glWidget->setPreDetails();
         glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Cone created");
     }
@@ -216,6 +221,7 @@ void Sketcher3D::onSphereToolClicked()
         shapeManager.addShape(sp);
         std::vector<float> vec = sp->getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = sp->getTriangulation().getNormalForOpenGl();
+        glWidget->setPreDetails();
         glWidget->drawShape(vec, nVec);
         mStatusBar->showMessage("Sphere created");
     }
@@ -367,11 +373,12 @@ void Sketcher3D::onTranslateActionTriggered()
     //shapeManager.addShape(shape);
 
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
-    //std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
-    std::vector<float> transformed = Transformations::translate(vec, tx, ty, tz);
-    //std::vector<float> transformedN = Transformations::translate(nVec, tx, ty, tz);
+    std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
+    std::vector<float> transformed = Transformations::translate(vec, tx, ty, tz);   
+    std::vector<float> transformedN = Transformations::translate(nVec, tx, ty, tz);   
 
-    glWidget->drawShape(transformed);
+    glWidget->delCurShapeForTrans();
+    glWidget->drawShape(transformed, transformedN);
 }
 
 void Sketcher3D::onScaleActionTriggered()
@@ -429,10 +436,13 @@ void Sketcher3D::onScaleActionTriggered()
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+    std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
 
     std::vector<float> transformed = Transformations::scale(vec, sx, sy, sz);
+    std::vector<float> transformedN = Transformations::scale(nVec, sx, sy, sz);
 
-    glWidget->drawShape(transformed);
+    glWidget->delCurShapeForTrans();
+    glWidget->drawShape(transformed, transformedN);
 }
 
 void Sketcher3D::onRotateXActionTriggered()
@@ -471,10 +481,14 @@ void Sketcher3D::onRotateXActionTriggered()
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+    std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
+
 
     std::vector<float> transformed = Transformations::rotationX(vec, angleX);
+    std::vector<float> transformedN = Transformations::rotationX(nVec, angleX);
 
-    glWidget->drawShape(transformed);
+    glWidget->delCurShapeForTrans();
+    glWidget->drawShape(transformed, transformedN);
 }
 
 void Sketcher3D::onRotateYActionTriggered()
@@ -513,10 +527,13 @@ void Sketcher3D::onRotateYActionTriggered()
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+    std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
 
     std::vector<float> transformed = Transformations::rotationY(vec, angleY);
+    std::vector<float> transformedN = Transformations::rotationY(nVec, angleY);
 
-    glWidget->drawShape(transformed);
+    glWidget->delCurShapeForTrans();
+    glWidget->drawShape(transformed, transformedN);
 }
 
 void Sketcher3D::onRotateZActionTriggered()
@@ -555,8 +572,11 @@ void Sketcher3D::onRotateZActionTriggered()
 
     std::shared_ptr<Shape> shape = shapeManager.getLastShape();
     std::vector<float> vec = shape->getTriangulation().getDataForOpenGl();
+    std::vector<float> nVec = shape->getTriangulation().getNormalForOpenGl();
 
     std::vector<float> transformed = Transformations::rotationZ(vec, angleZ);
+    std::vector<float> transformedN = Transformations::rotationZ(nVec, angleZ);
 
-    glWidget->drawShape(transformed);
+    glWidget->delCurShapeForTrans();
+    glWidget->drawShape(transformed, transformedN);
 }

@@ -21,6 +21,8 @@ public:
 
     void drawShape(const std::vector<float>& vec, const std::vector<float>& normal = {});
     void clearShape(); 
+    void setPreDetails();
+    void delCurShapeForTrans();
 
 protected:
     void initializeGL() override;     // Create VAO, VBO, shaders
@@ -31,9 +33,12 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
 
+
 private:
     std::vector<float> mVertices;
+    std::vector<float> mPreVertices;
     std::vector<float> mNormals;
+    std::vector<float> mPreNormals;
 
     //Buffers
     QOpenGLVertexArrayObject mShapeVAO;

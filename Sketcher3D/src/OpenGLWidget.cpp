@@ -298,3 +298,15 @@ void OpenGLWidget::wheelEvent(QWheelEvent* event)
 
     update();
 }
+
+void OpenGLWidget::setPreDetails()
+{
+    this->mPreVertices = this->mVertices;
+    this->mPreNormals = this->mNormals;
+}
+
+void OpenGLWidget::delCurShapeForTrans()
+{
+    this->mVertices = this->mPreVertices;
+    this->mNormals = this->mPreNormals;
+}
