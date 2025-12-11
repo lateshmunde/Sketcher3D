@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include "Exports.h"
 #include "Point.h"
 #include "Triangle.h"
