@@ -24,38 +24,34 @@ bool FileHandle::saveToFile(const std::string& fileName,
 
 }
 
-//std::vector<std::shared_ptr<Shape>> FileHandle::loadFromFile(const std::string& fileName)
-//{
-//	std::vector<std::shared_ptr<Shape>> shapes;
-//
-//	std::ifstream fin(fileName);
-//	if (!fin.is_open())
-//	{
-//		std::cerr << "Error: Cannot open file or reading: " << fileName << "\n";
-//		return shapes;
-//	}
-//
-//	std::string line;
-//	while (std::getline(fin, line))
-//	{
-//		if (line.empty())
-//			continue;
-//
-//		//shapes.push_back(ShapeCreator::createFromString(line));
-//		std::unique_ptr<Shape> shape = ShapeCreator::createFromString(line);
-//
-//		if (!shape)
-//		{
-//			std::cerr << "Warning: Invalid line in file: " << line << "\n";
-//			continue;
-//		}
-//
-//		shapes.push_back(std::move(shape));
-//	}
-//
-//	fin.close();
-//	return shapes;
-//}
+std::vector<std::shared_ptr<Shape>> FileHandle::loadFromFile(const std::string& fileName)
+{
+	std::vector<std::shared_ptr<Shape>> shapes;
+
+	std::ifstream fin(fileName);
+	
+
+	std::string line;
+	while (std::getline(fin, line))
+	{
+		if (line.empty())
+			continue;
+
+		//shapes.push_back(ShapeCreator::createFromString(line));
+		std::unique_ptr<Shape> shape = ShapeCreator::createFromString(line);
+
+		if (!shape)
+		{
+			std::cerr << "Warning: Invalid line in file: " << line << "\n";
+			continue;
+		}
+
+		shapes.push_back(std::move(shape));
+	}
+
+	fin.close();
+	return shapes;
+}
 
 
 bool FileHandle::saveToFileGNUPlot(const std::string& fileName,

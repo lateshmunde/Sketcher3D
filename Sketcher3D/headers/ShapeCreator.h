@@ -6,13 +6,14 @@
 #include "Cone.h"
 #include "Cube.h"
 #include "Pyramid.h"
+#include <sstream>
 
 
 class ShapeCreator
 {
 public:
 	// Create shape from a serialized line (used in FileHandle)
-	//static std::unique_ptr<Shape> createFromString(const std::string& line);
+	static std::unique_ptr<Shape> createFromString(const std::string& line);
 
 	// Direct creation helpers
 	static Cuboid createCuboid(const std::string& name, double length, double width, double height);
@@ -24,7 +25,7 @@ public:
 
 private:
 	// Helper to parse tokens
-	//static std::vector<std::string> reader(const std::string& line);
+	static std::vector<std::string> reader(const std::string& line);
 	
 	// Helper to check numeric conversion
 	static bool toDouble(const std::string& s, double& out);

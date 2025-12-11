@@ -1,17 +1,17 @@
 #include "ShapeCreator.h"
 
 //reader() : split string by spaces, coverts it into vector
-//std::vector<std::string> ShapeCreator::reader(const std::string& line)
-//{
-//	std::stringstream ss(line);
-//	std::string str;
-//	std::vector<std::string> strVec;
-//
-//	while (ss >> str)
-//		strVec.push_back(str);
-//
-//	return strVec;
-//}
+std::vector<std::string> ShapeCreator::reader(const std::string& line)
+{
+	std::stringstream ss(line);
+	std::string str;
+	std::vector<std::string> strVec;
+
+	while (ss >> str)
+		strVec.push_back(str);
+
+	return strVec;
+}
 
 
 // toDouble(): convert string to double
@@ -35,7 +35,6 @@ Cuboid ShapeCreator::createCuboid(const std::string& name, double length, double
 	return Cuboid(name, length, width, height);
 }
 
-
 Cube ShapeCreator::createCube(const std::string& name, double side)
 {
 	if (side <= 0)
@@ -43,7 +42,6 @@ Cube ShapeCreator::createCube(const std::string& name, double side)
 
 	return Cube(name, side);
 }
-
 
 Sphere ShapeCreator::createSphere(const std::string& name, double radius)
 {
@@ -77,114 +75,114 @@ Pyramid ShapeCreator::createPyramid(const std::string& name, double baseLength, 
 	return Pyramid(name, baseLength, baseWidth, height);
 }
 
-//// createFromString(): used when loading from file
-//std::unique_ptr<Shape> ShapeCreator::createFromString(const std::string& line)
-//{
-//	std::vector<std::string> params = reader(line);
-//	if (params.size() < 1)
-//		return nullptr;
-//
-//	std::string type = params[0];
-//
-//	if (type == "Cuboid")
-//	{
-//		if (params.size() != 7) // Cuboid x y z L W H
-//			return nullptr;
-//
-//		double x, y, z, L, W, H;
-//		if (!toDouble(params[1], x) ||
-//			!toDouble(params[2], y) ||
-//			!toDouble(params[3], z) ||
-//			!toDouble(params[4], L) ||
-//			!toDouble(params[5], W) ||
-//			!toDouble(params[6], H))
-//			return nullptr;
-//
-//		return createCuboid( L, W, H, Point(x, y, z));
-//	}
-//
-//	if (type == "Cube")
-//	{
-//		if (params.size() != 5) // Sphere x y z L
-//			return nullptr;
-//
-//		double x, y, z, L;
-//		if (!toDouble(params[1], x) ||
-//			!toDouble(params[2], y) ||
-//			!toDouble(params[3], z) ||
-//			!toDouble(params[4], L))
-//			return nullptr;
-//
-//		return createCube(L, Point(x, y, z));
-//	}
-//
-//	if (type == "Sphere")
-//	{
-//		if (params.size() != 5) // Sphere x y z R
-//			return nullptr;
-//
-//		double x, y, z, R;
-//		if (!toDouble(params[1], x) ||
-//			!toDouble(params[2], y) ||
-//			!toDouble(params[3], z) ||
-//			!toDouble(params[4], R))
-//			return nullptr;
-//
-//		return createSphere( R, Point(x, y, z));
-//	}
-//
-//	if (type == "Cylinder")
-//	{
-//		if (params.size() != 6) // Cylinder x y z R H
-//			return nullptr;
-//
-//		double x, y, z, R, H;
-//		if (!toDouble(params[1], x) ||
-//			!toDouble(params[2], y) ||
-//			!toDouble(params[3], z) ||
-//			!toDouble(params[4], R) ||
-//			!toDouble(params[5], H))
-//			return nullptr;
-//
-//		return createCylinder( R, H, Point(x, y, z));
-//	}
-//
-//	if (type == "Cone")
-//	{
-//		if (params.size() != 6) // Cone x y z R H
-//			return nullptr;
-//
-//		double x, y, z, R, H;
-//		if (!toDouble(params[1], x) ||
-//			!toDouble(params[2], y) ||
-//			!toDouble(params[3], z) ||
-//			!toDouble(params[4], R) ||
-//			!toDouble(params[5], H))
-//			return nullptr;
-//
-//		return createCone(R, H, Point(x, y, z));
-//	}
-//
-//	if (type == "Pyramid")
-//	{
-//		if (params.size() != 7) // Pyramid x y z BL BW H
-//			return nullptr;
-//
-//		double x, y, z, BL, BW, H;
-//		if (!toDouble(params[1], x) ||
-//			!toDouble(params[2], y) ||
-//			!toDouble(params[3], z) ||
-//			!toDouble(params[4], BL) ||
-//			!toDouble(params[5], BW) ||
-//			!toDouble(params[6], H))
-//			return nullptr;
-//
-//		return createPyramid(BL, BW, H, Point(x, y, z));
-//	}
-//
-//
-//	return nullptr; // Unknown shape type
-//}
-//	 
-//
+// createFromString(): used when loading from file
+std::unique_ptr<Shape> ShapeCreator::createFromString(const std::string& line)
+{
+	std::vector<std::string> params = reader(line);
+	if (params.size() < 1)
+		return nullptr;
+
+	std::string type = params[0];
+
+	if (type == "Cuboid")
+	{
+		if (params.size() != 5) // Cuboid cb1 L W H
+			return nullptr;
+
+		double L;
+		double W;
+		double H;
+		size_t i = 0;
+		if (!toDouble(params[i + 2], L) ||
+			!toDouble(params[i + 3], W) ||
+			!toDouble(params[i + 4], H))
+			return nullptr;
+
+		Cuboid cb = createCuboid( params[i+1], L, W, H);
+		return std::make_unique<Cuboid>(cb);
+	}
+
+	if (type == "Cube")
+	{
+		if (params.size() != 3) // Cube c L
+			return nullptr;
+
+		double L;
+		size_t i = 0;
+		if (!toDouble(params[i + 2 ], L))
+			return nullptr;
+
+		Cube c = createCube(params[i+1],L);
+		return std::make_unique<Cube>(c);
+	}
+
+	if (type == "Sphere")
+	{
+		if (params.size() != 3) // Sphere s R
+			return nullptr;
+
+		double R;
+		size_t i = 0;
+		if (!toDouble(params[i + 2], R))
+			return nullptr;
+
+		Sphere s = createSphere(params[i + 1], R);
+		return std::make_unique<Sphere>(s);
+	}
+
+	if (type == "Cylinder")
+	{
+		if (params.size() != 4) // Cylinder cy1 R H
+			return nullptr;
+
+		double R;
+		double H;
+		size_t i = 0;
+		if (!toDouble(params[i + 2], R) ||
+			!toDouble(params[i + 3], H))
+			return nullptr;
+
+		Cylinder cy = createCylinder(params[i + 1], R, H); 
+		return std::make_unique<Cylinder>(cy);
+	}
+
+	if (type == "Cone")
+	{
+		if (params.size() != 4) // Cone con R H
+			return nullptr;
+
+		double R;
+		double H;
+		size_t i = 0;
+		if (!toDouble(params[i + 2], R) ||
+			!toDouble(params[i + 3], H))
+			return nullptr;
+
+		Cone con = createCone(params[i + 1], R, H);
+		return std::make_unique<Cone>(con);
+	}
+
+	if (type == "Pyramid")
+	{
+		if (params.size() != 5) // Pyramid py BL BW H
+			return nullptr;
+
+		double BL;
+		double BW;
+		double H;
+		size_t i = 0;
+		if (!toDouble(params[i + 2], BL) ||
+			!toDouble(params[i + 3], BW) ||
+			!toDouble(params[i + 4], H))
+			return nullptr;
+
+		Pyramid py = createPyramid(params[i + 1], BL, BW, H);
+		return std::make_unique<Pyramid>(py);
+	}
+
+
+	return nullptr; // Unknown shape type
+}
+	 
+
 
