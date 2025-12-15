@@ -6,20 +6,22 @@ Cuboid::Cuboid(const std::string& name, double length, double width, double heig
 	build();
 }
 
-void Cuboid::build()
+void Cuboid::build()//every shape will have triag object to store points and triangles
 {
 	double x = 0;
 	double y = 0;
 	double z = 0;
 
-	int p0Ind = mTriag.addPoint(Point(x, y, z));
+	int p0Ind = mTriag.addPoint(Point(x, y, z));//point is pushed back in mPoints vector  and returns index
 	int p1Ind = mTriag.addPoint(Point(x + mLength, y, z));
 	int p2Ind = mTriag.addPoint(Point(x + mLength, y + mWidth, z));
 
-	mTriag.addTriangle(p0Ind, p2Ind, p1Ind); // front
-
+	mTriag.addTriangle(p0Ind, p2Ind, p1Ind); // front//triangle is pushed  in mTriangles vector
+	//triangle is made by indexes of points in mPoints vector with map
 	int p3Ind = mTriag.addPoint(Point(x, y + mWidth, z));
-	mTriag.addTriangle(p0Ind, p3Ind, p2Ind); // front
+	mTriag.addTriangle(p0Ind, p3Ind, p2Ind); // front//
+	//triangle is stored in form of (int) indices of points in mPoints vector
+	//use of map is shown in Triangulation.cpp addPoint function
 
 	int p4Ind = mTriag.addPoint(Point(x, y, z + mHeight));
 	int p5Ind = mTriag.addPoint(Point(x + mLength, y, z + mHeight));

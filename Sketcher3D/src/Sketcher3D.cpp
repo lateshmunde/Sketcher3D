@@ -144,7 +144,7 @@ void Sketcher3D::onCuboidToolClicked()
     try {
         std::shared_ptr<Shape> cb = std::make_shared<Cuboid>(ShapeSlots::cuboidSlot(this));
         shapeManager.addShape(cb);
-        std::vector<float> vec = cb->getTriangulation().getDataForOpenGl();
+		std::vector<float> vec = cb->getTriangulation().getDataForOpenGl();//(*cb).getTriangulation().getDataForOpenGl();
         std::vector<float> nVec = cb->getTriangulation().getNormalForOpenGl();
         glWidget->drawShape(vec, nVec); 
         mStatusBar->showMessage("Cuboid created");
@@ -152,7 +152,7 @@ void Sketcher3D::onCuboidToolClicked()
     catch (const std::runtime_error& e)
     {
         QMessageBox::information(nullptr, "Info", e.what());
-            }
+    }
 }
 
 void Sketcher3D::onCubeToolClicked()

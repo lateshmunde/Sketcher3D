@@ -30,36 +30,40 @@ int Triangulation::addPoint(const Point& p)
 
     // Otherwise add new unique point
     auto index = int(mPoints.size()); //new index
-    mPoints.push_back(p);
-    pointIndex[p] = index;
-    return index;
+	mPoints.push_back(p);//add point to mPoints vector
+	pointIndex[p] = index;//store point and its index in map
+	return index;//usage of map to store point and its index
 }
 
 void Triangulation::addTriangle(int a, int b, int c, Point normal)
 {
     Triangle t(a, b, c, normal);
-    mTriangles.push_back(t);
+	mTriangles.push_back(t);//triangle in terms of int indices of points added to mTriangles vector
     mNormals.push_back(calculateNormal(t));
 }
 
 
-std::vector<float> Triangulation::getDataForOpenGl() const
+std::vector<float> Triangulation::getDataForOpenGl() const//req in Sketcher3D to draw shapes
 {
     std::vector<float> oglData;
 
-    for (Triangle t : mTriangles)
+	for (Triangle t : mTriangles)//for each triangle in mTriangles vector
     {
-        oglData.push_back(float(mPoints[t.m1].getX()));
-        oglData.push_back(float(mPoints[t.m1].getY()));
-        oglData.push_back(float(mPoints[t.m1].getZ()));
+        oglData.push_back(float(mPoints[t.m1].getX()));//mPoints[1].getX()
+		oglData.push_back(float(mPoints[t.m1].getY()));//mPoints[1].getY()
+		oglData.push_back(float(mPoints[t.m1].getZ()));//mPoints[1].getZ()
+		//Triangle t is made up of "indices" of points in mPoints vector. 
+		//indices are returned by addPoint function (with help of map) and stored in Triangle object
 
-        oglData.push_back(float(mPoints[t.m2].getX()));
+
+		oglData.push_back(float(mPoints[t.m2].getX()));//mPoints[2].getX()
         oglData.push_back(float(mPoints[t.m2].getY()));
         oglData.push_back(float(mPoints[t.m2].getZ()));
 
-        oglData.push_back(float(mPoints[t.m3].getX()));
+		oglData.push_back(float(mPoints[t.m3].getX()));//mPoints[3].getX()
         oglData.push_back(float(mPoints[t.m3].getY()));
         oglData.push_back(float(mPoints[t.m3].getZ()));
+		//3 points of one triangle added
     }
 
     return oglData;
